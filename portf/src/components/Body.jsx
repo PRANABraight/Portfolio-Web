@@ -310,13 +310,68 @@ const SkillCard = styled(motion.div)`
   }
 `;
 
+const Footer = styled.footer`
+  width: 100%;
+  padding: 2rem 1rem; 
+  background: linear-gradient(to right, rgba(78, 205, 196, 0.1), rgba(255, 107, 107, 0.1));
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  @media (max-width: 768px) {
+    padding: 1.5rem 1rem;
+  }
+`;
+
+const FooterContent = styled.div`
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  @media (max-width: 768px) {
+    width: 90%;
+    
+
+  }
+`;
+
+const FooterText = styled.p`
+  color: #666;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  
+  span {
+    color: #4ecdc4;
+    font-weight: 500;
+  }
+  
+  .heart {
+    color: #ff6b6b;
+    display: inline-block;
+    animation: pulse 1.5s ease infinite;
+  }
+
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+  }
+`;
+
+
 const Body = () => {
   const traits = [
-    "Full Stack Developer",
-    "Machine Learning Enthusiast",
-    "Problem Solver",
-    "Quick Learner",
-    "Team Player",
+    "🚀 Full Stack Developer",
+    "🧠 Machine Learning Enthusiast",
+    "💡 Problem Solver",
+    "📚 Quick Learner",
+    "🤝 Team Player & Leader",
   ];
 
   const currentTrait = useRotatingText(traits);
@@ -587,10 +642,10 @@ const Body = () => {
           <AboutText>
             Get in touch at:{" "}
             <a
-              href="mailto:pranabrai407@gmail.com"
+              href="mailto:pranabrai137@gmail.com"
               style={{ color: "#4ECDC4", textDecoration: "none" }}
             >
-              pranabrai407@gmail.com
+              pranabrai137@gmail.com
             </a>
           </AboutText>
           <SocialLinks>
@@ -616,7 +671,7 @@ const Body = () => {
               <FaInstagram />
             </SocialLink>
             <SocialLink
-              href="mailto:pranabrai407@gmail.com"
+              href="mailto:pranabrai137@gmail.com"
               class="padding-bottom: 20px;"
             >
               <FaEnvelope />
@@ -624,6 +679,18 @@ const Body = () => {
           </SocialLinks>
         </ContactSection>
       </Section>
+      <Footer>
+        <FooterContent>
+          
+          <FooterText>
+            © {new Date().getFullYear()} <span>Pranab Rai</span>. All rights reserved. 
+            <br />
+            Designed & Coded with <span className="heart">♥</span> by Pranab Rai
+          </FooterText>
+        </FooterContent>
+      </Footer>
+      <br />
+      <br />
     </BodyContainer>
   );
 };

@@ -49,7 +49,7 @@ src/
 
 - GitHub: [@PRANABraight](https://github.com/PRANABraight)
 - LinkedIn: [Pranab Rai](https://www.linkedin.com/in/pranab-rai-924b6731b/)
-- Email: pranabrai407@gmail.com
+- Email: pranabrai137@gmail.com
 
 ## 📄 License
 
