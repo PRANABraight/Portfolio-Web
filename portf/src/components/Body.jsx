@@ -371,7 +371,7 @@ const Body = () => {
     "🧠 Machine Learning Enthusiast",
     "💡 Problem Solver",
     "📚 Quick Learner",
-    "🤝 Team Player & Leader",
+    "🤝 Team Player",
   ];
 
   const currentTrait = useRotatingText(traits);
@@ -397,7 +397,7 @@ const Body = () => {
       <HeroSection id="home">
         <HeroContent>
           <ProfileImage
-            src={profileImage} // Update this line
+            src={profileImage}
             alt="Pranab Rai"
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
