@@ -481,7 +481,7 @@ const Body = () => {
               whileInView={{ opacity: 1 }}
               transition={{ duration: 0.3 }}
             >
-              <ProjectImage src={profileImage} alt="Spotify Clone" />
+              <ProjectImage src={spotifyImage} alt="Spotify Clone" />
               <h3>Spotify Clone</h3>
               <p>
                 A feature-rich web application that replicates the core
@@ -503,7 +503,7 @@ const Body = () => {
               </p>
             </ProjectCard>
             <ProjectCard>
-              <ProjectImage src={profileImage} alt="Wisdom Warrior" />
+              <ProjectImage src={wisdomImage} alt="Wisdom Warrior" />
               <h3>Wisdom Warrior</h3>
               <p>
                 WisdomWarrior is an online learning platform designed to provide
@@ -531,7 +531,7 @@ const Body = () => {
           <ProjectCard
               
             >
-              <ProjectImage src={profileImage} alt="Spotify Clone" />
+              <ProjectImage src={netguardImage} alt="netGuard" />
               <h3>NetGuard IDS</h3>
               <p>
               A modern web-based intrusion detection system built with React.js that helps monitor and detect potential security threats in real-time.
