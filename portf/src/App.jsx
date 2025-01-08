@@ -8,6 +8,8 @@ function App() {
   return (
     <>
       <Navbar />
+      <br />
+      <br />
       <Sidebar />
       <Body />
     </>

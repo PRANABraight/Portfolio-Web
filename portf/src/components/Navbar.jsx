@@ -8,15 +8,21 @@ const Nav = styled.nav`
   justify-content: space-between;
   align-items: center;
   padding: 1rem 2rem;
+  border: none;
   background: rgba(255, 255, 255, 0.97);
   backdrop-filter: blur(10px);
   position: fixed;
-  width: 100vw;
+  width: 100%;
   left: 0;
   top: 0;
   z-index: 100;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   box-sizing: border-box;
+
+  @media (max-width: 768px) {
+    padding: 1rem;
+    
+  }
 `;
 
 const Logo = styled(motion.div)`
@@ -73,7 +79,7 @@ const MobileNavLinks = styled(motion.div)`
   display: none;
 
   @media (max-width: 768px) {
-    display: flex;
+    display: ${({ isOpen }) => (isOpen ? 'flex' : 'none')};
     flex-direction: column;
     align-items: center;
     justify-content: center;
@@ -83,6 +89,7 @@ const MobileNavLinks = styled(motion.div)`
     height: 100vh;
     width: 100%;
     background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(10px);
     padding-top: 6rem;
     z-index: 90;
     gap: 2rem;
@@ -197,6 +204,7 @@ const Navbar = () => {
 
       {/* Mobile Nav Links */}
       <MobileNavLinks
+        isOpen={isOpen}
         initial="closed"
         animate={isOpen ? "open" : "closed"}
         variants={menuVariants}
