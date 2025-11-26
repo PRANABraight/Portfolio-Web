@@ -6,6 +6,7 @@ import { FaGithub, FaExternalLinkAlt } from 'react-icons/fa';
 import { projectsData } from '../../data/portfolioData';
 import { colors, typography, spacing, borderRadius } from '../../styles/theme';
 import AnimatedTitle from '../common/AnimatedTitle';
+import ProjectModal from '../common/ProjectModal';
 
 const ProjectsSectionContainer = styled.section`
   padding: ${spacing['4xl']} ${spacing.xl};
@@ -193,6 +194,19 @@ const TechTag = styled.span`
 
 const ProjectsSection = () => {
   const [filter, setFilter] = useState('all');
+  const [selectedProject, setSelectedProject] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = (project) => {
+    setSelectedProject(project);
+    setIsModalOpen(true);
+    document.body.style.overflow = 'hidden';
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    document.body.style.overflow = 'unset';
+  };
 
   const allProjects = [...projectsData.completed, ...projectsData.ongoing];
   const filteredProjects = filter === 'all' 
@@ -253,17 +267,19 @@ const ProjectsSection = () => {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
               transition={{ duration: 0.4, delay: index * 0.05, ease: [0.4, 0, 0.2, 1] }}
+              onClick={() => openModal(project)}
+              style={{ cursor: 'pointer' }}
             >
               <ProjectImageContainer $tall={isTall(index)}>
                 <ProjectImage src={project.image} alt={project.title} loading="lazy" />
                 <ProjectOverlay>
                   {project.github && (
-                    <IconButton href={project.github} target="_blank" rel="noopener noreferrer" aria-label="View on GitHub">
+                    <IconButton href={project.github} target="_blank" rel="noopener noreferrer" aria-label="View on GitHub" onClick={(e) => e.stopPropagation()}>
                       <FaGithub />
                     </IconButton>
                   )}
                   {project.deployment && (
-                    <IconButton href={project.deployment} target="_blank" rel="noopener noreferrer" aria-label="View Live Demo">
+                    <IconButton href={project.deployment} target="_blank" rel="noopener noreferrer" aria-label="View Live Demo" onClick={(e) => e.stopPropagation()}>
                       <FaExternalLinkAlt />
                     </IconButton>
                   )}
@@ -280,6 +296,12 @@ const ProjectsSection = () => {
           ))}
         </AnimatePresence>
       </BentoGrid>
+      
+      <ProjectModal 
+        project={selectedProject} 
+        isOpen={isModalOpen} 
+        onClose={closeModal} 
+      />
     </ProjectsSectionContainer>
   );
 };
