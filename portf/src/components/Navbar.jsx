@@ -1,42 +1,42 @@
-import { useState } from "react";
-import styled from "styled-components";
-import { motion } from "framer-motion";
+import { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import { motion, useScroll, useSpring } from 'framer-motion';
+import { colors, typography, spacing, borderRadius } from '../styles/theme';
 
-// Styled Components
-const Nav = styled.nav`
+const NavbarContainer = styled(motion.nav)`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: ${spacing.md} ${spacing.xl};
+  background: ${props => props.$scrolled ? colors.background.glass : 'transparent'};
+  backdrop-filter: ${props => props.$scrolled ? 'blur(20px) saturate(180%)' : 'none'};
+  -webkit-backdrop-filter: ${props => props.$scrolled ? 'blur(20px) saturate(180%)' : 'none'};
+  border-bottom: 1px solid ${props => props.$scrolled ? colors.border.light : 'transparent'};
+  transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+`;
+
+const NavContent = styled.div`
+  max-width: 1200px;
+  margin: 0 auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
-  border: none;
-  background: rgba(255, 255, 255, 0.97);
-  backdrop-filter: blur(10px);
-  position: fixed;
-  width: 100%;
-  left: 0;
-  top: 0;
-  z-index: 100;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  box-sizing: border-box;
-
-  @media (max-width: 768px) {
-    padding: 1rem;
-    
-  }
 `;
 
 const Logo = styled(motion.div)`
-  font-size: 1.8rem;
-  font-weight: bold;
+  font-size: ${typography.fontSize.xl};
+  font-weight: ${typography.fontWeight.bold};
+  color: ${colors.text.primary};
+  letter-spacing: ${typography.letterSpacing.tight};
   cursor: pointer;
-  background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
 `;
 
 const NavLinks = styled.div`
   display: flex;
-  gap: 2rem;
+  gap: ${spacing.xl};
+  align-items: center;
 
   @media (max-width: 768px) {
     display: none;
@@ -44,184 +44,223 @@ const NavLinks = styled.div`
 `;
 
 const NavLink = styled(motion.a)`
-  text-decoration: none;
-  color: #333;
-  font-weight: 500;
+  color: ${colors.text.secondary};
+  font-size: ${typography.fontSize.base};
+  font-weight: ${typography.fontWeight.medium};
+  cursor: pointer;
   position: relative;
-  padding: 0.5rem 0;
+  transition: color 200ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover {
+    color: ${colors.primary};
+  }
 
   &::after {
-    content: "";
+    content: '';
     position: absolute;
-    width: 0;
-    height: 2px;
-    bottom: 0;
+    bottom: -4px;
     left: 0;
-    background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
-    transition: width 0.3s ease;
+    width: 100%;
+    height: 2px;
+    background: ${colors.primary};
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 200ms cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   &:hover::after {
-    width: 100%;
+    transform: scaleX(1);
+    transform-origin: left;
   }
 `;
 
-const MobileMenuButton = styled(motion.div)`
-  display: none;
+const CTAButton = styled(motion.a)`
+  padding: ${spacing.sm} ${spacing.lg};
+  background: ${colors.primary};
+  color: white;
+  border-radius: ${borderRadius.full};
+  font-weight: ${typography.fontWeight.medium};
+  font-size: ${typography.fontSize.sm};
   cursor: pointer;
+  border: none;
+  box-shadow: ${colors.shadow.sm};
+  transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: ${colors.shadow.md};
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+`;
+
+const ProgressBar = styled(motion.div)`
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: ${colors.primary};
+  transform-origin: 0%;
+`;
+
+const MobileMenuButton = styled.button`
+  display: none;
+  background: none;
+  border: none;
+  color: ${colors.text.primary};
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: ${spacing.sm};
 
   @media (max-width: 768px) {
     display: block;
   }
 `;
 
-const MobileNavLinks = styled(motion.div)`
-  display: none;
+const MobileMenu = styled(motion.div)`
+  position: fixed;
+  top: 70px;
+  left: 0;
+  right: 0;
+  background: ${colors.background.glass};
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid ${colors.border.light};
+  padding: ${spacing.xl};
+  display: flex;
+  flex-direction: column;
+  gap: ${spacing.lg};
+  box-shadow: ${colors.shadow.lg};
 
-  @media (max-width: 768px) {
-    display: ${({ isOpen }) => (isOpen ? 'flex' : 'none')};
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100vh;
-    width: 100%;
-    background: rgba(255, 255, 255, 0.98);
-    backdrop-filter: blur(10px);
-    padding-top: 6rem;
-    z-index: 90;
-    gap: 2rem;
+  @media (min-width: 769px) {
+    display: none;
   }
 `;
 
-const MobileNavLink = styled(motion.a)`
-  font-size: 1.5rem;
-  font-weight: 500;
-  color: #333;
-  text-decoration: none;
-  opacity: 0;
+const MobileNavLink = styled.a`
+  color: ${colors.text.secondary};
+  font-size: ${typography.fontSize.lg};
+  font-weight: ${typography.fontWeight.medium};
+  cursor: pointer;
+  transition: color 200ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover {
+    color: ${colors.primary};
+  }
 `;
 
-// Navbar Component
 const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001
+  });
 
-  const toggleMenu = () => setIsOpen(!isOpen);
-  const closeMenu = () => setIsOpen(false);
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+    };
 
-  const menuVariants = {
-    open: {
-      x: 0,
-      transition: {
-        type: "spring",
-        stiffness: 100,
-        when: "beforeChildren",
-        staggerChildren: 0.1,
-      },
-    },
-    closed: {
-      x: "100%",
-      transition: {
-        type: "spring",
-        stiffness: 100,
-        when: "afterChildren",
-      },
-    },
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const scrollToSection = (sectionId) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+      setMobileMenuOpen(false);
+    }
   };
 
-  const linkVariants = {
-    open: {
-      opacity: 1,
-      x: 0,
-      transition: { type: "spring", stiffness: 100 },
-    },
-    closed: {
-      opacity: 0,
-      x: 50,
-      transition: { type: "spring", stiffness: 100 },
-    },
-  };
-
-  const navItems = ["Home", "About", "Skills", "Projects", "Contact"];
+  const navItems = [
+    { label: 'Home', id: 'home' },
+    { label: 'About', id: 'about' },
+    { label: 'Projects', id: 'projects' },
+    { label: 'Skills', id: 'skills' },
+    { label: 'Contact', id: 'contact' }
+  ];
 
   return (
-    <Nav>
-      {/* Logo */}
-      <Logo whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
-        Pranab Rai
-      </Logo>
+    <NavbarContainer
+      $scrolled={scrolled}
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
+    >
+      <NavContent>
+        <Logo
+          onClick={() => scrollToSection('home')}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          Pranab Rai
+        </Logo>
 
-      {/* Desktop Links */}
-      <NavLinks>
-        {navItems.map((item) => (
-          <NavLink
-            key={item}
-            href={`#${item.toLowerCase()}`}
-            whileHover={{ y: -2 }}
+        <NavLinks>
+          {navItems.map((item) => (
+            <NavLink
+              key={item.id}
+              onClick={() => scrollToSection(item.id)}
+              whileHover={{ y: -2 }}
+            >
+              {item.label}
+            </NavLink>
+          ))}
+          <CTAButton
+            href="#contact"
+            onClick={(e) => {
+              e.preventDefault();
+              scrollToSection('contact');
+            }}
+            whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            {item}
-          </NavLink>
-        ))}
-      </NavLinks>
+            Let's Talk
+          </CTAButton>
+        </NavLinks>
 
-      {/* Mobile Menu Button */}
-      <MobileMenuButton
-        onClick={toggleMenu}
-        aria-label="Toggle mobile menu"
-        initial={false}
-        animate={isOpen ? "open" : "closed"}
-      >
-        <motion.div
-          animate={isOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }}
-          style={{
-            height: "2px",
-            width: "25px",
-            background: "#333",
-            marginBottom: "6px",
-          }}
-        />
-        <motion.div
-          animate={isOpen ? { opacity: 0 } : { opacity: 1 }}
-          style={{
-            height: "2px",
-            width: "25px",
-            background: "#333",
-            marginBottom: "6px",
-          }}
-        />
-        <motion.div
-          animate={isOpen ? { rotate: -45, y: -6 } : { rotate: 0, y: 0 }}
-          style={{
-            height: "2px",
-            width: "25px",
-            background: "#333",
-          }}
-        />
-      </MobileMenuButton>
+        <MobileMenuButton onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+          {mobileMenuOpen ? '✕' : '☰'}
+        </MobileMenuButton>
+      </NavContent>
 
-      {/* Mobile Nav Links */}
-      <MobileNavLinks
-        isOpen={isOpen}
-        initial="closed"
-        animate={isOpen ? "open" : "closed"}
-        variants={menuVariants}
-      >
-        {navItems.map((item) => (
-          <MobileNavLink
-            key={item}
-            href={`#${item.toLowerCase()}`}
-            variants={linkVariants}
-            onClick={closeMenu}
-            aria-label={`Navigate to ${item}`}
+      <ProgressBar style={{ scaleX }} />
+
+      {mobileMenuOpen && (
+        <MobileMenu
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+          transition={{ duration: 0.2 }}
+        >
+          {navItems.map((item) => (
+            <MobileNavLink
+              key={item.id}
+              onClick={() => scrollToSection(item.id)}
+            >
+              {item.label}
+            </MobileNavLink>
+          ))}
+          <CTAButton
+            href="#contact"
+            onClick={(e) => {
+              e.preventDefault();
+              scrollToSection('contact');
+            }}
+            style={{ alignSelf: 'flex-start' }}
           >
-            {item}
-          </MobileNavLink>
-        ))}
-      </MobileNavLinks>
-    </Nav>
+            Let's Talk
+          </CTAButton>
+        </MobileMenu>
+      )}
+    </NavbarContainer>
   );
 };
 

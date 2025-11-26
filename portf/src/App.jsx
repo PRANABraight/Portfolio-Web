@@ -1,19 +1,29 @@
-import { useState } from 'react'
-import Navbar from './components/Navbar'
-import Sidebar from './components/Sidebar'
-import Body from './components/Body'
-import './App.css'
+import Navbar from './components/Navbar';
+import Background from './components/Background';
+import Sidebar from './components/Sidebar';
+import HeroSection from './components/sections/HeroSection';
+import AboutSection from './components/sections/AboutSection';
+import ProjectsSection from './components/sections/ProjectsSection';
+import SkillsSection from './components/sections/SkillsSection';
+import ContactSection from './components/sections/ContactSection';
+import Footer from './components/sections/Footer';
 
 function App() {
   return (
     <>
       <Navbar />
-      <br />
-      <br />
+      <Background />
       <Sidebar />
-      <Body />
+      <main>
+        <HeroSection />
+        <AboutSection />
+        <ProjectsSection />
+        <SkillsSection />
+        <ContactSection />
+      </main>
+      <Footer />
     </>
-  )
+  );
 }
 
-export default App
+export default App;
