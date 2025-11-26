@@ -1,4 +1,5 @@
 // src/components/sections/AboutSection.jsx
+import { useRef } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { FaLaptopCode, FaGraduationCap, FaChartLine, FaBrain } from 'react-icons/fa';
@@ -33,13 +34,14 @@ const CodeWindow = styled(motion.div)`
   font-family: ${typography.fontFamily.mono};
   box-shadow: ${colors.shadow.xl};
   overflow: hidden;
-  transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
   height: fit-content;
   position: sticky;
   top: 100px;
+  transform-style: preserve-3d;
+  will-change: transform;
+  transition: box-shadow 0.3s ease;
 
   &:hover {
-    transform: translateY(-4px);
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
   }
 
@@ -208,21 +210,39 @@ const DecorativeElement = styled(motion.div)`
 `;
 
 const getSyntaxClass = (token) => {
-  // Python keywords
   if (/\b(class|def|self|return)\b/.test(token)) return 'keyword';
-  // Python comments
   if (token.trim().startsWith('#')) return 'comment';
-  // Python docstrings
   if (/""".*"""/.test(token) || token.includes('"""')) return 'comment';
-  // Python strings
   if (/'[^']*'/.test(token)) return 'string';
-  // Python function definitions
   if (/__init__|analyze_data|build_predictive_model/.test(token)) return 'function';
   return 'punctuation';
 };
 
 const AboutSection = () => {
   const { displayedLines, isComplete } = useTypingEffect(aboutData.code);
+  const codeWindowRef = useRef(null);
+
+  const handleMouseMove = (e) => {
+    const el = codeWindowRef.current;
+    if (!el) return;
+
+    const rect = el.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    
+    const rotateX = ((y - centerY) / centerY) * -8;
+    const rotateY = ((x - centerX) / centerX) * 8;
+
+    el.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.03, 1.03, 1.03)`;
+  };
+
+  const handleMouseLeave = () => {
+    const el = codeWindowRef.current;
+    if (!el) return;
+    el.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+  };
 
   const cardData = [
     {
@@ -270,10 +290,13 @@ const AboutSection = () => {
 
       <ContentGrid>
         <CodeWindow
+          ref={codeWindowRef}
           initial={{ opacity: 0, x: -50 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
+          onMouseMove={handleMouseMove}
+          onMouseLeave={handleMouseLeave}
         >
           <WindowHeader>
             <WindowButton color="#FF5F57" />
