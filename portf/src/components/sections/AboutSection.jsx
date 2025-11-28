@@ -36,7 +36,9 @@ const CodeWindow = styled(motion.div)`
   overflow: hidden;
   height: fit-content;
   position: sticky;
-  top: 100px;
+  top: 120px;
+  align-self: start;
+  z-index: 10;
   transform-style: preserve-3d;
   will-change: transform;
   transition: box-shadow 0.3s ease;
@@ -48,6 +50,7 @@ const CodeWindow = styled(motion.div)`
   @media (max-width: 968px) {
     position: relative;
     top: 0;
+    align-self: stretch;
   }
 `;
 

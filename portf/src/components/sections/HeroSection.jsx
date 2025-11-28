@@ -5,6 +5,7 @@ import { FaDownload, FaEnvelope } from "react-icons/fa";
 import { useRotatingText } from "../../hooks/useRotatingText";
 import { heroData } from "../../data/portfolioData";
 import { colors, typography, spacing, borderRadius } from "../../styles/theme";
+import MagneticButton from "../common/MagneticButton";
 import resumePDF from "../../assets/Pranab_Rai_da (1).pdf";
 
 const HeroContainer = styled.section`
@@ -145,11 +146,38 @@ const HeroSection = () => {
   return (
     <HeroContainer id="home">
       <Title
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
+        initial="hidden"
+        animate="visible"
+        variants={{
+          hidden: { opacity: 0 },
+          visible: {
+            opacity: 1,
+            transition: {
+              staggerChildren: 0.05,
+              delayChildren: 0.2,
+            },
+          },
+        }}
       >
-        Hi, I'm {heroData.name}
+        {Array.from("Hi, I'm " + heroData.name).map((char, index) => (
+          <motion.span
+            key={index}
+            variants={{
+              hidden: { opacity: 0, y: 20 },
+              visible: {
+                opacity: 1,
+                y: 0,
+                transition: {
+                  type: "spring",
+                  damping: 12,
+                  stiffness: 100,
+                },
+              },
+            }}
+          >
+            {char}
+          </motion.span>
+        ))}
       </Title>
       <Tagline
         initial={{ opacity: 0, y: 20 }}
@@ -173,24 +201,28 @@ const HeroSection = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4, duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
       >
-        <PrimaryButton
-          href="#contact"
-          onClick={scrollToContact}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          <FaEnvelope />
-          Get In Touch
-        </PrimaryButton>
-        <SecondaryButton
-          href={resumePDF}
-          download="Pranab_Rai_Resume.pdf"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          <FaDownload />
-          Download Resume
-        </SecondaryButton>
+        <MagneticButton>
+          <PrimaryButton
+            href="#contact"
+            onClick={scrollToContact}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <FaEnvelope />
+            Get In Touch
+          </PrimaryButton>
+        </MagneticButton>
+        <MagneticButton>
+          <SecondaryButton
+            href={resumePDF}
+            download="Pranab_Rai_Resume.pdf"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <FaDownload />
+            Download Resume
+          </SecondaryButton>
+        </MagneticButton>
       </CTAContainer>
     </HeroContainer>
   );

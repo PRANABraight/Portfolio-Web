@@ -4,6 +4,7 @@ import { SiJavascript, SiMysql, SiPostgresql, SiMongodb, SiFastapi, SiNextdotjs,
 import { TbChartBar } from "react-icons/tb";
 
 // Asset imports
+
 import clinicalImage from "../assets/clinical.jpg";
 import karnatakaImage from "../assets/karnataka.png";
 import attendanceImage from "../assets/attendance.jpg";

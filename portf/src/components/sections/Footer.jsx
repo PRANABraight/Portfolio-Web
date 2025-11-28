@@ -37,7 +37,7 @@ const Footer = () => {
   return (
     <FooterContainer>
       <FooterText>
-        Designed & Built with <span className="heart">♥</span> by <span>Pranab Rai</span>
+        Designed & Built with <span className="heart">❤️</span> by <span>Pranab Rai</span>
         <br />
         © {new Date().getFullYear()} Pranab Rai. All Rights Reserved.
       </FooterText>

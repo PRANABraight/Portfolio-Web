@@ -1,6 +1,7 @@
 import Navbar from './components/Navbar';
 import Background from './components/Background';
 import Sidebar from './components/Sidebar';
+import ScrollProgress from './components/common/ScrollProgress';
 import HeroSection from './components/sections/HeroSection';
 import AboutSection from './components/sections/AboutSection';
 import ProjectsSection from './components/sections/ProjectsSection';
@@ -11,6 +12,7 @@ import Footer from './components/sections/Footer';
 function App() {
   return (
     <>
+      <ScrollProgress />
       <Navbar />
       <Background />
       <Sidebar />

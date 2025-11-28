@@ -56,7 +56,6 @@
 
 html {
   scroll-behavior: smooth;
-  overflow-x: hidden;
   background: var(--color-bg-secondary);
 }
 
@@ -66,7 +65,6 @@ body {
   min-height: 100vh;
   background: transparent;
   color: var(--color-text);
-  overflow-x: hidden;
   font-family: 'Inter', sans-serif;
 }
 
