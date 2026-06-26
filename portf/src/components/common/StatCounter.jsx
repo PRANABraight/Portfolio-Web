@@ -16,7 +16,7 @@ const CounterValue = styled.div`
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  line-height: 1.2;
+  line-height: 1.25;
   margin-bottom: ${spacing.sm};
 `;
 

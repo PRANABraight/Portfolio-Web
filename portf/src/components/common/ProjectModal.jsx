@@ -144,12 +144,12 @@ const Description = styled.p`
 `;
 
 const SectionTitle = styled.h3`
-  font-size: ${typography.fontSize.xl};
-  font-weight: ${typography.fontWeight.semibold};
-  background: ${colors.gradient.primary};
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: ${typography.fontSize.xs};
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #00ff99;
   margin: ${spacing['2xl']} 0 ${spacing.lg} 0;
   display: flex;
   align-items: center;
@@ -169,21 +169,21 @@ const FeatureItem = styled(motion.li)`
   align-items: flex-start;
   gap: ${spacing.md};
   padding: ${spacing.md};
-  background: rgba(59, 130, 246, 0.05);
-  border-radius: ${borderRadius.lg};
-  border-left: 3px solid ${colors.primary.main};
-  color: ${colors.text.secondary};
-  font-size: ${typography.fontSize.base};
+  background: rgba(0, 255, 153, 0.03);
+  border-radius: ${borderRadius.md};
+  border-left: 2px solid #00ff99;
+  color: rgb(161,161,170);
+  font-size: ${typography.fontSize.sm};
   line-height: ${typography.lineHeight.relaxed};
   transition: all 200ms;
 
   &:hover {
-    background: rgba(59, 130, 246, 0.1);
+    background: rgba(0, 255, 153, 0.06);
     transform: translateX(4px);
   }
 
   svg {
-    color: ${colors.primary.main};
+    color: #00ff99;
     flex-shrink: 0;
     margin-top: 2px;
   }
@@ -197,18 +197,20 @@ const TechStack = styled.div`
 `;
 
 const TechTag = styled(motion.span)`
-  background: rgba(59, 130, 246, 0.15);
-  color: ${colors.text.primary};
-  padding: ${spacing.sm} ${spacing.lg};
-  border-radius: ${borderRadius.full};
-  font-size: ${typography.fontSize.sm};
-  font-weight: ${typography.fontWeight.semibold};
-  border: 1px solid rgba(59, 130, 246, 0.3);
+  background: rgba(0, 255, 153, 0.06);
+  color: rgba(0, 255, 153, 0.75);
+  padding: 0.375rem ${spacing.md};
+  border-radius: 4px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: ${typography.fontSize.xs};
+  font-weight: 500;
+  letter-spacing: 0.025em;
+  border: 1px solid rgba(0, 255, 153, 0.2);
   transition: all 200ms;
 
   &:hover {
-    background: rgba(59, 130, 246, 0.25);
-    border-color: rgba(59, 130, 246, 0.5);
+    background: rgba(0, 255, 153, 0.12);
+    border-color: rgba(0, 255, 153, 0.4);
     transform: translateY(-2px);
   }
 `;
@@ -238,24 +240,25 @@ const ActionButton = styled(motion.a)`
   text-decoration: none;
 
   ${props => props.$primary ? `
-    background: ${colors.primary.main};
-    color: white;
-    border: 2px solid ${colors.primary.main};
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+    background: #00ff99;
+    color: #0f0e1a;
+    border: 2px solid #00ff99;
+    box-shadow: 0 4px 16px rgba(0, 255, 153, 0.25);
+    font-weight: 700;
 
     &:hover {
-      background: ${colors.primary.light};
+      opacity: 0.88;
       transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(59, 130, 246, 0.5);
+      color: #0f0e1a;
     }
   ` : `
     background: transparent;
-    color: ${colors.text.primary};
-    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: rgb(161,161,170);
+    border: 1px solid rgba(255, 255, 255, 0.12);
 
     &:hover {
-      border-color: ${colors.secondary.main};
-      color: ${colors.secondary.main};
+      border-color: rgba(0, 255, 153, 0.3);
+      color: #ffffff;
       transform: translateY(-2px);
     }
   `}

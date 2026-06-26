@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:5173)",
+      "PowerShell(cmd /c \"dir \"\"d:\\\\pranab\\\\Portfolio-Web\\\\sanity \"\"\")",
+      "PowerShell(cmd /c \"type \"\"d:\\\\pranab\\\\Portfolio-Web\\\\sanity \\\\sanity.config.js\"\"\")",
+      "PowerShell(cmd /c \"rmdir /s /q \"\"d:\\\\pranab\\\\Portfolio-Web\\\\sanity \"\"\")",
+      "PowerShell(Get-Content \"d:\\\\pranab\\\\Portfolio-Web\\\\portf\\\\.env.local\" | ForEach-Object { $_.Split\\('='\\)[0] })",
+      "PowerShell([System.IO.Directory]::GetDirectories\\(\"d:\\\\pranab\\\\Portfolio-Web\"\\) | ForEach-Object { \"[$_]\" })",
+      "PowerShell($dirs = [System.IO.Directory]::GetDirectories\\(\"d:\\\\pranab\\\\Portfolio-Web\"\\); $s = $dirs | Where-Object { $_ -match \"sanity\" }; $s | ForEach-Object { $bytes = [System.Text.Encoding]::UTF8.GetBytes\\($_\\); \"Path: [$_] Len: $\\($_.Length\\) LastChar: $\\($bytes[-1]\\)\" })",
+      "PowerShell(git -C \"d:\\\\pranab\\\\Portfolio-Web\" log --oneline --all)",
+      "PowerShell(head -20)",
+      "PowerShell(git -C \"d:\\\\pranab\\\\Portfolio-Web\" ls-files sanity/)",
+      "PowerShell(if \\(-not $?\\) { \"NOT INSTALLED\" } else { \"INSTALLED\" })",
+      "PowerShell(if \\(-not $?\\) { \"NOT FOUND\" })",
+      "PowerShell(Set-Location \"D:\\\\pranab\\\\Portfolio-Web\\\\sanity\"; Start-Process powershell -ArgumentList \"-NoExit\", \"-Command\", \"cd 'D:\\\\pranab\\\\Portfolio-Web\\\\sanity'; npx sanity dev\" -WindowStyle Normal)"
+    ]
+  }
+}

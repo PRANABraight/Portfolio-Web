@@ -1,8 +1,6 @@
 
 import { FaPython, FaAws, FaGitAlt, FaJava, FaDatabase } from "react-icons/fa";
 import { SiJavascript, SiMysql, SiPostgresql, SiMongodb, SiFastapi, SiNextdotjs, SiNodedotjs, SiTableau, SiPlotly, SiScikitlearn, SiPandas, SiNumpy, SiTensorflow, SiOpencv, SiFirebase } from "react-icons/si";
-import { TbChartBar } from "react-icons/tb";
-
 // Asset imports
 
 import clinicalImage from "../assets/clinical.jpg";
@@ -44,32 +42,23 @@ export const aboutData = {
 };
 
 export const skillsData = [
-  // Programming Languages
-  { icon: FaPython, name: "Python", color: "#3776AB" },
-  { icon: FaDatabase, name: "SQL", color: "#4479A1" },
-  { icon: SiJavascript, name: "JavaScript", color: "#F7DF1E" },
-  { icon: FaJava, name: "Java", color: "#007396" },
-  
-  // Database & Cloud
-  { icon: SiMysql, name: "MySQL", color: "#4479A1" },
-  { icon: SiPostgresql, name: "PostgreSQL", color: "#336791" },
-  { icon: SiMongodb, name: "MongoDB", color: "#47A248" },
-  { icon: FaAws, name: "AWS", color: "#FF9900" },
-  { icon: SiFirebase, name: "Firebase", color: "#FFCA28" },
-  
-  // Data Analysis & ML
-  { icon: SiPandas, name: "Pandas", color: "#150458" },
-  { icon: SiNumpy, name: "NumPy", color: "#013243" },
-  { icon: TbChartBar, name: "Matplotlib", color: "#11557C" },
-  { icon: TbChartBar, name: "Seaborn", color: "#3776AB" },
-  { icon: SiScikitlearn, name: "Scikit-learn", color: "#F7931E" },
-  { icon: SiTensorflow, name: "TensorFlow", color: "#FF6F00" },
-  { icon: SiOpencv, name: "OpenCV", color: "#5C3EE8" },
-  
-  // Visualization & Tools
-  { icon: SiTableau, name: "Tableau", color: "#E97627" },
-  { icon: SiPlotly, name: "Plotly", color: "#3F4F75" },
-  { icon: FaGitAlt, name: "Git", color: "#F05032" },
+  { icon: FaPython,      name: "Python",       color: "#3776AB", category: "Languages" },
+  { icon: FaDatabase,    name: "SQL",           color: "#4479A1", category: "Languages" },
+  { icon: SiJavascript,  name: "JavaScript",   color: "#F7DF1E", category: "Languages" },
+  { icon: FaJava,        name: "Java",          color: "#007396", category: "Languages" },
+  { icon: SiMysql,       name: "MySQL",         color: "#4479A1", category: "Database"  },
+  { icon: SiPostgresql,  name: "PostgreSQL",    color: "#336791", category: "Database"  },
+  { icon: SiMongodb,     name: "MongoDB",       color: "#47A248", category: "Database"  },
+  { icon: FaAws,         name: "AWS",           color: "#FF9900", category: "Cloud"     },
+  { icon: SiFirebase,    name: "Firebase",      color: "#FFCA28", category: "Cloud"     },
+  { icon: SiPandas,      name: "Pandas",        color: "#E70488", category: "ML/Data"   },
+  { icon: SiNumpy,       name: "NumPy",         color: "#4DABCF", category: "ML/Data"   },
+  { icon: SiScikitlearn, name: "Scikit-learn",  color: "#F7931E", category: "ML/Data"   },
+  { icon: SiTensorflow,  name: "TensorFlow",    color: "#FF6F00", category: "ML/Data"   },
+  { icon: SiOpencv,      name: "OpenCV",        color: "#5C3EE8", category: "ML/Data"   },
+  { icon: SiTableau,     name: "Tableau",       color: "#E97627", category: "Viz"       },
+  { icon: SiPlotly,      name: "Plotly",        color: "#3F4F75", category: "Viz"       },
+  { icon: FaGitAlt,      name: "Git",           color: "#F05032", category: "Tools"     },
 ];
 
 export const projectsData = {
