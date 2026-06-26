@@ -1,379 +1,241 @@
-// src/components/sections/ContactSection.jsx
-import { useState } from 'react';
-import styled from 'styled-components';
+// Contact/Footer CTA — exact match to radnaabazar.com component 30836
+import styled, { keyframes } from 'styled-components';
 import { motion } from 'framer-motion';
-import { FaGithub, FaLinkedin, FaInstagram, FaEnvelope, FaPaperPlane } from 'react-icons/fa';
-import { colors, typography, spacing, borderRadius } from '../../styles/theme';
-import AnimatedTitle from '../common/AnimatedTitle';
+import { FaGithub, FaLinkedin, FaInstagram, FaEnvelope, FaArrowRight } from 'react-icons/fa';
 
-const ContactSectionContainer = styled.section`
-  padding: ${spacing['4xl']} ${spacing.xl};
-  max-width: 1200px;
-  margin: 0 auto;
+const spinConic = keyframes`from{transform:rotate(0deg)}to{transform:rotate(360deg)}`;
+
+const Wrap = styled.section`
   position: relative;
+  overflow: hidden;
+  width: 100%;
+  padding-top: 5rem;
+  padding-bottom: 2.5rem;
 `;
 
-const ContactLayout = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1.2fr;
-  gap: ${spacing['4xl']};
-  align-items: start;
+/* footer-grid SVG effect — exact match to radna's /footer-grid.svg */
+const FooterBg = styled.div`
+  position: absolute;
+  left: 0;
+  bottom: -18rem;
+  width: 100%;
+  min-height: 24rem;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+  background-size: 40px 40px;
+  mask-image: linear-gradient(to top, black 0%, transparent 80%);
+  -webkit-mask-image: linear-gradient(to top, black 0%, transparent 80%);
+  opacity: 0.5;
+`;
 
-  @media (max-width: 968px) {
-    grid-template-columns: 1fr;
-    gap: ${spacing['3xl']};
+const Inner = styled.div`
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1.25rem;
+
+  @media (min-width: 640px) { padding: 0 2.5rem; }
+  position: relative;
+  z-index: 10;
+`;
+
+/* CTA block */
+const CtaBlock = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 10;
+`;
+
+const Heading = styled.h1`
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  text-align: center;
+  max-width: 45vw;
+  min-width: 280px;
+  line-height: 1.15;
+
+  span { color: #00ff99; }
+
+  @media (max-width: 768px) { max-width: 90vw; }
+`;
+
+const CtaDesc = styled.p`
+  color: rgba(255,255,255,0.8);
+  margin: 2.5rem 0 1.5rem;
+  text-align: center;
+  font-size: 0.875rem;
+  line-height: 1.625;
+  max-width: 520px;
+`;
+
+/* Shiny animated button (exact from source component 24750) */
+const ShinyBtn = styled(motion.a)`
+  position: relative;
+  display: inline-flex;
+  height: 48px;
+  width: 100%;
+  max-width: 240px;
+  overflow: hidden;
+  border-radius: 8px;
+  padding: 1px;
+  text-decoration: none;
+`;
+
+const Spinner = styled.span`
+  position: absolute;
+  inset: -1000%;
+  animation: ${spinConic} 2s linear infinite;
+  background: conic-gradient(from 90deg at 50% 50%, #E2CBFF 0%, #393BB2 50%, #E2CBFF 100%);
+`;
+
+const ShinyLabel = styled.span`
+  display: inline-flex;
+  height: 100%;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: #0f0e1a;
+  padding: 0 1.75rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: white;
+  gap: 0.5rem;
+  letter-spacing: 0.025em;
+`;
+
+const Hr = styled.hr`
+  border: none;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  width: 100%;
+  margin: 3rem 0 1.5rem;
+`;
+
+/* "See my personal Side" outline button */
+const PersonalBtn = styled(motion.button)`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 44px;
+  padding: 0 1.5rem;
+  border-radius: 9999px;
+  border: 1px solid #00ff99;
+  background: transparent;
+  color: #00ff99;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 1rem;
+
+  &:hover { background: #00ff99; color: #0f0e1a; border-color: #00ff99; }
+`;
+
+/* Bottom row */
+const BottomRow = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  margin-top: 4rem;
+
+  @media (min-width: 768px) {
+    flex-direction: row;
+    justify-content: space-between;
   }
 `;
 
-const ContactInfo = styled.div`
-  position: sticky;
-  top: 120px;
+const NameLabel = styled.p`
+  font-size: 0.875rem;
+  color: rgba(255,255,255,0.8);
 `;
 
-const InfoCard = styled(motion.div)`
-  background: ${colors.background.glass};
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border: 1px solid ${colors.border.light};
-  border-radius: ${borderRadius.xl};
-  padding: ${spacing['2xl']};
-  box-shadow: ${colors.shadow.md};
-  margin-bottom: ${spacing.xl};
-`;
-
-const InfoTitle = styled.h3`
-  font-size: ${typography.fontSize['2xl']};
-  font-weight: ${typography.fontWeight.bold};
-  background: ${colors.gradient.primary};
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  margin: 0 0 ${spacing.md} 0;
-`;
-
-const InfoText = styled.p`
-  color: ${colors.text.secondary};
-  font-size: ${typography.fontSize.base};
-  line-height: ${typography.lineHeight.relaxed};
-  margin: 0 0 ${spacing.xl} 0;
-`;
-
-const SocialGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: ${spacing.md};
-`;
-
-const SocialCard = styled(motion.a)`
+const SocialRow = styled.div`
   display: flex;
   align-items: center;
-  gap: ${spacing.md};
-  padding: ${spacing.md};
-  background: rgba(30, 64, 175, 0.05);
-  border: 1px solid ${colors.border.light};
-  border-radius: ${borderRadius.lg};
-  color: ${colors.text.primary};
-  transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
-
-  &:hover {
-    background: rgba(30, 64, 175, 0.1);
-    border-color: ${colors.primary.main};
-    transform: translateY(-2px);
-  }
-
-  svg {
-    font-size: 1.5rem;
-    color: ${colors.primary.main};
-  }
-
-  span {
-    font-size: ${typography.fontSize.sm};
-    font-weight: ${typography.fontWeight.medium};
-  }
+  gap: 0.75rem;
 `;
 
-const ContactForm = styled(motion.form)`
-  background: ${colors.background.glass};
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border: 1px solid ${colors.border.light};
-  border-radius: ${borderRadius.xl};
-  padding: ${spacing['2xl']};
-  box-shadow: ${colors.shadow.lg};
-`;
-
-const FormGroup = styled.div`
-  margin-bottom: ${spacing.lg};
-`;
-
-const Label = styled.label`
-  display: block;
-  color: ${colors.text.secondary};
-  font-size: ${typography.fontSize.sm};
-  font-weight: ${typography.fontWeight.medium};
-  margin-bottom: ${spacing.sm};
-`;
-
-const Input = styled.input`
-  width: 100%;
-  padding: ${spacing.md};
-  background: rgba(15, 23, 42, 0.6);
-  border: 1px solid ${colors.border.default};
-  border-radius: ${borderRadius.lg};
-  color: ${colors.text.primary};
-  font-family: ${typography.fontFamily.primary};
-  font-size: ${typography.fontSize.base};
-  transition: all 200ms ease;
-
-  &:focus {
-    outline: none;
-    border-color: ${colors.secondary.main};
-    box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.2);
-  }
-`;
-
-const TextArea = styled.textarea`
-  width: 100%;
-  padding: ${spacing.md};
-  background: rgba(15, 23, 42, 0.6);
-  border: 1px solid ${colors.border.default};
-  border-radius: ${borderRadius.lg};
-  color: ${colors.text.primary};
-  font-family: ${typography.fontFamily.primary};
-  font-size: ${typography.fontSize.base};
-  min-height: 150px;
-  resize: vertical;
-  transition: all 200ms ease;
-
-  &:focus {
-    outline: none;
-    border-color: ${colors.secondary.main};
-    box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.2);
-  }
-`;
-
-const SubmitButton = styled(motion.button)`
-  width: 100%;
-  padding: ${spacing.md};
-  background: ${colors.gradient.primary};
-  color: white;
-  border: none;
-  border-radius: ${borderRadius.lg};
-  font-weight: ${typography.fontWeight.semibold};
-  font-size: ${typography.fontSize.base};
-  cursor: pointer;
+const SocialBtn = styled(motion.a)`
+  width: 36px; height: 36px;
+  border: 1px solid #00ff99;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: ${spacing.sm};
-  box-shadow: ${colors.shadow.blue};
-  transition: all 200ms ease;
+  color: #00ff99;
+  font-size: 0.875rem;
+  text-decoration: none;
+  transition: all 0.5s ease;
 
-  &:disabled {
-    opacity: 0.7;
-    cursor: not-allowed;
-  }
+  &:hover { background: #00ff99; color: #0f0e1a; }
 `;
 
-const StatusMessage = styled(motion.div)`
-  margin-top: ${spacing.md};
-  padding: ${spacing.md};
-  border-radius: ${borderRadius.md};
-  text-align: center;
-  font-weight: ${typography.fontWeight.medium};
-  
-  ${props => props.$type === 'success' && `
-    background: rgba(5, 150, 105, 0.1);
-    color: ${colors.success.main};
-    border: 1px solid ${colors.success.dark};
-  `}
+const SOCIALS = [
+  { icon: <FaGithub />,    href: 'https://github.com/PRANABraight',              label: 'GitHub' },
+  { icon: <FaLinkedin />,  href: 'https://linkedin.com/in/pranab-rai-924b6731b/', label: 'LinkedIn' },
+  { icon: <FaInstagram />, href: 'https://instagram.com/pranabrai1/',             label: 'Instagram' },
+  { icon: <FaEnvelope />,  href: 'mailto:pranabrai137@gmail.com',                 label: 'Email' },
+];
 
-  ${props => props.$type === 'error' && `
-    background: rgba(220, 38, 38, 0.1);
-    color: #EF4444;
-    border: 1px solid #991B1B;
-  `}
-`;
+const ContactSection = ({ setMode }) => (
+  <Wrap id="contact" >
+    <FooterBg />
+    <Inner>
+      <CtaBlock>
+        <Heading>
+          Let's{' '}
+          <span>Talk</span>
+        </Heading>
 
-const DecorativeBlob = styled(motion.div)`
-  position: absolute;
-  width: 500px;
-  height: 500px;
-  background: ${colors.gradient.secondary};
-  filter: blur(100px);
-  opacity: 0.1;
-  border-radius: 50%;
-  z-index: -1;
-  pointer-events: none;
-`;
+        <CtaDesc>
+          What led you here? What are you looking for? I would love to hear from you over a virtual coffee chat!
+        </CtaDesc>
 
-const ContactSection = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: ''
-  });
-  const [status, setStatus] = useState({ type: '', message: '' });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setStatus({ type: '', message: '' });
-
-    try {
-      const res = await fetch('http://localhost:3000/api/send-email', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData)
-      });
-
-      if (res.ok) {
-        setStatus({ type: 'success', message: 'Message sent successfully! I will get back to you soon.' });
-        setFormData({ name: '', email: '', message: '' });
-      } else {
-        const errorData = await res.json();
-        console.error('Resend Error:', errorData);
-        setStatus({ type: 'error', message: 'Failed to send message. Please try again later.' });
-      }
-    } catch (error) {
-      console.error('Error sending email:', error);
-      setStatus({ type: 'error', message: 'An unexpected error occurred. Please try again.' });
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  const socialLinks = [
-    { icon: <FaGithub />, label: 'GitHub', href: 'https://github.com/PRANABraight' },
-    { icon: <FaLinkedin />, label: 'LinkedIn', href: 'https://linkedin.com/in/pranab-rai' },
-    { icon: <FaInstagram />, label: 'Instagram', href: 'https://instagram.com/pranab_rai' },
-    { icon: <FaEnvelope />, label: 'Email', href: 'mailto:pranab.rai@mca.christuniversity.in' }
-  ];
-
-  return (
-    <ContactSectionContainer id="contact">
-      <AnimatedTitle>Let's Work Together</AnimatedTitle>
-      
-      <DecorativeBlob 
-        style={{ bottom: '-10%', left: '-10%' }}
-        animate={{ 
-          scale: [1, 1.2, 1],
-          opacity: [0.1, 0.15, 0.1] 
-        }}
-        transition={{ 
-          duration: 10, 
-          repeat: Infinity, 
-          ease: "easeInOut" 
-        }}
-      />
-
-      <ContactLayout>
-        <ContactInfo>
-          <InfoCard
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <InfoTitle>Get In Touch</InfoTitle>
-            <InfoText>
-              I'm currently looking for new opportunities as a Data Engineer or Data Scientist. 
-              Whether you have a question or just want to say hi, I'll try my best to get back to you!
-            </InfoText>
-            
-            <SocialGrid>
-              {socialLinks.map((link, index) => (
-                <SocialCard 
-                  key={link.label}
-                  href={link.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  {link.icon}
-                  <span>{link.label}</span>
-                </SocialCard>
-              ))}
-            </SocialGrid>
-          </InfoCard>
-        </ContactInfo>
-
-        <ContactForm
-          onSubmit={handleSubmit}
-          initial={{ opacity: 0, x: 50 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.2 }}
+        <ShinyBtn
+          href="mailto:pranabrai137@gmail.com"
+          whileTap={{ scale: 0.97 }}
         >
-          <FormGroup>
-            <Label>Name</Label>
-            <Input 
-              type="text" 
-              name="name" 
-              value={formData.name}
-              onChange={handleChange}
-              placeholder="John Doe" 
-              required 
-            />
-          </FormGroup>
-          
-          <FormGroup>
-            <Label>Email</Label>
-            <Input 
-              type="email" 
-              name="email" 
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="john@example.com" 
-              required 
-            />
-          </FormGroup>
-          
-          <FormGroup>
-            <Label>Message</Label>
-            <TextArea 
-              name="message" 
-              value={formData.message}
-              onChange={handleChange}
-              placeholder="Hello! I'd like to discuss a project..." 
-              required 
-            />
-          </FormGroup>
+          <Spinner />
+          <ShinyLabel>
+            Let's get in touch <FaArrowRight size={11} />
+          </ShinyLabel>
+        </ShinyBtn>
 
-          <SubmitButton
-            type="submit"
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            disabled={isSubmitting}
-          >
-            <FaPaperPlane />
-            {isSubmitting ? 'Sending...' : 'Send Message'}
-          </SubmitButton>
+        <Hr />
 
-          {status.message && (
-            <StatusMessage
-              $type={status.type}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
+        <PersonalBtn
+          onClick={() => setMode && setMode('personal')}
+          whileTap={{ scale: 0.97 }}
+        >
+          Peer through my Personal Life ↗
+        </PersonalBtn>
+      </CtaBlock>
+
+      <BottomRow>
+        <NameLabel>Pranab Rai</NameLabel>
+        <SocialRow>
+          {SOCIALS.map(s => (
+            <SocialBtn
+              key={s.label}
+              href={s.href}
+              target={s.href.startsWith('http') ? '_blank' : undefined}
+              rel="noopener noreferrer"
+              aria-label={s.label}
+              whileTap={{ scale: 0.9 }}
             >
-              {status.message}
-            </StatusMessage>
-          )}
-        </ContactForm>
-      </ContactLayout>
-    </ContactSectionContainer>
-  );
-};
+              {s.icon}
+            </SocialBtn>
+          ))}
+        </SocialRow>
+      </BottomRow>
+    </Inner>
+  </Wrap>
+);
 
 export default ContactSection;

@@ -1,266 +1,234 @@
+// Navbar/Header — exact match to radnaabazar.com component 70839
+// Logo: "FirstName." with accent dot
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { motion, useScroll, useSpring } from 'framer-motion';
-import { colors, typography, spacing, borderRadius } from '../styles/theme';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FaTimes } from 'react-icons/fa';
 
-const NavbarContainer = styled(motion.nav)`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 100;
-  padding: ${spacing.md} ${spacing.xl};
-  background: ${props => props.$scrolled ? colors.background.glass : 'transparent'};
-  backdrop-filter: ${props => props.$scrolled ? 'blur(20px) saturate(180%)' : 'none'};
-  -webkit-backdrop-filter: ${props => props.$scrolled ? 'blur(20px) saturate(180%)' : 'none'};
-  border-bottom: 1px solid ${props => props.$scrolled ? colors.border.light : 'transparent'};
-  transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+const Header = styled.header`
+  padding: 2rem 0;
+  color: white;
+
+  @media (min-width: 1280px) { padding: 3rem 0; }
 `;
 
-const NavContent = styled.div`
-  max-width: 1200px;
+const Container = styled.div`
+  max-width: 1280px;
   margin: 0 auto;
+  padding: 0 1.25rem;
+
+  @media (min-width: 640px) { padding: 0 2.5rem; }
   display: flex;
   justify-content: space-between;
   align-items: center;
 `;
 
-const Logo = styled(motion.div)`
-  font-size: ${typography.fontSize.xl};
-  font-weight: ${typography.fontWeight.bold};
-  color: ${colors.text.primary};
-  letter-spacing: ${typography.letterSpacing.tight};
+/* Logo: "Pranab." — firstName + accent dot */
+const Logo = styled(motion.a)`
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 2.25rem;
+  font-weight: 600;
+  color: #fff;
+  text-decoration: none;
+  letter-spacing: -0.025em;
   cursor: pointer;
+
+  span { color: #00ff99; }
 `;
 
-const NavLinks = styled.div`
-  display: flex;
-  gap: ${spacing.xl};
+/* Desktop nav links */
+const DesktopNav = styled.nav`
+  display: none;
+  gap: 2rem;
   align-items: center;
 
-  @media (max-width: 768px) {
-    display: none;
-  }
+  @media (min-width: 1280px) { display: flex; }
 `;
 
-const NavLink = styled(motion.a)`
-  color: ${colors.text.secondary};
-  font-size: ${typography.fontSize.base};
-  font-weight: ${typography.fontWeight.medium};
+const NavItem = styled.a`
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: ${p => p.$active ? '#00ff99' : 'rgba(255,255,255,0.8)'};
+  text-decoration: none;
+  text-transform: capitalize;
+  border-bottom: ${p => p.$active ? '2px solid #00ff99' : '2px solid transparent'};
+  padding-bottom: 2px;
+  transition: color 0.2s ease, border-color 0.2s ease;
   cursor: pointer;
-  position: relative;
-  transition: color 200ms cubic-bezier(0.4, 0, 0.2, 1);
 
-  &:hover {
-    color: ${colors.primary};
-  }
-
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: -4px;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    background: ${colors.primary};
-    transform: scaleX(0);
-    transform-origin: right;
-    transition: transform 200ms cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  &:hover::after {
-    transform: scaleX(1);
-    transform-origin: left;
-  }
+  &:hover { color: #00ff99; }
 `;
 
-const CTAButton = styled(motion.a)`
-  padding: ${spacing.sm} ${spacing.lg};
-  background: ${colors.primary};
-  color: white;
-  border-radius: ${borderRadius.full};
-  font-weight: ${typography.fontWeight.medium};
-  font-size: ${typography.fontSize.sm};
-  cursor: pointer;
-  border: none;
-  box-shadow: ${colors.shadow.sm};
-  transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
-
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: ${colors.shadow.md};
-  }
-
-  &:active {
-    transform: translateY(0);
-  }
-`;
-
-const ProgressBar = styled(motion.div)`
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: ${colors.primary};
-  transform-origin: 0%;
-`;
-
-const MobileMenuButton = styled.button`
-  display: none;
+/* Mobile hamburger (Sheet/drawer from right) */
+const MobileBtn = styled(motion.button)`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px; height: 36px;
   background: none;
   border: none;
-  color: ${colors.text.primary};
+  color: #00ff99;
   font-size: 1.5rem;
   cursor: pointer;
-  padding: ${spacing.sm};
 
-  @media (max-width: 768px) {
-    display: block;
-  }
+  @media (min-width: 1280px) { display: none; }
 `;
 
-const MobileMenu = styled(motion.div)`
+const Drawer = styled(motion.div)`
   position: fixed;
-  top: 70px;
-  left: 0;
+  inset-y: 0;
   right: 0;
-  background: ${colors.background.glass};
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border-bottom: 1px solid ${colors.border.light};
-  padding: ${spacing.xl};
+  width: 75%;
+  max-width: 320px;
+  background: #0f0e1a;
+  z-index: 300;
   display: flex;
   flex-direction: column;
-  gap: ${spacing.lg};
-  box-shadow: ${colors.shadow.lg};
-
-  @media (min-width: 769px) {
-    display: none;
-  }
+  padding: 1.5rem;
+  border-left: 1px solid rgba(255,255,255,0.08);
 `;
 
-const MobileNavLink = styled.a`
-  color: ${colors.text.secondary};
-  font-size: ${typography.fontSize.lg};
-  font-weight: ${typography.fontWeight.medium};
+const DrawerOverlay = styled(motion.div)`
+  position: fixed;
+  inset: 0;
+  background: #0f0e1a;
+  z-index: 299;
+`;
+
+const DrawerClose = styled.button`
+  position: absolute;
+  right: 2rem;
+  top: 2rem;
+  background: none;
+  border: none;
+  color: #00ff99;
+  font-size: 1.875rem;
   cursor: pointer;
-  transition: color 200ms cubic-bezier(0.4, 0, 0.2, 1);
-
-  &:hover {
-    color: ${colors.primary};
-  }
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
-const Navbar = () => {
-  const [scrolled, setScrolled] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { scrollYProgress } = useScroll();
-  const scaleX = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
-    restDelta: 0.001
-  });
+const DrawerNav = styled.nav`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  flex: 1;
+`;
+
+const DrawerLink = styled.a`
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: ${p => p.$active ? '#00ff99' : 'rgba(255,255,255,0.8)'};
+  text-decoration: none;
+  text-transform: capitalize;
+  border-bottom: ${p => p.$active ? '2px solid #00ff99' : 'none'};
+  transition: color 0.2s ease;
+  cursor: pointer;
+
+  &:hover { color: #00ff99; }
+`;
+
+const NAV_LINKS = [
+  { label: 'professional', id: 'home' },
+  { label: 'work',         id: 'projects' },
+  { label: 'contact',      id: 'contact' },
+];
+
+const Navbar = ({ mode, setMode }) => {
+  const [open, setOpen] = useState(false);
+  const [active, setActive] = useState('home');
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
+    const onScroll = () => {
+      const sections = ['contact', 'github', 'skills', 'experience', 'projects', 'approach', 'home'];
+      for (const id of sections) {
+        const el = document.getElementById(id);
+        if (el && window.scrollY >= el.offsetTop - 120) {
+          setActive(id);
+          break;
+        }
+      }
     };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  const scrollToSection = (sectionId) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-      setMobileMenuOpen(false);
-    }
+  const scrollTo = (id) => {
+    if (mode !== 'professional') setMode('professional');
+    setTimeout(() => {
+      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+    }, 50);
+    setOpen(false);
   };
 
-  const navItems = [
-    { label: 'Home', id: 'home' },
-    { label: 'About', id: 'about' },
-    { label: 'Projects', id: 'projects' },
-    { label: 'Skills', id: 'skills' },
-    { label: 'Contact', id: 'contact' }
-  ];
-
   return (
-    <NavbarContainer
-      $scrolled={scrolled}
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
-    >
-      <NavContent>
-        <Logo
-          onClick={() => scrollToSection('home')}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          Pranab Rai
-        </Logo>
+    <>
+      <Header>
+        <Container>
+          <Logo href="#home" onClick={e => { e.preventDefault(); scrollTo('home'); }} whileTap={{ scale: 0.97 }}>
+            Pranab<span>.</span>
+          </Logo>
 
-        <NavLinks>
-          {navItems.map((item) => (
-            <NavLink
-              key={item.id}
-              onClick={() => scrollToSection(item.id)}
-              whileHover={{ y: -2 }}
+          {/* Desktop */}
+          <DesktopNav>
+            {NAV_LINKS.map(n => (
+              <NavItem
+                key={n.id}
+                $active={active === n.id}
+                onClick={() => scrollTo(n.id)}
+              >
+                {n.label}
+              </NavItem>
+            ))}
+          </DesktopNav>
+
+          {/* Mobile */}
+          <MobileBtn onClick={() => setOpen(true)} whileTap={{ scale: 0.9 }}>
+            ☰
+          </MobileBtn>
+        </Container>
+      </Header>
+
+      <AnimatePresence>
+        {open && (
+          <>
+            <DrawerOverlay
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              onClick={() => setOpen(false)}
+            />
+            <Drawer
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              transition={{ type: 'tween', duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
             >
-              {item.label}
-            </NavLink>
-          ))}
-          <CTAButton
-            href="#contact"
-            onClick={(e) => {
-              e.preventDefault();
-              scrollToSection('contact');
-            }}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            Let's Talk
-          </CTAButton>
-        </NavLinks>
-
-        <MobileMenuButton onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
-          {mobileMenuOpen ? '✕' : '☰'}
-        </MobileMenuButton>
-      </NavContent>
-
-      <ProgressBar style={{ scaleX }} />
-
-      {mobileMenuOpen && (
-        <MobileMenu
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -20 }}
-          transition={{ duration: 0.2 }}
-        >
-          {navItems.map((item) => (
-            <MobileNavLink
-              key={item.id}
-              onClick={() => scrollToSection(item.id)}
-            >
-              {item.label}
-            </MobileNavLink>
-          ))}
-          <CTAButton
-            href="#contact"
-            onClick={(e) => {
-              e.preventDefault();
-              scrollToSection('contact');
-            }}
-            style={{ alignSelf: 'flex-start' }}
-          >
-            Let's Talk
-          </CTAButton>
-        </MobileMenu>
-      )}
-    </NavbarContainer>
+              <DrawerClose onClick={() => setOpen(false)}>
+                <FaTimes />
+              </DrawerClose>
+              <DrawerNav>
+                {NAV_LINKS.map(n => (
+                  <DrawerLink
+                    key={n.id}
+                    $active={active === n.id}
+                    onClick={() => scrollTo(n.id)}
+                  >
+                    {n.label}
+                  </DrawerLink>
+                ))}
+              </DrawerNav>
+            </Drawer>
+          </>
+        )}
+      </AnimatePresence>
+    </>
   );
 };
 

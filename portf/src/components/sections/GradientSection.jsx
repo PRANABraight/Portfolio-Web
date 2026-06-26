@@ -1,0 +1,122 @@
+// Animated gradient blobs — matches radnaabazar.com component 48761
+import styled, { keyframes } from 'styled-components';
+
+const moveFirst = keyframes`
+  0%   { transform: translate(-50%, -50%) scale(1); }
+  50%  { transform: translate(-60%, -40%) scale(1.1); }
+  100% { transform: translate(-50%, -50%) scale(1); }
+`;
+const moveSecond = keyframes`
+  0%   { transform: translate(-50%, -50%) scale(0.9); }
+  33%  { transform: translate(-35%, -60%) scale(1.1); }
+  66%  { transform: translate(-65%, -40%) scale(0.95); }
+  100% { transform: translate(-50%, -50%) scale(0.9); }
+`;
+const moveThird = keyframes`
+  0%   { transform: translate(-50%, -50%) scale(1.05); }
+  40%  { transform: translate(-60%, -60%) scale(0.9); }
+  80%  { transform: translate(-40%, -45%) scale(1.1); }
+  100% { transform: translate(-50%, -50%) scale(1.05); }
+`;
+const moveFourth = keyframes`
+  0%   { transform: translate(-50%, -50%) scale(0.95); }
+  50%  { transform: translate(-40%, -55%) scale(1.05); }
+  100% { transform: translate(-50%, -50%) scale(0.95); }
+`;
+const moveFifth = keyframes`
+  0%   { transform: translate(-130%, -80%); }
+  50%  { transform: translate(-100%, -90%); }
+  100% { transform: translate(-130%, -80%); }
+`;
+
+const Wrap = styled.div`
+  position: relative;
+  width: 100%;
+  height: 400px;
+  overflow: hidden;
+  background: linear-gradient(40deg, rgb(108, 0, 162), rgb(0, 17, 82));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const GradientsContainer = styled.div`
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  filter: url(#blurMe) blur(40px);
+`;
+
+const BlobBase = styled.div`
+  position: absolute;
+  width: 80%;
+  height: 80%;
+  top: calc(50% - 40%);
+  left: calc(50% - 40%);
+  border-radius: 50%;
+  mix-blend-mode: hard-light;
+`;
+
+const Blob1 = styled(BlobBase)`
+  background: radial-gradient(circle at center, rgb(18,113,255) 0%, rgba(18,113,255,0) 50%);
+  animation: ${moveFirst} 8s ease infinite;
+`;
+const Blob2 = styled(BlobBase)`
+  background: radial-gradient(circle at center, rgba(221,74,255,0.8) 0%, rgba(221,74,255,0) 50%);
+  animation: ${moveSecond} 10s ease infinite;
+  transform-origin: calc(50% - 400px);
+`;
+const Blob3 = styled(BlobBase)`
+  background: radial-gradient(circle at center, rgba(100,220,255,0.8) 0%, rgba(100,220,255,0) 50%);
+  animation: ${moveThird} 12s ease infinite;
+  transform-origin: calc(50% + 400px);
+`;
+const Blob4 = styled(BlobBase)`
+  background: radial-gradient(circle at center, rgba(200,50,50,0.8) 0%, rgba(200,50,50,0) 50%);
+  animation: ${moveFourth} 9s ease infinite;
+  opacity: 0.7;
+`;
+const Blob5 = styled(BlobBase)`
+  background: radial-gradient(circle at center, rgba(180,180,50,0.8) 0%, rgba(180,180,50,0) 50%);
+  animation: ${moveFifth} 11s ease infinite;
+`;
+
+const CenterText = styled.div`
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  color: rgba(255,255,255,0.9);
+  padding: 2rem 1.25rem;
+`;
+
+const GradientSection = () => (
+  <div style={{ position: 'relative', overflow: 'hidden' }}>
+    <Wrap>
+      <svg style={{ display: 'none' }}>
+        <defs>
+          <filter id="blurMe">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
+            <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -8" result="goo" />
+            <feBlend in="SourceGraphic" in2="goo" />
+          </filter>
+        </defs>
+      </svg>
+
+      <GradientsContainer>
+        <Blob1 /><Blob2 /><Blob3 /><Blob4 /><Blob5 />
+      </GradientsContainer>
+
+      <CenterText>
+        <h2 style={{ fontSize: 'clamp(1.5rem, 3vw, 2.2rem)', fontWeight: 800, letterSpacing: '-0.025em', marginBottom: '0.75rem' }}>
+          Building scalable, data-driven systems
+        </h2>
+        <p style={{ fontSize: '0.875rem', color: 'rgba(255,255,255,0.8)', maxWidth: '500px', margin: '0 auto', lineHeight: 1.625 }}>
+          Pragmatic, delivery-oriented Data &amp; ML Engineer — turning raw data into actionable insights
+        </p>
+      </CenterText>
+    </Wrap>
+  </div>
+);
+
+export default GradientSection;

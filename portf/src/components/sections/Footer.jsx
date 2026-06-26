@@ -1,48 +1,23 @@
-// src/components/sections/Footer.jsx
 import styled from 'styled-components';
-import { colors, typography, spacing } from '../../styles/theme';
 
-const FooterContainer = styled.footer`
-  padding: ${spacing['2xl']} ${spacing.xl};
+const El = styled.footer`
+  padding: 1.25rem;
   text-align: center;
-  border-top: 1px solid ${colors.border.default};
-  margin-top: ${spacing['4xl']};
-  background: ${colors.background.secondary};
+  border-top: 1px solid rgba(255,255,255,0.05);
+
+  p {
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.2);
+    letter-spacing: 0.04em;
+  }
+
+  span { color: #00ff99; }
 `;
 
-const FooterText = styled.p`
-  color: ${colors.text.secondary};
-  font-size: ${typography.fontSize.sm};
-  line-height: ${typography.lineHeight.relaxed};
-  font-weight: ${typography.fontWeight.regular};
-
-  span {
-    color: ${colors.text.primary};
-    font-weight: ${typography.fontWeight.medium};
-  }
-
-  .heart {
-    color: #FF375F;
-    display: inline-block;
-    animation: pulse 1.5s ease-in-out infinite;
-  }
-
-  @keyframes pulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.15); }
-  }
-`;
-
-const Footer = () => {
-  return (
-    <FooterContainer>
-      <FooterText>
-        Designed & Built with <span className="heart">❤️</span> by <span>Pranab Rai</span>
-        <br />
-        © {new Date().getFullYear()} Pranab Rai. All Rights Reserved.
-      </FooterText>
-    </FooterContainer>
-  );
-};
+const Footer = () => (
+  <El>
+    <p>© {new Date().getFullYear()} <span>Pranab Rai</span>. All rights reserved.</p>
+  </El>
+);
 
 export default Footer;
