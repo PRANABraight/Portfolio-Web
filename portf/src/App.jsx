@@ -26,8 +26,7 @@ import {
   SKILLS_QUERY, STATS_QUERY,
 } from './lib/queries';
 
-const SANITY_CONFIGURED = import.meta.env.VITE_SANITY_PROJECT_ID &&
-  import.meta.env.VITE_SANITY_PROJECT_ID !== 'REPLACE_ME';
+const SANITY_CONFIGURED = true;
 
 function App() {
   const [mode, setMode] = useState('professional');
