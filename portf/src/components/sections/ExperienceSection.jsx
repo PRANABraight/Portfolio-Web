@@ -165,7 +165,8 @@ const ExperienceSection = ({ cmsExperience }) => {
         {ITEMS.map((item, i) => {
           const IconComponent = getIcon(item.iconName);
           const hasBullets = item.bullets?.length > 0;
-          const hasMeta = item.company || item.startDate;
+          const hasMeta = item.company || item.startDate || item.location;
+          const dateStr = [item.startDate, item.endDate].filter(Boolean).join(' – ');
           return (
             <motion.div
               key={item.id}
@@ -180,8 +181,8 @@ const ExperienceSection = ({ cmsExperience }) => {
                 {item.company && <CompanyRow>{item.company}</CompanyRow>}
                 {hasMeta && (
                   <Meta>
-                    {[item.startDate, item.endDate].filter(Boolean).join(' – ')}
-                    {item.location ? ` · ${item.location}` : ''}
+                    {dateStr}
+                    {item.location ? `${dateStr ? ' · ' : ''}${item.location}` : ''}
                   </Meta>
                 )}
                 {hasBullets ? (
