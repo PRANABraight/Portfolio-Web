@@ -11,7 +11,7 @@ import falconImage from "../assets/falcon.jpg";
 
 export const heroData = {
   name: "Pranab Rai",
-  tagline: "Data Engineer | Data Science & Analytics",
+  tagline: "Software Engineer | Data & ML",
   traits: [
     "📊 Data & Platform Engineer",
     "🤖 Machine Learning Engineer",
@@ -58,6 +58,7 @@ export const skillsData = [
   { icon: SiOpencv,      name: "OpenCV",        color: "#5C3EE8", category: "ML/Data"   },
   { icon: SiTableau,     name: "Tableau",       color: "#E97627", category: "Viz"       },
   { icon: SiPlotly,      name: "Plotly",        color: "#3F4F75", category: "Viz"       },
+  { icon: SiFastapi,     name: "FastAPI",        color: "#009688", category: "Tools"     },
   { icon: FaGitAlt,      name: "Git",           color: "#F05032", category: "Tools"     },
 ];
 

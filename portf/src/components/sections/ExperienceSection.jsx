@@ -59,7 +59,47 @@ const ExpTitle = styled.h3`
   font-weight: 700;
   color: #fff;
   letter-spacing: -0.02em;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.25rem;
+`;
+
+const CompanyRow = styled.p`
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #00ff99;
+  margin-bottom: 0.25rem;
+`;
+
+const Meta = styled.p`
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.45);
+  margin-bottom: 1rem;
+  letter-spacing: 0.02em;
+`;
+
+const BulletList = styled.ul`
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+`;
+
+const BulletItem = styled.li`
+  font-size: 0.8125rem;
+  color: rgba(255,255,255,0.7);
+  line-height: 1.55;
+  padding-left: 1rem;
+  position: relative;
+
+  &::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: #00ff99;
+    font-size: 0.6rem;
+    top: 0.25rem;
+  }
 `;
 
 const ExpDesc = styled.p`
@@ -69,15 +109,50 @@ const ExpDesc = styled.p`
 `;
 
 const ITEMS_FALLBACK = [
-  { id: 1, iconName: 'FaCode',     title: 'Full Stack Developer', desc: 'Built Spotify Clone, WisdomWarrior e-learning platform, and Karnataka Beneficiary Dashboard. Led architecture decisions, deployed production systems.' },
-  { id: 2, iconName: 'FaDatabase', title: 'Data Engineer',        desc: 'Designed and built Credit Risk Analytics Platform processing 22,903 transactions with 6 REST API endpoints. Reduced manual reporting time by 80%.' },
-  { id: 3, iconName: 'FaBrain',    title: 'ML Engineer',          desc: 'Developed ML pipelines for SpaceX Falcon 9 (83.33% accuracy), Clinical Decision Support (93% RF/XGBoost), and real-time Student Attendance with YOLOv8.' },
-  { id: 4, iconName: 'FaServer',   title: 'Research Engineer',    desc: 'Published comprehensive QML review paper. Explored quantum chemistry, secure distributed computing, and high-dimensional data analysis with quantum algorithms.' },
+  {
+    id: 1,
+    iconName: 'FaBrain',
+    title: 'Software Engineer',
+    company: 'Centre for Open Societal Systems (COSS)',
+    location: 'Bengaluru, India',
+    startDate: 'Jan 2026',
+    endDate: 'Present',
+    bullets: [
+      'Built production AI feedback loop for NMT with DPO/KTO model alignment and RBAC',
+      'Contributed to VoiceERA — multilingual voice AI with IndicConformer STT and Indic Parler TTS',
+      'Researched RLHF/RLAIF, LoRA vs GaLore trade-offs, and RAG with Weaviate',
+      'Authored architecture docs; delivered India AI Summit deliverables',
+    ],
+  },
+  {
+    id: 2,
+    iconName: 'FaServer',
+    title: 'Data & Platform Engineer',
+    company: 'Government of Karnataka (Contract)',
+    location: 'Bengaluru, India',
+    startDate: 'Jul 2024',
+    endDate: 'Present',
+    bullets: [
+      'Built bilingual (English/Kannada) Next.js frontend tracking 5+ KPIs from 300+ submissions across 8 districts',
+      'Architected Node.js/Express/MongoDB backend with 2-tier RBAC and JWT auth',
+      'Designed data pipelines for survey validation and automated CSV/Excel export for officials',
+    ],
+  },
 ];
 
 const ExperienceSection = ({ cmsExperience }) => {
-  const ITEMS = cmsExperience
-    ? cmsExperience.map(e => ({ id: e._id, iconName: e.iconName || 'FaCode', title: e.title, desc: e.desc }))
+  const ITEMS = cmsExperience?.length
+    ? cmsExperience.map(e => ({
+        id: e._id,
+        iconName: e.iconName || 'FaCode',
+        title: e.title,
+        company: e.company,
+        location: e.location,
+        startDate: e.startDate,
+        endDate: e.endDate,
+        bullets: e.bullets,
+        desc: e.desc,
+      }))
     : ITEMS_FALLBACK;
 
   return (
@@ -89,6 +164,8 @@ const ExperienceSection = ({ cmsExperience }) => {
       <Grid>
         {ITEMS.map((item, i) => {
           const IconComponent = getIcon(item.iconName);
+          const hasBullets = item.bullets?.length > 0;
+          const hasMeta = item.company || item.startDate;
           return (
             <motion.div
               key={item.id}
@@ -100,7 +177,20 @@ const ExperienceSection = ({ cmsExperience }) => {
               <Card>
                 <Thumb><IconComponent /></Thumb>
                 <ExpTitle>{item.title}</ExpTitle>
-                <ExpDesc>{item.desc}</ExpDesc>
+                {item.company && <CompanyRow>{item.company}</CompanyRow>}
+                {hasMeta && (
+                  <Meta>
+                    {[item.startDate, item.endDate].filter(Boolean).join(' – ')}
+                    {item.location ? ` · ${item.location}` : ''}
+                  </Meta>
+                )}
+                {hasBullets ? (
+                  <BulletList>
+                    {item.bullets.map((b, j) => <BulletItem key={j}>{b}</BulletItem>)}
+                  </BulletList>
+                ) : (
+                  <ExpDesc>{item.desc}</ExpDesc>
+                )}
               </Card>
             </motion.div>
           );

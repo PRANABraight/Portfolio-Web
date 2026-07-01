@@ -66,13 +66,39 @@ const Dot = styled.div`
   @media (min-width: 768px) { display: block; }
 `;
 
+const YearRow = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  flex-wrap: wrap;
+`;
+
 const Year = styled.div`
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.15em;
   text-transform: uppercase;
   color: #00ff99;
-  margin-bottom: 0.5rem;
+`;
+
+const TYPE_COLORS = {
+  achievement:   { bg: 'rgba(255,196,0,0.12)',  text: '#ffc400' },
+  publication:   { bg: 'rgba(96,165,250,0.12)', text: '#60a5fa' },
+  certification: { bg: 'rgba(52,211,153,0.12)', text: '#34d399' },
+  leadership:    { bg: 'rgba(167,139,250,0.12)',text: '#a78bfa' },
+  milestone:     { bg: 'rgba(156,163,175,0.1)', text: '#9ca3af' },
+};
+
+const TypeBadge = styled.span`
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  background: ${({ $type }) => TYPE_COLORS[$type]?.bg || 'rgba(156,163,175,0.1)'};
+  color: ${({ $type }) => TYPE_COLORS[$type]?.text || '#9ca3af'};
 `;
 
 const EntryTitle = styled.h3`
@@ -148,7 +174,10 @@ const JourneySection = ({ cmsJourney }) => {
             viewport={{ once: true, margin: '-40px' }}
           >
             <Dot />
-            <Year>{e.year}</Year>
+            <YearRow>
+              <Year>{e.year}</Year>
+              {e.type && <TypeBadge $type={e.type}>{e.type}</TypeBadge>}
+            </YearRow>
             <EntryTitle>{e.title}</EntryTitle>
             <EntryDesc>{e.desc}</EntryDesc>
           </Entry>

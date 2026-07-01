@@ -11,12 +11,12 @@ export const ABOUT_QUERY = `*[_type == "about"][0]{
 }`;
 
 export const JOURNEY_QUERY = `*[_type == "journey"][0]{
-  entries[]{ year, title, desc }
+  entries[]{ year, title, desc, type }
 }`;
 
 export const PROJECTS_QUERY = `*[_type == "project"] | order(order asc) {
   _id, title, description, status,
-  image, stack, github, deployment
+  image, features, stack, github, deployment
 }`;
 
 export const EDUCATION_QUERY = `*[_type == "education"] | order(order asc) {
@@ -24,7 +24,7 @@ export const EDUCATION_QUERY = `*[_type == "education"] | order(order asc) {
 }`;
 
 export const EXPERIENCE_QUERY = `*[_type == "experience"] | order(order asc) {
-  _id, title, desc, iconName
+  _id, title, company, location, startDate, endDate, bullets, desc, iconName
 }`;
 
 export const SKILLS_QUERY = `*[_type == "skill"] | order(order asc) {

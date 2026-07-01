@@ -12,6 +12,7 @@ export default {
       type: 'string',
       options: { list: ['completed', 'ongoing', 'archived'] },
     },
+    { name: 'features', title: 'Key Features', type: 'array', of: [{ type: 'string' }] },
     { name: 'stack', title: 'Tech Stack', type: 'array', of: [{ type: 'string' }] },
     { name: 'github', title: 'GitHub URL', type: 'url' },
     { name: 'deployment', title: 'Live URL', type: 'url' },
