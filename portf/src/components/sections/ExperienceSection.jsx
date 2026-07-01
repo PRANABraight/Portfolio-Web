@@ -141,7 +141,7 @@ const ITEMS_FALLBACK = [
 ];
 
 const ExperienceSection = ({ cmsExperience }) => {
-  const ITEMS = cmsExperience?.length
+  const ITEMS = Array.isArray(cmsExperience)
     ? cmsExperience.map(e => ({
         id: e._id,
         iconName: e.iconName || 'FaCode',
