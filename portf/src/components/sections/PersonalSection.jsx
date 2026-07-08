@@ -2,7 +2,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaPlay, FaPause, FaForward, FaBackward, FaMusic } from 'react-icons/fa';
+import { FaPlay, FaForward, FaBackward, FaMusic } from 'react-icons/fa';
 import {
   LuBookOpen, LuGuitar, LuLandmark, LuMonitor,
   LuVolleyball, LuMusic, LuMail, LuHeart, LuRocket,
@@ -369,6 +369,14 @@ const WidgetsWrap = styled(motion.div)`
   margin-right: auto;
 `;
 
+const WidgetTitle = styled.h3`
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-weight: 500;
+  letter-spacing: -0.025em;
+  color: #fff;
+  text-align: center;
+`;
+
 const WidgetGrid = styled.div`
   display: flex;
   justify-content: center;
@@ -394,115 +402,71 @@ const MusicCard = styled.div`
   &:hover { background: #202020; }
 `;
 
-const MusicTop = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.9rem;
-`;
-
 const MusicImg = styled.img`
-  width: 64px; height: 64px;
-  border-radius: 8px;
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 12px;
   object-fit: cover;
-  flex-shrink: 0;
 `;
 
 const MusicDisc = styled.div`
-  width: 64px; height: 64px;
-  border-radius: 8px;
-  flex-shrink: 0;
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
   background: linear-gradient(135deg, #2a2840, #16142a);
   color: ${colors.accent};
-  font-size: 1.4rem;
+  font-size: 3.5rem;
 `;
 
 const MusicMeta = styled.div`
-  min-width: 0;
-
   .title {
-    font-size: 0.95rem;
+    font-size: 1.35rem;
     font-weight: 700;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
   }
   .artist {
-    font-size: 0.75rem;
+    font-size: 0.95rem;
     color: rgba(255,255,255,0.55);
-    margin-top: 0.2rem;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    margin-top: 0.3rem;
   }
-`;
-
-const ProgressRow = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-
-  .time {
-    font-family: ${typography.fontFamily.mono};
-    font-size: 0.625rem;
-    color: rgba(255,255,255,0.45);
-    min-width: 30px;
-    text-align: center;
-  }
-`;
-
-const ProgressTrack = styled.div`
-  flex: 1;
-  height: 4px;
-  border-radius: 9999px;
-  background: rgba(255,255,255,0.15);
-  cursor: ${p => p.$seekable ? 'pointer' : 'default'};
-  position: relative;
-
-  &:hover > div { background: ${colors.accent}; }
-`;
-
-const ProgressFill = styled.div`
-  height: 100%;
-  border-radius: 9999px;
-  background: #fff;
-  width: ${p => p.$pct}%;
-  transition: background 0.15s ease;
 `;
 
 const MusicControls = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1.4rem;
+  gap: 1.6rem;
 
   button {
     background: none;
     border: none;
     color: rgba(255,255,255,0.75);
     cursor: pointer;
-    font-size: 1rem;
+    font-size: 1.1rem;
     padding: 0;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: color 0.15s ease, transform 0.1s ease;
 
-    &:hover:not(:disabled) { color: #fff; }
-    &:active:not(:disabled) { transform: scale(0.94); }
-    &:disabled { opacity: 0.3; cursor: not-allowed; }
+    &:hover { color: #fff; }
+    &:active { transform: scale(0.94); }
   }
 
-  .play {
-    width: 40px; height: 40px;
+  a.play {
+    width: 48px; height: 48px;
     border-radius: 50%;
-    background: ${colors.accent};
+    background: #1db954;
     color: #0f0e1a;
-    font-size: 0.85rem;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.15s ease;
 
-    &:hover:not(:disabled) { color: #0f0e1a; transform: scale(1.05); }
+    &:hover { transform: scale(1.07); }
   }
 `;
 
@@ -633,7 +597,7 @@ const FALLBACK_SONG = {
   title: 'Merry-Go-Round of Life',
   artist: "Joe Hisaishi — Howl's Moving Castle",
   albumArt: null,
-  audioUrl: null,
+  spotifyUrl: null,
 };
 
 const BEAMS = [
@@ -649,111 +613,73 @@ const BEAMS = [
 /* ══════════════════════════════════════════════════════
    MUSIC PLAYER — songs come from Sanity (personal.songs)
 ═══════════════════════════════════════════════════════ */
-const fmtTime = (s) => {
-  if (!Number.isFinite(s)) return '0:00';
-  const m = Math.floor(s / 60);
-  return `${m}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
-};
-
 const MusicPlayer = ({ songs }) => {
   const list = songs?.length ? songs : [FALLBACK_SONG];
   const [idx, setIdx] = useState(0);
-  const [playing, setPlaying] = useState(false);
-  const [progress, setProgress] = useState(0);
-  const [duration, setDuration] = useState(0);
-  const audioRef = useRef(null);
-  const trackRef = useRef(null);
+  // album art from Spotify's oEmbed endpoint, keyed by song URL (null = fetch failed)
+  const [spotifyArt, setSpotifyArt] = useState({});
 
   const song = list[idx];
-  const hasAudio = !!song.audioUrl;
-  const artUrl = song.albumArt ? urlFor(song.albumArt).width(200).height(200).url() : null;
 
-  const goTo = (nextIdx) => {
-    setIdx(((nextIdx % list.length) + list.length) % list.length);
-    setProgress(0);
-    setDuration(0);
-  };
-
-  // keep playback going across track changes
   useEffect(() => {
-    const el = audioRef.current;
-    if (el && playing && hasAudio) el.play().catch(() => setPlaying(false));
-  }, [idx]); // eslint-disable-line react-hooks/exhaustive-deps
+    if (song.albumArt || !song.spotifyUrl) return;
+    if (spotifyArt[song.spotifyUrl] !== undefined) return;
+    let cancelled = false;
+    fetch(`https://open.spotify.com/oembed?url=${encodeURIComponent(song.spotifyUrl)}`)
+      .then(r => (r.ok ? r.json() : null))
+      .then(d => {
+        if (!cancelled) {
+          setSpotifyArt(m => ({ ...m, [song.spotifyUrl]: d?.thumbnail_url || null }));
+        }
+      })
+      .catch(() => {
+        if (!cancelled) setSpotifyArt(m => ({ ...m, [song.spotifyUrl]: null }));
+      });
+    return () => { cancelled = true; };
+  }, [song.albumArt, song.spotifyUrl]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const togglePlay = () => {
-    const el = audioRef.current;
-    if (!el || !hasAudio) return;
-    if (playing) { el.pause(); setPlaying(false); }
-    else { el.play().then(() => setPlaying(true)).catch(() => setPlaying(false)); }
-  };
+  const artUrl = song.albumArt
+    ? urlFor(song.albumArt).width(800).height(800).url()
+    : spotifyArt[song.spotifyUrl] || null;
 
-  const seek = (e) => {
-    const el = audioRef.current;
-    const track = trackRef.current;
-    if (!el || !track || !duration) return;
-    const rect = track.getBoundingClientRect();
-    const pct = Math.min(Math.max((e.clientX - rect.left) / rect.width, 0), 1);
-    el.currentTime = pct * duration;
-    setProgress(pct * duration);
-  };
+  const goTo = (nextIdx) => setIdx(((nextIdx % list.length) + list.length) % list.length);
 
   return (
     <MusicCard>
-      {hasAudio && (
-        <audio
-          ref={audioRef}
-          src={song.audioUrl}
-          preload="metadata"
-          onTimeUpdate={e => setProgress(e.target.currentTime)}
-          onLoadedMetadata={e => setDuration(e.target.duration)}
-          onEnded={() => goTo(idx + 1)}
-        />
-      )}
+      {artUrl
+        ? <MusicImg src={artUrl} alt={`${song.title} album art`} />
+        : <MusicDisc aria-hidden="true"><FaMusic /></MusicDisc>}
 
-      <MusicTop>
-        {artUrl
-          ? <MusicImg src={artUrl} alt={`${song.title} album art`} />
-          : <MusicDisc aria-hidden="true"><FaMusic /></MusicDisc>}
-        <MusicMeta>
-          <p className="title">{song.title}</p>
-          <p className="artist">{song.artist}</p>
-        </MusicMeta>
-      </MusicTop>
-
-      <ProgressRow>
-        <span className="time">{fmtTime(progress)}</span>
-        <ProgressTrack ref={trackRef} $seekable={hasAudio} onClick={seek}>
-          <ProgressFill $pct={duration ? (progress / duration) * 100 : 0} />
-        </ProgressTrack>
-        <span className="time">{fmtTime(duration)}</span>
-      </ProgressRow>
+      <MusicMeta>
+        <p className="title">{song.title}</p>
+        <p className="artist">{song.artist}</p>
+      </MusicMeta>
 
       <MusicControls>
-        <button
-          onClick={() => goTo(idx - 1)}
-          disabled={list.length < 2}
-          aria-label="Previous song"
-        >
-          <FaBackward />
-        </button>
-        <button
-          className="play"
-          onClick={togglePlay}
-          disabled={!hasAudio}
-          aria-label={playing ? 'Pause' : 'Play'}
-        >
-          {playing ? <FaPause /> : <FaPlay style={{ marginLeft: 2 }} />}
-        </button>
-        <button
-          onClick={() => goTo(idx + 1)}
-          disabled={list.length < 2}
-          aria-label="Next song"
-        >
-          <FaForward />
-        </button>
+        {list.length > 1 && (
+          <button onClick={() => goTo(idx - 1)} aria-label="Previous song">
+            <FaBackward />
+          </button>
+        )}
+        {song.spotifyUrl && (
+          <a
+            className="play"
+            href={song.spotifyUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`Play ${song.title} on Spotify`}
+          >
+            <FaPlay style={{ marginLeft: 3 }} />
+          </a>
+        )}
+        {list.length > 1 && (
+          <button onClick={() => goTo(idx + 1)} aria-label="Next song">
+            <FaForward />
+          </button>
+        )}
       </MusicControls>
 
-      {!hasAudio && <MusicHint>add songs in Sanity Studio to enable playback</MusicHint>}
+      {!song.spotifyUrl && <MusicHint>add Spotify links in Sanity Studio to enable playback</MusicHint>}
     </MusicCard>
   );
 };
@@ -905,10 +831,12 @@ const PersonalSection = ({ cmsPersonal }) => {
 
       {/* ── 4. MUSIC ── */}
       <WidgetsWrap {...fadeIn}>
+        <WidgetTitle>Music that I enjoy 🎶</WidgetTitle>
         <WidgetGrid>
-          <MusicPlayer songs={cmsPersonal?.songs} />
+          <MusicPlayer songs={cmsPersonal?.songs || []} />
         </WidgetGrid>
       </WidgetsWrap>
+ 
 
       {/* ── 5. THANK YOU ── */}
       <ThankWrap>

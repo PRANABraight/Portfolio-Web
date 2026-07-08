@@ -37,5 +37,5 @@ export const STATS_QUERY = `*[_type == "stat"] | order(order asc) {
 
 export const PERSONAL_QUERY = `*[_type == "personal"][0]{
   hobbyImages{ fitness, tableTennis, books, guitar, roots },
-  songs[]{ title, artist, albumArt, "audioUrl": audioFile.asset->url }
+  songs[]{ title, artist, albumArt, spotifyUrl }
 }`;

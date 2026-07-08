@@ -6,5 +6,6 @@ import education from './education';
 import experience from './experience';
 import skill from './skill';
 import stat from './stat';
+import personal from './personal';
 
-export const schemaTypes = [hero, about, journey, project, education, experience, skill, stat];
+export const schemaTypes = [hero, about, journey, project, education, experience, skill, stat, personal];

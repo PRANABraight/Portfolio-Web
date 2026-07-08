@@ -1,12 +1,3 @@
-/**
- * Sanity schema for the Personal page — copy this file into your Sanity
- * Studio project's schema folder (e.g. schemas/personal.js) and register it
- * in your schema index, then deploy the Studio.
- *
- * After deploying: create ONE "Personal Page" document, upload hobby images
- * (optional — the site bundles fallbacks) and add songs with audio files
- * (mp3/m4a). The site's music player picks them up automatically.
- */
 export default {
   name: 'personal',
   title: 'Personal Page',
@@ -28,7 +19,7 @@ export default {
     {
       name: 'songs',
       title: 'Playlist',
-      description: 'Songs for the Spotify-style player on the Personal page.',
+      description: 'Songs for the Spotify-style player on the Personal page. Playback happens via Spotify embed — paste the track link from Spotify (Share → Copy Song Link).',
       type: 'array',
       of: [
         {
@@ -38,11 +29,11 @@ export default {
             { name: 'artist', title: 'Artist', type: 'string', validation: R => R.required() },
             { name: 'albumArt', title: 'Album art', type: 'image' },
             {
-              name: 'audioFile',
-              title: 'Audio file',
-              type: 'file',
-              options: { accept: 'audio/*' },
-              validation: R => R.required(),
+              name: 'spotifyUrl',
+              title: 'Spotify link',
+              description: 'e.g. https://open.spotify.com/track/…',
+              type: 'url',
+              validation: R => R.required().uri({ scheme: ['https'] }),
             },
           ],
           preview: {
