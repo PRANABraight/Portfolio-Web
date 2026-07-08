@@ -152,7 +152,7 @@ const LinkBtn = styled.a`
 const COLORS = ['#3776AB', '#F7931E', '#47A248', '#4479A1', '#00ff99'];
 
 const ProjectCard = ({ project, onClick, isOngoing }) => {
-  const icons = project.stack.slice(0, 4);
+  const icons = (project.stack ?? []).slice(0, 4);
   const hasGithub = !!project.github;
   const hasLive = !!project.deployment;
 
@@ -210,6 +210,8 @@ const ProjectsSection = ({ cmsProjects }) => {
   if (cmsProjects) {
     const normalized = cmsProjects.map(p => ({
       ...p,
+      stack: p.stack ?? [],
+      features: p.features ?? [],
       image: p.image ? urlFor(p.image).width(800).url() : null,
     }));
     completed = normalized.filter(p => p.status !== 'ongoing');

@@ -24,19 +24,19 @@ Single-page React 18 portfolio with a dual-mode layout. The `mode` state in `App
 
 ### Key architectural decisions
 
-- **Dual styling system** — components mix `styled-components` and Tailwind CSS. New components should pick one and stay consistent within the file.
+- **Styling** — `styled-components` throughout, plus global styles in `src/index.css`. (Tailwind was removed — it was never wired into PostCSS.)
 - **Design tokens** — `src/styles/theme.js` exports `colors`, `typography`, `spacing`, `borderRadius`, `transitions`, `breakpoints`. Import from here; do not hardcode hex values. Note the file has both flat aliases (`colors.accent`) and nested objects (`colors.background.primary`) for backward compatibility.
 - **All content data** — `src/data/portfolioData.jsx` is the single source of truth for hero, about, skills, projects, experience, education, journey, stats, and social links. Editing display content means editing this file only.
-- **Backend** — `server.js` is a minimal Express server solely for the contact form email via Resend API. It runs separately from Vite on port 3000. `VITE_RESEND_API_KEY` must be set in `.env` inside `portf/`.
+- **Backend** — the contact form posts to `/api/send-email`, a Vercel serverless function in `api/send-email.js`. `server.js` is a thin Express shim mounting the same handler for local dev (Vite proxies `/api` to port 3000). `RESEND_API_KEY` and `CONTACT_TO_EMAIL` go in `.env.local` inside `portf/` — never with a `VITE_` prefix (those get bundled into client JS).
 - **Animation** — Framer Motion throughout. Entry animations use `viewport={{ once: true }}` to fire once on scroll.
-- **Section order** (professional mode): Hero → Stats → Education → GradientSection → Approach → Projects → Experience → Journey → Skills → GitHub → Contact → Footer
+- **Section order** (professional mode): Hero → Stats → Education → About → GradientSection → Approach → Projects → Experience → Journey → Skills → GitHub → Contact → Footer
 
 ### Component layout
 
 ```
 src/components/
   sections/        # Full-page sections (one per scroll stop)
-  common/          # Reusable pieces: AnimatedTitle, StatCounter, ScrollProgress, ProjectModal, MagneticButton
+  common/          # Reusable pieces: AnimatedTitle, ScrollProgress, ProjectModal, ErrorBoundary
   Background.jsx   # Animated canvas/CSS background, rendered outside <main>
   Navbar.jsx       # Top nav with mode toggle
   FloatingNav.jsx  # Bottom floating nav, mirrors Navbar mode toggle
@@ -44,4 +44,4 @@ src/components/
   Spotlight.jsx
 ```
 
-`ProjectsSection_working.jsx` is a scratch/backup file — not imported anywhere, safe to ignore.
+**Deploy** — Vercel, with Root Directory set to `portf` (see `portf/vercel.json`). `api/` is auto-detected as serverless functions.

@@ -35,4 +35,9 @@ export default [
       ],
     },
   },
+  {
+    // Server-side files run under Node, not the browser
+    files: ['api/**/*.js', 'server.js'],
+    languageOptions: { globals: { ...globals.node } },
+  },
 ]

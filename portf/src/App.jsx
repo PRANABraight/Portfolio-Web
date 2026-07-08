@@ -6,6 +6,7 @@ import FloatingNav from './components/FloatingNav';
 import ScrollProgress from './components/common/ScrollProgress';
 
 import HeroSection from './components/sections/HeroSection';
+import AboutSection from './components/sections/AboutSection';
 import StatsSection from './components/sections/StatsSection';
 import EducationSection from './components/sections/EducationSection';
 import GradientSection from './components/sections/GradientSection';
@@ -26,8 +27,6 @@ import {
   SKILLS_QUERY, STATS_QUERY,
 } from './lib/queries';
 
-const SANITY_CONFIGURED = true;
-
 function App() {
   const [mode, setMode] = useState('professional');
   const [cms, setCms] = useState({
@@ -42,19 +41,26 @@ function App() {
   });
 
   useEffect(() => {
-    if (!SANITY_CONFIGURED) return;
-    Promise.all([
-      client.fetch(HERO_QUERY),
-      client.fetch(ABOUT_QUERY),
-      client.fetch(JOURNEY_QUERY),
-      client.fetch(PROJECTS_QUERY),
-      client.fetch(EDUCATION_QUERY),
-      client.fetch(EXPERIENCE_QUERY),
-      client.fetch(SKILLS_QUERY),
-      client.fetch(STATS_QUERY),
-    ]).then(([hero, about, journey, projects, education, experience, skills, stats]) => {
-      setCms({ hero, about, journey, projects, education, experience, skills, stats });
-    }).catch(console.error);
+    const queries = {
+      hero: HERO_QUERY,
+      about: ABOUT_QUERY,
+      journey: JOURNEY_QUERY,
+      projects: PROJECTS_QUERY,
+      education: EDUCATION_QUERY,
+      experience: EXPERIENCE_QUERY,
+      skills: SKILLS_QUERY,
+      stats: STATS_QUERY,
+    };
+    const keys = Object.keys(queries);
+    // allSettled: one failing query degrades only its own section to fallback data
+    Promise.allSettled(keys.map(k => client.fetch(queries[k]))).then(results => {
+      const next = {};
+      results.forEach((r, i) => {
+        if (r.status === 'fulfilled') next[keys[i]] = r.value;
+        else console.error(`Sanity ${keys[i]} query failed:`, r.reason);
+      });
+      setCms(prev => ({ ...prev, ...next }));
+    });
   }, []);
 
   return (
@@ -69,6 +75,7 @@ function App() {
           <HeroSection cmsHero={cms.hero} />
           <StatsSection cmsStats={cms.stats} />
           <EducationSection cmsEducation={cms.education} />
+          <AboutSection cmsAbout={cms.about} />
           <GradientSection />
           <ApproachSection />
           <ProjectsSection cmsProjects={cms.projects} />

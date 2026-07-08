@@ -288,6 +288,7 @@ const ProjectModal = ({ project, isOpen, onClose }) => {
               onClick={onClose}
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
+              aria-label="Close project details"
             >
               <FaTimes />
             </CloseButton>
@@ -303,7 +304,7 @@ const ProjectModal = ({ project, isOpen, onClose }) => {
 
               <SectionTitle>✨ Key Features</SectionTitle>
               <FeaturesList>
-                {project.features.map((feature, index) => (
+                {(project.features ?? []).map((feature, index) => (
                   <FeatureItem
                     key={index}
                     initial={{ opacity: 0, x: -20 }}
@@ -318,7 +319,7 @@ const ProjectModal = ({ project, isOpen, onClose }) => {
 
               <SectionTitle>🛠️ Tech Stack</SectionTitle>
               <TechStack>
-                {project.stack.map((tech, index) => (
+                {(project.stack ?? []).map((tech, index) => (
                   <TechTag
                     key={tech}
                     initial={{ opacity: 0, scale: 0.8 }}

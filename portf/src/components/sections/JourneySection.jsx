@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
+import { colors } from '../../styles/theme';
 
 const Wrap = styled.section`
   padding: 6rem 1.25rem;
@@ -36,7 +37,7 @@ const TLine = styled.div`
     top: 0;
     bottom: 0;
     width: 1px;
-    background: linear-gradient(to bottom, #00ff99, rgba(0,255,153,0.08));
+    background: linear-gradient(to bottom, ${colors.accentBlue}, ${colors.accentBlueSoft});
     display: none;
 
     @media (min-width: 768px) { display: block; }
@@ -59,8 +60,8 @@ const Dot = styled.div`
   top: 0.4rem;
   width: 10px; height: 10px;
   border-radius: 50%;
-  background: #00ff99;
-  box-shadow: 0 0 12px rgba(0,255,153,0.6);
+  background: ${colors.accentBlue};
+  box-shadow: 0 0 12px ${colors.accentBlueGlow};
   transform: translateX(-50%);
 
   @media (min-width: 768px) { display: block; }

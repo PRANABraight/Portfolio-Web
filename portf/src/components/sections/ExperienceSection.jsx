@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
-import { FaDatabase, FaBrain, FaCode, FaServer } from 'react-icons/fa';
 import { getIcon } from '../../lib/iconMap';
 
 const Wrap = styled.section`

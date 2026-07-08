@@ -301,7 +301,7 @@ const HeroSection = ({ cmsHero }) => {
                 <SIcon
                   key={s.label}
                   href={s.href}
-                  target={s.href.startsWith('http') ? '_blank' : undefined}
+                  target={s.href?.startsWith('http') ? '_blank' : undefined}
                   rel="noopener noreferrer"
                   aria-label={s.label}
                   whileTap={{ scale: 0.92 }}

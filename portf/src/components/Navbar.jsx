@@ -188,7 +188,7 @@ const Navbar = ({ mode, setMode }) => {
           </DesktopNav>
 
           {/* Mobile */}
-          <MobileBtn onClick={() => setOpen(true)} whileTap={{ scale: 0.9 }}>
+          <MobileBtn onClick={() => setOpen(true)} whileTap={{ scale: 0.9 }} aria-label="Open navigation menu">
             ☰
           </MobileBtn>
         </Container>
@@ -210,7 +210,7 @@ const Navbar = ({ mode, setMode }) => {
               exit={{ x: '100%' }}
               transition={{ type: 'tween', duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
             >
-              <DrawerClose onClick={() => setOpen(false)}>
+              <DrawerClose onClick={() => setOpen(false)} aria-label="Close navigation menu">
                 <FaTimes />
               </DrawerClose>
               <DrawerNav>

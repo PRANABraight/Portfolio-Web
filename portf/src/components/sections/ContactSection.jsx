@@ -1,7 +1,9 @@
 // Contact/Footer CTA — exact match to radnaabazar.com component 30836
+import { useState } from 'react';
 import styled, { keyframes } from 'styled-components';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { FaGithub, FaLinkedin, FaInstagram, FaEnvelope, FaArrowRight } from 'react-icons/fa';
+import { colors, typography, borderRadius, transitions } from '../../styles/theme';
 
 const spinConic = keyframes`from{transform:rotate(0deg)}to{transform:rotate(360deg)}`;
 
@@ -58,7 +60,7 @@ const Heading = styled.h1`
   min-width: 280px;
   line-height: 1.15;
 
-  span { color: #00ff99; }
+  span { color: ${colors.accent}; }
 
   @media (max-width: 768px) { max-width: 90vw; }
 `;
@@ -72,8 +74,71 @@ const CtaDesc = styled.p`
   max-width: 520px;
 `;
 
+/* Contact form */
+const Form = styled.form`
+  width: 100%;
+  max-width: 520px;
+  display: grid;
+  gap: 1rem;
+  margin-bottom: 1.75rem;
+`;
+
+const Field = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+`;
+
+const Label = styled.label`
+  font-family: ${typography.fontFamily.mono};
+  font-size: 0.75rem;
+  color: ${colors.text2};
+  letter-spacing: 0.04em;
+`;
+
+const inputStyles = `
+  width: 100%;
+  background: ${colors.bgCard};
+  border: 1px solid ${colors.border.default};
+  border-radius: ${borderRadius.md};
+  padding: 0.7rem 0.9rem;
+  font-family: ${typography.fontFamily.mono};
+  font-size: 0.875rem;
+  color: ${colors.text.primary};
+  outline: none;
+  transition: border-color ${transitions.base};
+
+  &::placeholder { color: ${colors.text3}; }
+  &:focus { border-color: ${colors.border.focus}; }
+`;
+
+const Input = styled.input`${inputStyles}`;
+
+const TextArea = styled.textarea`
+  ${inputStyles}
+  min-height: 120px;
+  resize: vertical;
+`;
+
+/* Honeypot — visually hidden, bots fill it, humans never see it */
+const Honeypot = styled.div`
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+`;
+
+const StatusMsg = styled(motion.p)`
+  font-family: ${typography.fontFamily.mono};
+  font-size: 0.8125rem;
+  text-align: center;
+  margin: 0;
+  color: ${p => (p.$error ? colors.warning.main : colors.accent)};
+`;
+
 /* Shiny animated button (exact from source component 24750) */
-const ShinyBtn = styled(motion.a)`
+const ShinyBtn = styled(motion.button)`
   position: relative;
   display: inline-flex;
   height: 48px;
@@ -82,7 +147,13 @@ const ShinyBtn = styled(motion.a)`
   overflow: hidden;
   border-radius: 8px;
   padding: 1px;
-  text-decoration: none;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  justify-self: center;
+  margin: 0 auto;
+
+  &:disabled { opacity: 0.6; cursor: not-allowed; }
 `;
 
 const Spinner = styled.span`
@@ -99,7 +170,7 @@ const ShinyLabel = styled.span`
   align-items: center;
   justify-content: center;
   border-radius: 8px;
-  background: #0f0e1a;
+  background: ${colors.bg};
   padding: 0 1.75rem;
   font-size: 0.875rem;
   font-weight: 500;
@@ -123,17 +194,17 @@ const PersonalBtn = styled(motion.button)`
   height: 44px;
   padding: 0 1.5rem;
   border-radius: 9999px;
-  border: 1px solid #00ff99;
+  border: 1px solid ${colors.accent};
   background: transparent;
-  color: #00ff99;
-  font-family: 'JetBrains Mono', monospace;
+  color: ${colors.accent};
+  font-family: ${typography.fontFamily.mono};
   font-size: 0.875rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
   margin-top: 1rem;
 
-  &:hover { background: #00ff99; color: #0f0e1a; border-color: #00ff99; }
+  &:hover { background: ${colors.accent}; color: ${colors.bg}; border-color: ${colors.accent}; }
 `;
 
 /* Bottom row */
@@ -163,17 +234,17 @@ const SocialRow = styled.div`
 
 const SocialBtn = styled(motion.a)`
   width: 36px; height: 36px;
-  border: 1px solid #00ff99;
+  border: 1px solid ${colors.accent};
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #00ff99;
+  color: ${colors.accent};
   font-size: 0.875rem;
   text-decoration: none;
   transition: all 0.5s ease;
 
-  &:hover { background: #00ff99; color: #0f0e1a; }
+  &:hover { background: ${colors.accent}; color: ${colors.bg}; }
 `;
 
 const SOCIALS = [
@@ -183,59 +254,176 @@ const SOCIALS = [
   { icon: <FaEnvelope />,  href: 'mailto:pranabrai137@gmail.com',                 label: 'Email' },
 ];
 
-const ContactSection = ({ setMode }) => (
-  <Wrap id="contact" >
-    <FooterBg />
-    <Inner>
-      <CtaBlock>
-        <Heading>
-          Let's{' '}
-          <span>Talk</span>
-        </Heading>
+const INITIAL_FORM = { name: '', email: '', message: '', company: '' };
 
-        <CtaDesc>
-          What led you here? What are you looking for? I would love to hear from you over a virtual coffee chat!
-        </CtaDesc>
+const ContactSection = ({ setMode }) => {
+  const [form, setForm] = useState(INITIAL_FORM);
+  const [status, setStatus] = useState('idle'); // idle | loading | success | error
+  const [errorMsg, setErrorMsg] = useState('');
 
-        <ShinyBtn
-          href="mailto:pranabrai137@gmail.com"
-          whileTap={{ scale: 0.97 }}
-        >
-          <Spinner />
-          <ShinyLabel>
-            Let's get in touch <FaArrowRight size={11} />
-          </ShinyLabel>
-        </ShinyBtn>
+  const onChange = (e) =>
+    setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
 
-        <Hr />
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    if (status === 'loading') return;
+    setStatus('loading');
+    setErrorMsg('');
+    try {
+      const res = await fetch('/api/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (res.ok && data.success) {
+        setStatus('success');
+        setForm(INITIAL_FORM);
+      } else {
+        setStatus('error');
+        setErrorMsg(data.error || 'Something went wrong. Please try again.');
+      }
+    } catch {
+      setStatus('error');
+      setErrorMsg('Network error. Please try again or email me directly.');
+    }
+  };
 
-        <PersonalBtn
-          onClick={() => setMode && setMode('personal')}
-          whileTap={{ scale: 0.97 }}
-        >
-          Peer through my Personal Life ↗
-        </PersonalBtn>
-      </CtaBlock>
+  return (
+    <Wrap id="contact" >
+      <FooterBg />
+      <Inner>
+        <CtaBlock>
+          <Heading>
+            Let's{' '}
+            <span>Talk</span>
+          </Heading>
 
-      <BottomRow>
-        <NameLabel>Pranab Rai</NameLabel>
-        <SocialRow>
-          {SOCIALS.map(s => (
-            <SocialBtn
-              key={s.label}
-              href={s.href}
-              target={s.href.startsWith('http') ? '_blank' : undefined}
-              rel="noopener noreferrer"
-              aria-label={s.label}
-              whileTap={{ scale: 0.9 }}
+          <CtaDesc>
+            What led you here? What are you looking for? I would love to hear from you over a virtual coffee chat!
+          </CtaDesc>
+
+          <Form onSubmit={onSubmit}>
+            <Field>
+              <Label htmlFor="contact-name">Name</Label>
+              <Input
+                id="contact-name"
+                name="name"
+                type="text"
+                placeholder="Your name"
+                value={form.name}
+                onChange={onChange}
+                maxLength={100}
+                required
+              />
+            </Field>
+
+            <Field>
+              <Label htmlFor="contact-email">Email</Label>
+              <Input
+                id="contact-email"
+                name="email"
+                type="email"
+                placeholder="you@example.com"
+                value={form.email}
+                onChange={onChange}
+                maxLength={254}
+                required
+              />
+            </Field>
+
+            <Field>
+              <Label htmlFor="contact-message">Message</Label>
+              <TextArea
+                id="contact-message"
+                name="message"
+                placeholder="What's on your mind?"
+                value={form.message}
+                onChange={onChange}
+                minLength={10}
+                maxLength={5000}
+                required
+              />
+            </Field>
+
+            <Honeypot aria-hidden="true">
+              <label htmlFor="contact-company">Company</label>
+              <input
+                id="contact-company"
+                name="company"
+                type="text"
+                tabIndex={-1}
+                autoComplete="off"
+                value={form.company}
+                onChange={onChange}
+              />
+            </Honeypot>
+
+            <AnimatePresence>
+              {status === 'success' && (
+                <StatusMsg
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0 }}
+                >
+                  Message sent — I'll get back to you soon!
+                </StatusMsg>
+              )}
+              {status === 'error' && (
+                <StatusMsg
+                  $error
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0 }}
+                >
+                  {errorMsg}
+                </StatusMsg>
+              )}
+            </AnimatePresence>
+
+            <ShinyBtn
+              type="submit"
+              disabled={status === 'loading'}
+              whileTap={{ scale: 0.97 }}
+              aria-label="Send message"
             >
-              {s.icon}
-            </SocialBtn>
-          ))}
-        </SocialRow>
-      </BottomRow>
-    </Inner>
-  </Wrap>
-);
+              <Spinner />
+              <ShinyLabel>
+                {status === 'loading' ? 'Sending…' : <>Let's get in touch <FaArrowRight size={11} /></>}
+              </ShinyLabel>
+            </ShinyBtn>
+          </Form>
+
+          <Hr />
+
+          <PersonalBtn
+            onClick={() => setMode && setMode('personal')}
+            whileTap={{ scale: 0.97 }}
+          >
+            Peer through my Personal Life ↗
+          </PersonalBtn>
+        </CtaBlock>
+
+        <BottomRow>
+          <NameLabel>Pranab Rai</NameLabel>
+          <SocialRow>
+            {SOCIALS.map(s => (
+              <SocialBtn
+                key={s.label}
+                href={s.href}
+                target={s.href.startsWith('http') ? '_blank' : undefined}
+                rel="noopener noreferrer"
+                aria-label={s.label}
+                whileTap={{ scale: 0.9 }}
+              >
+                {s.icon}
+              </SocialBtn>
+            ))}
+          </SocialRow>
+        </BottomRow>
+      </Inner>
+    </Wrap>
+  );
+};
 
 export default ContactSection;

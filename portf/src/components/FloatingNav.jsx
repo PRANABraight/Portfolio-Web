@@ -118,8 +118,11 @@ const FloatingNav = ({ mode, setMode }) => {
                   key={tab.key}
                   $active={isActive}
                   onClick={() => setMode(tab.key)}
+                  onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setMode(tab.key); } }}
                   role="button"
                   tabIndex={0}
+                  aria-label={`Switch to ${tab.label.toLowerCase()} mode`}
+                  aria-pressed={isActive}
                 >
                   <span style={{ position: 'relative', zIndex: 10 }}>{tab.label}</span>
                   {isActive && (

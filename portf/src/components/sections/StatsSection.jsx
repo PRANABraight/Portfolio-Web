@@ -57,7 +57,7 @@ const useCountUp = (end, duration = 2000, delay = 0, started = false) => {
 };
 
 const StatItem = ({ item, hovered, onEnter, onLeave, started }) => {
-  const count = useCountUp(item.num, 5000, item.delay * 1000, started);
+  const count = useCountUp(item.num, 1500, item.delay * 1000, started);
   const isBlurred = hovered !== null && hovered !== item.id;
 
   return (
@@ -96,14 +96,14 @@ const StatItem = ({ item, hovered, onEnter, onLeave, started }) => {
 };
 
 const STATS_FALLBACK = [
-  { id: 0, num: 1,  suffix: '+', label: 'Years of experience', delay: 2 },
-  { id: 1, num: 5,  suffix: '+', label: 'Projects worked on',  delay: 2 },
-  { id: 2, num: 4,  suffix: '+', label: 'Projects deployed',   delay: 2 },
+  { id: 0, num: 1,  suffix: '+', label: 'Years of experience', delay: 0.3 },
+  { id: 1, num: 5,  suffix: '+', label: 'Projects worked on',  delay: 0.3 },
+  { id: 2, num: 4,  suffix: '+', label: 'Projects deployed',   delay: 0.3 },
 ];
 
 const StatsSection = ({ cmsStats }) => {
   const STATS = cmsStats
-    ? cmsStats.map((s, i) => ({ id: i, num: s.num, suffix: s.suffix || '+', label: s.label, delay: 2 }))
+    ? cmsStats.map((s, i) => ({ id: i, num: s.num, suffix: s.suffix || '+', label: s.label, delay: 0.3 }))
     : STATS_FALLBACK;
   const [hovered, setHovered] = useState(null);
   const ref = useRef(null);
