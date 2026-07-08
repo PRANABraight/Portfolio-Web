@@ -716,7 +716,7 @@ const PersonalSection = ({ cmsPersonal }) => {
       <IntroWrap {...fadeIn}>
         <BigHello>
           Hello again? <br />
-          My nickname is{' '}
+          My name is{' '}
           <span
             style={{
               display: 'inline-block',
@@ -725,7 +725,7 @@ const PersonalSection = ({ cmsPersonal }) => {
               WebkitTextFillColor: 'transparent',
             }}
           >
-            Pranab
+          Pranab
           </span>
         </BigHello>
 
