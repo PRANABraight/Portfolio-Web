@@ -3,6 +3,11 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaPlay, FaPause, FaForward, FaBackward, FaMusic } from 'react-icons/fa';
+import {
+  LuBookOpen, LuGuitar, LuLandmark, LuMonitor,
+  LuVolleyball, LuMusic, LuMail, LuHeart, LuRocket,
+} from 'react-icons/lu';
+import { PiPingPong } from 'react-icons/pi';
 import { urlFor } from '../../lib/sanity';
 import { colors, typography } from '../../styles/theme';
 import fitnessImg from '../../assets/personal/fitness.jpg';
@@ -10,6 +15,11 @@ import tableTennisImg from '../../assets/personal/table-tennis.jpg';
 import booksImg from '../../assets/personal/books.jpg';
 import guitarImg from '../../assets/personal/guitar.jpg';
 import rootsImg from '../../assets/personal/roots.jpg';
+import lifeItImg from '../../assets/personal/life-it.webp';
+import lifeSportsImg from '../../assets/personal/life-sports.webp';
+import lifeBooksImg from '../../assets/personal/life-books.webp';
+import lifeMusicImg from '../../assets/personal/life-music.webp';
+import lifeHeritageImg from '../../assets/personal/life-heritage.webp';
 
 /* ══════════════════════════════════════════════════════
    1. INTRO — "Hello again?" + cycling personality
@@ -300,6 +310,25 @@ const CarouselBgImg = styled.div`
   font-size: 4rem;
 `;
 
+const CarouselPhoto = styled.img`
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: transform 0.5s ease;
+
+  ${CarouselCard}:hover & { transform: scale(1.04); }
+`;
+
+/* darkens the photo so the label/title stay readable */
+const CarouselShade = styled.div`
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(10,9,16,0.75) 0%, rgba(10,9,16,0.25) 45%, rgba(10,9,16,0.55) 100%);
+`;
+
 const CarouselBtns = styled.div`
   display: flex;
   justify-content: flex-end;
@@ -556,46 +585,48 @@ const HOBBIES = [
   {
     span: 4, right: true, nob: false,
     key: 'fitness', img: fitnessImg,
-    title: 'Morning Fitness & Volleyball',
-    desc: "Led volleyball teams and organized tournaments. Morning workouts keep me mentally sharp and physically ready for the day.",
-    emoji: '🏋️',
+    title: 'Volleyball',
+    desc: "Enjoy playing Volleyball. Led volleyball teams and organized tournaments.",
+    icon: <LuVolleyball />,
   },
   {
     span: 2, right: false, nob: false,
     key: 'books', img: booksImg,
     title: 'Enjoyer of good books & research',
-    desc: "I read research papers, tech blogs, and science books. Always expanding my mental model of the world.",
-    emoji: '📚',
+    desc: "I enjoy reading fiction, non-fiction, research papers, tech blogs, and science books. Always expanding my mental model of the world.",
+    // icon: <LuBookOpen />
+    icon: '📚'
+    ,
   },
   {
     span: 2, right: true, nob: true,
     key: 'tableTennis', img: tableTennisImg,
     title: 'Table Tennis',
     desc: "Fast rallies, quick reflexes. Table tennis is my go-to for a competitive break — always up for a match.",
-    emoji: '🏓',
+    icon: '🏓',
   },
   {
     span: 2, right: true, nob: true,
     key: 'guitar', img: guitarImg,
     title: 'Music & Guitar',
     desc: "I play guitar and enjoy a wide range of music — from lo-fi beats while coding to classical compositions.",
-    emoji: '🎸',
+    icon:  '🎸',
   },
   {
     span: 2, right: false, nob: true,
     key: 'roots', img: rootsImg,
     title: 'Cultural History & Roots',
     desc: "I love tracing my cultural history and roots — the traditions, stories, and places my family comes from keep me grounded.",
-    emoji: '🛕',
+    icon: <LuLandmark />,
   },
 ];
 
 const CAROUSEL_ITEMS = [
-  { category: 'Computer, IT', title: 'Interest, Work', bg: '#1a1a28', emoji: '💻' },
-  { category: 'Sports', title: 'Volleyball, Table Tennis, Gym', bg: '#1a2818', emoji: '🏐' },
-  { category: 'Books', title: 'Fiction & Research', bg: '#2a1a18', emoji: '📖' },
-  { category: 'Music', title: 'Guitar & Piano', bg: '#1a182a', emoji: '🎵' },
-  { category: 'Heritage', title: 'Culture & Roots', bg: '#181a2a', emoji: '🛕' },
+  { category: 'Computer, IT', title: 'Interest, Work', bg: '#1a1a28', icon: <LuMonitor />, img: lifeItImg },
+  { category: 'Sports', title: 'Volleyball and Table Tennis', bg: '#1a2818', icon: <LuVolleyball />, img: lifeSportsImg },
+  { category: 'Books', title: 'Fiction & Research', bg: '#2a1a18', icon: <LuBookOpen />, img: lifeBooksImg },
+  { category: 'Music', title: 'Guitar & Piano', bg: '#1a182a', icon: <LuMusic />, img: lifeMusicImg },
+  { category: 'Heritage', title: 'Culture & Roots', bg: '#181a2a', icon: <LuLandmark />, img: lifeHeritageImg },
 ];
 
 const FALLBACK_SONG = {
@@ -791,8 +822,10 @@ const PersonalSection = ({ cmsPersonal }) => {
 
         <CenterBtn>
           <LetterBtn onClick={() => window.open('mailto:pranabrai137@gmail.com', '_blank')}>
-            <span className="label">✉️ Write a letter</span>
-            <span className="emoji">✉️</span>
+            <span className="label" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
+              <LuMail /> Write a letter
+            </span>
+            <span className="emoji"><LuMail /></span>
           </LetterBtn>
         </CenterBtn>
       </IntroWrap>
@@ -815,7 +848,7 @@ const PersonalSection = ({ cmsPersonal }) => {
                 <CellImg src={imgSrc} alt="" loading="lazy" />
                 <CellScrim />
                 <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', padding: '2rem', zIndex: 1 }}>
-                  <span style={{ fontSize: '2.5rem', marginBottom: '0.75rem' }}>{h.emoji}</span>
+                  <span style={{ fontSize: '2rem', marginBottom: '0.75rem', color: '#00ff99', display: 'inline-flex' }}>{h.icon}</span>
                   <CellTitle>{h.title}</CellTitle>
                   <CellDesc>{h.desc}</CellDesc>
                 </div>
@@ -844,8 +877,10 @@ const PersonalSection = ({ cmsPersonal }) => {
                   <CarouselCardTitle>{item.title}</CarouselCardTitle>
                   <CarouselBg>
                     <CarouselBgImg $bg={item.bg}>
-                      <span style={{ fontSize: '5rem', opacity: 0.4 }}>{item.emoji}</span>
+                      <span style={{ fontSize: '4rem', opacity: 0.4, color: '#fff', display: 'inline-flex' }}>{item.icon}</span>
                     </CarouselBgImg>
+                    <CarouselPhoto src={item.img} alt="" loading="lazy" />
+                    <CarouselShade />
                   </CarouselBg>
                 </CarouselCard>
               </motion.div>

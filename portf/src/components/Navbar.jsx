@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaTimes } from 'react-icons/fa';
+import { LuMenu } from 'react-icons/lu';
 
 const Header = styled.header`
   padding: 2rem 0;
@@ -189,7 +190,7 @@ const Navbar = ({ mode, setMode }) => {
 
           {/* Mobile */}
           <MobileBtn onClick={() => setOpen(true)} whileTap={{ scale: 0.9 }} aria-label="Open navigation menu">
-            ☰
+            <LuMenu />
           </MobileBtn>
         </Container>
       </Header>

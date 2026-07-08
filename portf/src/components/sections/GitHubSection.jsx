@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { motion } from 'framer-motion';
 import { FaGithub, FaExternalLinkAlt } from 'react-icons/fa';
+import { LuStar } from 'react-icons/lu';
 import { colors, typography } from '../../styles/theme';
 
 const GH = 'PRANABraight';
@@ -230,7 +231,7 @@ const GitHubSection = () => {
               <StatLabel>Repositories</StatLabel>
             </Stat>
             <Stat>
-              <StatNum>{stats.stars}<span>★</span></StatNum>
+              <StatNum>{stats.stars}<span><LuStar style={{ verticalAlign: '-0.05em', fontSize: '0.8em' }} /></span></StatNum>
               <StatLabel>Stars earned</StatLabel>
             </Stat>
             <Stat>
