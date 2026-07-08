@@ -2,12 +2,14 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
-import {
-  FaRunning, FaBook, FaVolleyballBall, FaAtom, FaPlay, FaPause,
-  FaForward, FaBackward, FaGraduationCap, FaBriefcase, FaGithub,
-  FaBrain, FaDumbbell, FaCheck, FaBell
-} from 'react-icons/fa';
-import profImg from '../../assets/prof.webp';
+import { FaPlay, FaPause, FaForward, FaBackward, FaMusic } from 'react-icons/fa';
+import { urlFor } from '../../lib/sanity';
+import { colors, typography } from '../../styles/theme';
+import fitnessImg from '../../assets/personal/fitness.jpg';
+import tableTennisImg from '../../assets/personal/table-tennis.jpg';
+import booksImg from '../../assets/personal/books.jpg';
+import guitarImg from '../../assets/personal/guitar.jpg';
+import rootsImg from '../../assets/personal/roots.jpg';
 
 /* ══════════════════════════════════════════════════════
    1. INTRO — "Hello again?" + cycling personality
@@ -47,11 +49,6 @@ const NicknameText = styled.div`
 const AccentWord = styled.span`
   color: #00ff99;
   font-weight: 700;
-`;
-
-const WordRotate = styled.span`
-  display: inline-block;
-  color: rgba(163, 163, 163, 0.9);
 `;
 
 const LetterBtn = styled.button`
@@ -180,8 +177,15 @@ const CellImg = styled.img`
   object-position: center;
   position: absolute;
   inset: 0;
-  opacity: 0.3;
+  opacity: 0.5;
   z-index: 0;
+`;
+
+/* bottom-heavy scrim keeps title/desc readable over the photo */
+const CellScrim = styled.div`
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(10,9,16,0.9) 0%, rgba(10,9,16,0.45) 45%, rgba(10,9,16,0.15) 100%);
 `;
 
 /* ══════════════════════════════════════════════════════
@@ -344,219 +348,141 @@ const WidgetGrid = styled.div`
   gap: 1rem;
 `;
 
-/* Schedule widget */
-const ScheduleCard = styled.div`
-  width: 100%;
-  max-width: 288px;
-  border-radius: 24px;
-  background: rgba(0,255,153,0.15);
-  border: 1px solid #00ff99;
-  padding: 1rem;
-`;
-
-const ScheduleTitle = styled.div`
-  font-size: 0.875rem;
-  font-weight: 700;
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 0.75rem;
-`;
-
-const ScheduleItem = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.375rem 0;
-
-  .time {
-    font-size: 0.875rem;
-    font-weight: 700;
-    color: #fff;
-  }
-  .label {
-    font-size: 0.75rem;
-    color: rgba(163,163,163,0.8);
-  }
-`;
-
-/* Reminder checklist */
-const ReminderCard = styled.div`
-  width: 100%;
-  max-width: 288px;
-  border-radius: 24px;
-  background: #18181b;
-  padding: 1rem;
-  height: auto;
-`;
-
-const ReminderHeader = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.5rem;
-  margin-bottom: 0.25rem;
-
-  .title {
-    font-size: 1.125rem;
-    font-weight: 700;
-    color: #60a5fa;
-    display: flex;
-    align-items: center;
-    gap: 0.375rem;
-  }
-  .count {
-    width: 16px; height: 16px;
-    background: #3f3f46;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.75rem;
-    color: #60a5fa;
-  }
-`;
-
-const ReminderItem = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  border-bottom: 1px solid rgba(55,55,65,0.7);
-  padding: 0.375rem 0;
-  cursor: pointer;
-
-  input[type="checkbox"] {
-    width: 12px; height: 12px;
-    appearance: none;
-    border-radius: 50%;
-    border: 2px solid #3f3f46;
-    background: ${p => p.$checked ? '#3b82f6' : 'transparent'};
-    cursor: pointer;
-    flex-shrink: 0;
-  }
-
-  p {
-    font-size: 0.75rem;
-    font-weight: 600;
-    text-transform: capitalize;
-    color: #fff;
-  }
-`;
-
-/* Music player */
+/* Music player — Spotify-style card */
 const MusicCard = styled.div`
   width: 100%;
-  max-width: 288px;
-  border-radius: 24px;
-  background: linear-gradient(to bottom left, #c7d2fe, #4f46e5);
-  padding: 1rem;
+  max-width: 380px;
+  border-radius: 16px;
+  background: #181818;
+  border: 1px solid rgba(255,255,255,0.07);
+  padding: 1.25rem;
   color: #fff;
-  height: 240px;
   display: flex;
   flex-direction: column;
+  gap: 1rem;
+  transition: background 0.25s ease;
+
+  &:hover { background: #202020; }
 `;
 
 const MusicTop = styled.div`
   display: flex;
-  flex: 1;
-  flex-direction: column;
-  justify-content: space-between;
+  align-items: center;
+  gap: 0.9rem;
 `;
 
 const MusicImg = styled.img`
-  width: 80px; height: 80px;
-  border-radius: 16px;
+  width: 64px; height: 64px;
+  border-radius: 8px;
   object-fit: cover;
+  flex-shrink: 0;
 `;
 
-const MusicTitle = styled.p`
-  font-size: 1rem;
-  font-weight: 700;
-  line-height: 1;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
-
-const MusicArtist = styled.p`
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: #a5b4fc;
-  margin-top: -1.25rem;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
-
-const MusicControls = styled.div`
-  margin-top: 0.5rem;
+const MusicDisc = styled.div`
+  width: 64px; height: 64px;
+  border-radius: 8px;
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1rem;
+  background: linear-gradient(135deg, #2a2840, #16142a);
+  color: ${colors.accent};
+  font-size: 1.4rem;
+`;
+
+const MusicMeta = styled.div`
+  min-width: 0;
+
+  .title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .artist {
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.55);
+    margin-top: 0.2rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+`;
+
+const ProgressRow = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  .time {
+    font-family: ${typography.fontFamily.mono};
+    font-size: 0.625rem;
+    color: rgba(255,255,255,0.45);
+    min-width: 30px;
+    text-align: center;
+  }
+`;
+
+const ProgressTrack = styled.div`
+  flex: 1;
+  height: 4px;
+  border-radius: 9999px;
+  background: rgba(255,255,255,0.15);
+  cursor: ${p => p.$seekable ? 'pointer' : 'default'};
+  position: relative;
+
+  &:hover > div { background: ${colors.accent}; }
+`;
+
+const ProgressFill = styled.div`
+  height: 100%;
+  border-radius: 9999px;
+  background: #fff;
+  width: ${p => p.$pct}%;
+  transition: background 0.15s ease;
+`;
+
+const MusicControls = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.4rem;
 
   button {
     background: none;
     border: none;
-    color: #fff;
+    color: rgba(255,255,255,0.75);
     cursor: pointer;
-    font-size: 1.5rem;
+    font-size: 1rem;
     padding: 0;
-    transition: opacity 0.15s ease;
-    &:hover { opacity: 0.75; }
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.15s ease, transform 0.1s ease;
+
+    &:hover:not(:disabled) { color: #fff; }
+    &:active:not(:disabled) { transform: scale(0.94); }
+    &:disabled { opacity: 0.3; cursor: not-allowed; }
+  }
+
+  .play {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: ${colors.accent};
+    color: #0f0e1a;
+    font-size: 0.85rem;
+
+    &:hover:not(:disabled) { color: #0f0e1a; transform: scale(1.05); }
   }
 `;
 
-/* Achievement bars */
-const AchieveCard = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  width: 128px;
-  height: 384px;
-  border-radius: 8px;
-  padding: 0.25rem;
-`;
-
-const AchieveBar = styled.div`
-  position: relative;
-  width: 100%;
-  border-radius: 4px;
-  background: ${p => p.$color};
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: #fff;
+const MusicHint = styled.p`
+  font-family: ${typography.fontFamily.mono};
+  font-size: 0.625rem;
+  color: rgba(255,255,255,0.35);
   text-align: center;
-  overflow: visible;
-
-  .count {
-    position: absolute;
-    left: 100%;
-    top: 50%;
-    transform: translateY(-50%);
-    margin-left: 0.25rem;
-    background: ${p => p.$color};
-    border-radius: 4px;
-    padding: 0.375rem 0.6rem;
-    font-weight: 700;
-    font-size: 0.75rem;
-    white-space: nowrap;
-  }
-
-  .arrow {
-    position: absolute;
-    left: 100%;
-    top: 50%;
-    transform: translateY(-50%) rotate(45deg);
-    width: 16px; height: 16px;
-    background: ${p => p.$color};
-    margin-left: 0.15rem;
-  }
+  margin: 0;
 `;
 
 /* ══════════════════════════════════════════════════════
@@ -629,64 +555,55 @@ const PERSONALITIES = ['Peaceful', 'Persistent', 'Clever', 'Curious', 'Disciplin
 const HOBBIES = [
   {
     span: 4, right: true, nob: false,
+    key: 'fitness', img: fitnessImg,
     title: 'Morning Fitness & Volleyball',
     desc: "Led volleyball teams and organized tournaments. Morning workouts keep me mentally sharp and physically ready for the day.",
-    bg: '#1a1a2e',
     emoji: '🏋️',
   },
   {
     span: 2, right: false, nob: false,
+    key: 'books', img: booksImg,
     title: 'Enjoyer of good books & research',
     desc: "I read research papers, tech blogs, and science books. Always expanding my mental model of the world.",
-    bg: '#0d1b2a',
     emoji: '📚',
   },
   {
-    span: 3, right: true, nob: true,
+    span: 2, right: true, nob: true,
+    key: 'tableTennis', img: tableTennisImg,
+    title: 'Table Tennis',
+    desc: "Fast rallies, quick reflexes. Table tennis is my go-to for a competitive break — always up for a match.",
+    emoji: '🏓',
+  },
+  {
+    span: 2, right: true, nob: true,
+    key: 'guitar', img: guitarImg,
     title: 'Music & Guitar',
     desc: "I play guitar and enjoy a wide range of music — from lo-fi beats while coding to classical compositions.",
-    bg: '#1a0a2e',
     emoji: '🎸',
   },
   {
-    span: 3, right: false, nob: true,
-    title: 'Dream of Becoming a Polyglot',
-    desc: "Currently learning Japanese. Planning to study German and more languages. Each new language opens a new world.",
-    bg: '#0a1a2e',
-    emoji: '🌏',
+    span: 2, right: false, nob: true,
+    key: 'roots', img: rootsImg,
+    title: 'Cultural History & Roots',
+    desc: "I love tracing my cultural history and roots — the traditions, stories, and places my family comes from keep me grounded.",
+    emoji: '🛕',
   },
 ];
 
 const CAROUSEL_ITEMS = [
   { category: 'Computer, IT', title: 'Interest, Work', bg: '#1a1a28', emoji: '💻' },
-  { category: 'Sports', title: 'Volleyball, Gym', bg: '#1a2818', emoji: '🏐' },
+  { category: 'Sports', title: 'Volleyball, Table Tennis, Gym', bg: '#1a2818', emoji: '🏐' },
   { category: 'Books', title: 'Fiction & Research', bg: '#2a1a18', emoji: '📖' },
   { category: 'Music', title: 'Guitar & Piano', bg: '#1a182a', emoji: '🎵' },
-  { category: 'Foreign Languages', title: 'Learning Japanese', bg: '#181a2a', emoji: '🗣️' },
+  { category: 'Heritage', title: 'Culture & Roots', bg: '#181a2a', emoji: '🛕' },
 ];
 
-const SCHEDULE = [
-  { time: '6:00 AM', label: 'Wake up & Morning run' },
-  { time: '9:00 AM', label: 'University / Work' },
-  { time: '5:00 PM', label: 'Gym / Volleyball' },
-  { time: '7:00 PM', label: 'Projects & Research' },
-  { time: '9:00 PM', label: 'Books & Learning' },
-  { time: '11:00 PM', label: 'Sleep' },
-];
-
-const REMINDERS = [
-  'Graduation', 'Land a data engineering role', 'Contribute to open source',
-  'Build production ML system', 'Learn Japanese N2', 'Run half marathon',
-  'Master guitar', 'Make family proud',
-];
-
-const ACHIEVEMENTS = [
-  { label: 'Books read',     count: '+50',  color: '#3b82f6' },
-  { label: 'Projects built', count: '+5',   color: '#a855f7' },
-  { label: 'Tech mastered',  count: '+19',  color: '#ef4444' },
-  { label: 'Papers read',    count: '+20',  color: '#22c55e' },
-  { label: 'Kanji learned',  count: '+200', color: '#eab308' },
-];
+const FALLBACK_SONG = {
+  title: 'Merry-Go-Round of Life',
+  artist: "Joe Hisaishi — Howl's Moving Castle",
+  albumArt: null,
+  audioUrl: null,
+};
 
 const BEAMS = [
   { x: 5,  dur: 7,  delay: 2  },
@@ -699,11 +616,122 @@ const BEAMS = [
 ];
 
 /* ══════════════════════════════════════════════════════
+   MUSIC PLAYER — songs come from Sanity (personal.songs)
+═══════════════════════════════════════════════════════ */
+const fmtTime = (s) => {
+  if (!Number.isFinite(s)) return '0:00';
+  const m = Math.floor(s / 60);
+  return `${m}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
+};
+
+const MusicPlayer = ({ songs }) => {
+  const list = songs?.length ? songs : [FALLBACK_SONG];
+  const [idx, setIdx] = useState(0);
+  const [playing, setPlaying] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const audioRef = useRef(null);
+  const trackRef = useRef(null);
+
+  const song = list[idx];
+  const hasAudio = !!song.audioUrl;
+  const artUrl = song.albumArt ? urlFor(song.albumArt).width(200).height(200).url() : null;
+
+  const goTo = (nextIdx) => {
+    setIdx(((nextIdx % list.length) + list.length) % list.length);
+    setProgress(0);
+    setDuration(0);
+  };
+
+  // keep playback going across track changes
+  useEffect(() => {
+    const el = audioRef.current;
+    if (el && playing && hasAudio) el.play().catch(() => setPlaying(false));
+  }, [idx]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const togglePlay = () => {
+    const el = audioRef.current;
+    if (!el || !hasAudio) return;
+    if (playing) { el.pause(); setPlaying(false); }
+    else { el.play().then(() => setPlaying(true)).catch(() => setPlaying(false)); }
+  };
+
+  const seek = (e) => {
+    const el = audioRef.current;
+    const track = trackRef.current;
+    if (!el || !track || !duration) return;
+    const rect = track.getBoundingClientRect();
+    const pct = Math.min(Math.max((e.clientX - rect.left) / rect.width, 0), 1);
+    el.currentTime = pct * duration;
+    setProgress(pct * duration);
+  };
+
+  return (
+    <MusicCard>
+      {hasAudio && (
+        <audio
+          ref={audioRef}
+          src={song.audioUrl}
+          preload="metadata"
+          onTimeUpdate={e => setProgress(e.target.currentTime)}
+          onLoadedMetadata={e => setDuration(e.target.duration)}
+          onEnded={() => goTo(idx + 1)}
+        />
+      )}
+
+      <MusicTop>
+        {artUrl
+          ? <MusicImg src={artUrl} alt={`${song.title} album art`} />
+          : <MusicDisc aria-hidden="true"><FaMusic /></MusicDisc>}
+        <MusicMeta>
+          <p className="title">{song.title}</p>
+          <p className="artist">{song.artist}</p>
+        </MusicMeta>
+      </MusicTop>
+
+      <ProgressRow>
+        <span className="time">{fmtTime(progress)}</span>
+        <ProgressTrack ref={trackRef} $seekable={hasAudio} onClick={seek}>
+          <ProgressFill $pct={duration ? (progress / duration) * 100 : 0} />
+        </ProgressTrack>
+        <span className="time">{fmtTime(duration)}</span>
+      </ProgressRow>
+
+      <MusicControls>
+        <button
+          onClick={() => goTo(idx - 1)}
+          disabled={list.length < 2}
+          aria-label="Previous song"
+        >
+          <FaBackward />
+        </button>
+        <button
+          className="play"
+          onClick={togglePlay}
+          disabled={!hasAudio}
+          aria-label={playing ? 'Pause' : 'Play'}
+        >
+          {playing ? <FaPause /> : <FaPlay style={{ marginLeft: 2 }} />}
+        </button>
+        <button
+          onClick={() => goTo(idx + 1)}
+          disabled={list.length < 2}
+          aria-label="Next song"
+        >
+          <FaForward />
+        </button>
+      </MusicControls>
+
+      {!hasAudio && <MusicHint>add songs in Sanity Studio to enable playback</MusicHint>}
+    </MusicCard>
+  );
+};
+
+/* ══════════════════════════════════════════════════════
    COMPONENT
 ═══════════════════════════════════════════════════════ */
-const PersonalSection = () => {
+const PersonalSection = ({ cmsPersonal }) => {
   const [traitIdx, setTraitIdx] = useState(0);
-  const [checkedItems, setCheckedItems] = useState(new Set());
   const carouselRef = useRef(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
@@ -715,15 +743,6 @@ const PersonalSection = () => {
     }, 2300);
     return () => clearInterval(t);
   }, []);
-
-  const toggleItem = (item) => {
-    setCheckedItems(prev => {
-      const next = new Set(prev);
-      if (next.has(item)) next.delete(item);
-      else next.add(item);
-      return next;
-    });
-  };
 
   const onCarouselScroll = useCallback(() => {
     if (!carouselRef.current) return;
@@ -788,21 +807,21 @@ const PersonalSection = () => {
         </FeaturedHeader>
 
         <BentoGrid>
-          {HOBBIES.map((h, i) => (
-            <BentoCell key={h.title} $span={h.span} $right={h.right} $nob={h.nob}>
-              <CellImg
-                src={profImg}
-                alt=""
-                style={{ display: i === 0 ? 'block' : 'none' }}
-              />
-              <div style={{ position: 'absolute', inset: 0, background: h.bg, opacity: i === 0 ? 0.7 : 1 }} />
-              <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', padding: '2rem', zIndex: 1 }}>
-                <span style={{ fontSize: '3rem', marginBottom: '1rem' }}>{h.emoji}</span>
-                <CellTitle>{h.title}</CellTitle>
-                <CellDesc>{h.desc}</CellDesc>
-              </div>
-            </BentoCell>
-          ))}
+          {HOBBIES.map(h => {
+            const cmsImage = cmsPersonal?.hobbyImages?.[h.key];
+            const imgSrc = cmsImage ? urlFor(cmsImage).width(900).url() : h.img;
+            return (
+              <BentoCell key={h.title} $span={h.span} $right={h.right} $nob={h.nob}>
+                <CellImg src={imgSrc} alt="" loading="lazy" />
+                <CellScrim />
+                <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', padding: '2rem', zIndex: 1 }}>
+                  <span style={{ fontSize: '2.5rem', marginBottom: '0.75rem' }}>{h.emoji}</span>
+                  <CellTitle>{h.title}</CellTitle>
+                  <CellDesc>{h.desc}</CellDesc>
+                </div>
+              </BentoCell>
+            );
+          })}
         </BentoGrid>
       </FeaturedWrap>
 
@@ -849,71 +868,10 @@ const PersonalSection = () => {
         </CarouselBtns>
       </CarouselWrap>
 
-      {/* ── 4. WIDGETS ── */}
+      {/* ── 4. MUSIC ── */}
       <WidgetsWrap {...fadeIn}>
         <WidgetGrid>
-          {/* Schedule */}
-          <ScheduleCard>
-            <ScheduleTitle>
-              Daily routine
-              <FaBell style={{ color: 'rgba(163,163,163,0.6)', fontSize: '1.1rem' }} />
-            </ScheduleTitle>
-            {SCHEDULE.map(s => (
-              <ScheduleItem key={s.time}>
-                <div>
-                  <div className="time">{s.time}</div>
-                  <div className="label">{s.label}</div>
-                </div>
-              </ScheduleItem>
-            ))}
-          </ScheduleCard>
-
-          {/* Reminder */}
-          <ReminderCard>
-            <ReminderHeader>
-              <div className="title">
-                <FaBell size={14} color="#60a5fa" />
-                Future plan
-              </div>
-              <div className="count">{REMINDERS.length - checkedItems.size}</div>
-            </ReminderHeader>
-            {REMINDERS.map(r => (
-              <ReminderItem key={r} $checked={checkedItems.has(r)} onClick={() => toggleItem(r)}>
-                <input type="checkbox" checked={checkedItems.has(r)} onChange={() => toggleItem(r)} />
-                <p>{r}</p>
-              </ReminderItem>
-            ))}
-          </ReminderCard>
-
-          {/* Music + Achievements stacked */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', alignItems: 'center' }}>
-            <MusicCard>
-              <MusicTop>
-                <div style={{ display: 'flex', gap: '0.5rem' }}>
-                  <MusicImg src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Ghibli.png/240px-Ghibli.png" alt="album" onError={e => { e.target.style.display='none'; }} />
-                </div>
-                <div>
-                  <MusicTitle>Merry-Go-Round of Life</MusicTitle>
-                  <MusicArtist>Howl's Moving Castle — Joe Hisaishi</MusicArtist>
-                </div>
-              </MusicTop>
-              <MusicControls>
-                <button><FaBackward /></button>
-                <button><FaPlay /></button>
-                <button><FaForward /></button>
-              </MusicControls>
-            </MusicCard>
-
-            <AchieveCard>
-              {ACHIEVEMENTS.map(a => (
-                <AchieveBar key={a.label} $color={a.color}>
-                  {a.label}
-                  <span className="arrow" />
-                  <span className="count">{a.count}</span>
-                </AchieveBar>
-              ))}
-            </AchieveCard>
-          </div>
+          <MusicPlayer songs={cmsPersonal?.songs} />
         </WidgetGrid>
       </WidgetsWrap>
 

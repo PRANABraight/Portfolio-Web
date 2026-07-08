@@ -24,7 +24,7 @@ import { client } from './lib/sanity';
 import {
   HERO_QUERY, ABOUT_QUERY, JOURNEY_QUERY,
   PROJECTS_QUERY, EDUCATION_QUERY, EXPERIENCE_QUERY,
-  SKILLS_QUERY, STATS_QUERY,
+  SKILLS_QUERY, STATS_QUERY, PERSONAL_QUERY,
 } from './lib/queries';
 
 function App() {
@@ -38,7 +38,13 @@ function App() {
     experience: null,
     skills: null,
     stats: null,
+    personal: null,
   });
+
+  // Always start the newly shown mode at the top of the page
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [mode]);
 
   useEffect(() => {
     const queries = {
@@ -50,6 +56,7 @@ function App() {
       experience: EXPERIENCE_QUERY,
       skills: SKILLS_QUERY,
       stats: STATS_QUERY,
+      personal: PERSONAL_QUERY,
     };
     const keys = Object.keys(queries);
     // allSettled: one failing query degrades only its own section to fallback data
@@ -86,7 +93,7 @@ function App() {
           <ContactSection setMode={setMode} />
         </main>
       ) : (
-        <PersonalSection />
+        <PersonalSection cmsPersonal={cms.personal} />
       )}
 
       <Footer />
