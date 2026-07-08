@@ -190,7 +190,14 @@ const cardItem = {
 };
 
 const AboutSection = ({ cmsAbout }) => {
-  const codeLines = cmsAbout?.codeLines?.length ? cmsAbout.codeLines : aboutData.code;
+  // CMS may return the code as one newline-joined string (or array entries
+  // containing newlines) — normalize to one array element per visual line
+  const rawLines = cmsAbout?.codeLines?.length ? cmsAbout.codeLines : aboutData.code;
+  const normalized = (Array.isArray(rawLines) ? rawLines : [rawLines])
+    .flatMap(l => String(l).split('\n'));
+  // Real code blocks are always multi-line; fewer means the CMS entry lost
+  // its line structure (newlines collapsed to spaces) — use local fallback
+  const codeLines = normalized.length >= 3 ? normalized : aboutData.code;
   const cards = cmsAbout?.cards?.length
     ? cmsAbout.cards.map(c => ({
         icon: createElement(getIcon(c.iconName)),

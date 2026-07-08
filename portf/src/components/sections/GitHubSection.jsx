@@ -1,21 +1,32 @@
-import styled from 'styled-components';
+import { useEffect, useState } from 'react';
+import styled, { keyframes } from 'styled-components';
 import { motion } from 'framer-motion';
 import { FaGithub, FaExternalLinkAlt } from 'react-icons/fa';
+import { colors, typography } from '../../styles/theme';
 
 const GH = 'PRANABraight';
+const CACHE_KEY = 'gh-stats-v1';
+const CACHE_TTL = 60 * 60 * 1000; // 1h — stays well under GitHub's 60 req/h anonymous limit
+
+/* GitHub's own language swatch colors */
+const LANG_COLORS = {
+  Python: '#3572A5', JavaScript: '#f1e05a', TypeScript: '#3178c6',
+  HTML: '#e34c26', CSS: '#563d7c', Jupyter: '#DA5B0B', 'Jupyter Notebook': '#DA5B0B',
+  Java: '#b07219', C: '#555555', 'C++': '#f34b7d', Shell: '#89e051',
+  R: '#198CE7', Go: '#00ADD8', Rust: '#dea584', PHP: '#4F5D95', Dart: '#00B4AB',
+};
 
 const Wrap = styled.section`
   padding: 3rem 1.25rem;
   @media (min-width: 640px) { padding: 3rem 2.5rem; }
-  max-width: 900px;
+  max-width: 760px;
   margin: 0 auto;
 `;
 
 const Header = styled.div`
   text-align: center;
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
 `;
-
 
 const GhLink = styled.a`
   display: inline-flex;
@@ -27,76 +38,235 @@ const GhLink = styled.a`
   text-decoration: none;
   transition: color 0.2s ease;
 
-  &:hover { color: #00ff99; }
+  &:hover { color: ${colors.accent}; }
 `;
 
-/* ── Stats row ─────────────────────────────────────── */
-const StatsRow = styled(motion.div)`
+const Card = styled(motion.div)`
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 1rem;
+  background: ${colors.bgCard};
+  padding: 1.5rem 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+  transition: border-color 0.25s ease;
+
+  &:hover { border-color: rgba(0,255,153,0.2); }
+`;
+
+const StatGrid = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(3, 1fr);
   gap: 1rem;
 
-  @media (max-width: 640px) {
-    grid-template-columns: 1fr;
+  @media (max-width: 480px) { grid-template-columns: repeat(3, auto); justify-content: space-between; }
+`;
+
+const Stat = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  align-items: center;
+`;
+
+const StatNum = styled.span`
+  font-family: ${typography.fontFamily.mono};
+  font-size: 1.6rem;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  color: ${colors.text.primary};
+
+  span { color: ${colors.accent}; }
+`;
+
+const StatLabel = styled.span`
+  font-family: ${typography.fontFamily.mono};
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: ${colors.text3};
+`;
+
+/* Language spectrum — one thin stacked bar, GitHub-repo-page style */
+const BarTrack = styled.div`
+  display: flex;
+  height: 8px;
+  border-radius: 9999px;
+  overflow: hidden;
+  gap: 2px;
+`;
+
+const BarSeg = styled(motion.span)`
+  height: 100%;
+  background: ${p => p.$c};
+  min-width: 4px;
+`;
+
+const Legend = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.1rem;
+  justify-content: center;
+`;
+
+const LegendItem = styled.span`
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: ${typography.fontFamily.mono};
+  font-size: 0.7rem;
+  color: ${colors.text2};
+
+  &::before {
+    content: '';
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: ${p => p.$c};
   }
 `;
 
-const StatImg = styled(motion.img)`
-  width: 100%;
-  border-radius: 1rem;
-  border: 1px solid rgba(255,255,255,0.07);
-  display: block;
-  transition: border-color 0.25s ease;
+const shimmer = keyframes`0%{opacity:0.35}50%{opacity:0.7}100%{opacity:0.35}`;
 
-  &:hover { border-color: rgba(0,255,153,0.25); }
+const Skeleton = styled.div`
+  height: 118px;
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 1rem;
+  background: ${colors.bgCard};
+  animation: ${shimmer} 1.4s ease-in-out infinite;
 `;
 
-/* shared query params */
-const COMMON = `&bg_color=0f0e1a&title_color=00ff99&text_color=ffffff&icon_color=00ff99&border_color=ffffff20&hide_border=false&card_width=495`;
+const FallbackCard = styled.a`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 118px;
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 1rem;
+  color: ${colors.text2};
+  font-size: 0.8125rem;
+  text-decoration: none;
+  text-align: center;
+  padding: 1rem;
+  transition: border-color 0.25s ease, color 0.25s ease;
 
-const STATS_URL   = `https://github-readme-stats.vercel.app/api?username=${GH}${COMMON}&show_icons=true&count_private=true&include_all_commits=true&rank_icon=github`;
-const LANGS_URL   = `https://github-readme-stats.vercel.app/api/top-langs/?username=${GH}${COMMON}&layout=compact&langs_count=8`;
+  svg { font-size: 1.5rem; color: ${colors.accent}; }
 
-const fadeUp = {
-  hidden:  { opacity: 0, y: 20 },
-  visible: (i) => ({ opacity: 1, y: 0, transition: { delay: i * 0.1, duration: 0.5, ease: [0.4,0,0.2,1] } }),
+  &:hover { border-color: rgba(0,255,153,0.25); color: ${colors.text.primary}; }
+`;
+
+const fetchStats = async () => {
+  const cached = sessionStorage.getItem(CACHE_KEY);
+  if (cached) {
+    const { at, data } = JSON.parse(cached);
+    if (Date.now() - at < CACHE_TTL) return data;
+  }
+
+  const [userRes, reposRes] = await Promise.all([
+    fetch(`https://api.github.com/users/${GH}`),
+    fetch(`https://api.github.com/users/${GH}/repos?per_page=100&type=owner`),
+  ]);
+  if (!userRes.ok || !reposRes.ok) throw new Error('GitHub API unavailable');
+
+  const user = await userRes.json();
+  const repos = await reposRes.json();
+
+  const stars = repos.reduce((n, r) => n + (r.stargazers_count || 0), 0);
+  const langCounts = {};
+  repos.forEach(r => { if (r.language) langCounts[r.language] = (langCounts[r.language] || 0) + 1; });
+  const total = Object.values(langCounts).reduce((a, b) => a + b, 0) || 1;
+  const languages = Object.entries(langCounts)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 5)
+    .map(([name, count]) => ({ name, pct: Math.round((count / total) * 100) }));
+
+  const data = {
+    repos: user.public_repos,
+    followers: user.followers,
+    stars,
+    languages,
+  };
+  sessionStorage.setItem(CACHE_KEY, JSON.stringify({ at: Date.now(), data }));
+  return data;
 };
 
-const GitHubSection = () => (
-  <Wrap id="github">
-    <Header>
-      <h1 className="heading" style={{ marginBottom: '0.25rem' }}>
-        Open Source <span style={{ color: '#00ff99' }}>Activity</span>
-      </h1>
-      <GhLink href={`https://github.com/${GH}`} target="_blank" rel="noopener noreferrer">
-        <FaGithub /> github.com/{GH} <FaExternalLinkAlt style={{ fontSize: '0.75rem' }} />
-      </GhLink>
-    </Header>
+const GitHubSection = () => {
+  const [stats, setStats] = useState(null);
+  const [failed, setFailed] = useState(false);
 
-    <StatsRow
-      variants={{ hidden:{}, visible:{ transition:{ staggerChildren:0.08 } } }}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, margin: '-40px' }}
-    >
-      <motion.div custom={0} variants={fadeUp}>
-        <StatImg
-          src={STATS_URL}
-          alt="GitHub Stats"
-          loading="lazy"
-          onError={e => { e.target.style.display = 'none'; }}
-        />
-      </motion.div>
-      <motion.div custom={1} variants={fadeUp}>
-        <StatImg
-          src={LANGS_URL}
-          alt="Top Languages"
-          loading="lazy"
-          onError={e => { e.target.style.display = 'none'; }}
-        />
-      </motion.div>
-    </StatsRow>
-  </Wrap>
-);
+  useEffect(() => {
+    fetchStats().then(setStats).catch(() => setFailed(true));
+  }, []);
+
+  return (
+    <Wrap id="github">
+      <Header>
+        <h1 className="heading" style={{ marginBottom: '0.25rem' }}>
+          Open Source <span style={{ color: colors.accent }}>Activity</span>
+        </h1>
+        <GhLink href={`https://github.com/${GH}`} target="_blank" rel="noopener noreferrer">
+          <FaGithub /> github.com/{GH} <FaExternalLinkAlt style={{ fontSize: '0.75rem' }} />
+        </GhLink>
+      </Header>
+
+      {failed ? (
+        <FallbackCard href={`https://github.com/${GH}`} target="_blank" rel="noopener noreferrer">
+          <FaGithub />
+          Stats unavailable right now — view on GitHub
+        </FallbackCard>
+      ) : !stats ? (
+        <Skeleton />
+      ) : (
+        <Card
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-40px' }}
+          transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
+        >
+          <StatGrid>
+            <Stat>
+              <StatNum>{stats.repos}<span>+</span></StatNum>
+              <StatLabel>Repositories</StatLabel>
+            </Stat>
+            <Stat>
+              <StatNum>{stats.stars}<span>★</span></StatNum>
+              <StatLabel>Stars earned</StatLabel>
+            </Stat>
+            <Stat>
+              <StatNum>{stats.followers}<span>+</span></StatNum>
+              <StatLabel>Followers</StatLabel>
+            </Stat>
+          </StatGrid>
+
+          {stats.languages.length > 0 && (
+            <>
+              <BarTrack>
+                {stats.languages.map((l, i) => (
+                  <BarSeg
+                    key={l.name}
+                    $c={LANG_COLORS[l.name] || colors.text3}
+                    initial={{ flexGrow: 0 }}
+                    whileInView={{ flexGrow: l.pct }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.7, delay: 0.2 + i * 0.08, ease: [0.4, 0, 0.2, 1] }}
+                    title={`${l.name} ${l.pct}%`}
+                  />
+                ))}
+              </BarTrack>
+              <Legend>
+                {stats.languages.map(l => (
+                  <LegendItem key={l.name} $c={LANG_COLORS[l.name] || colors.text3}>
+                    {l.name} {l.pct}%
+                  </LegendItem>
+                ))}
+              </Legend>
+            </>
+          )}
+        </Card>
+      )}
+    </Wrap>
+  );
+};
 
 export default GitHubSection;

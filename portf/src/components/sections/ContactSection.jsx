@@ -164,6 +164,8 @@ const Spinner = styled.span`
 `;
 
 const ShinyLabel = styled.span`
+  position: relative;
+  z-index: 1;
   display: inline-flex;
   height: 100%;
   width: 100%;
