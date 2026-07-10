@@ -10,13 +10,13 @@ import { urlFor } from '../../lib/sanity';
 
 /* ── layout ── */
 const Section = styled.section`
-  min-height: 100vh;
+  min-height: calc(100vh - var(--nav-height));
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 80px 1.25rem 2rem;
+  padding: 0 1.25rem;
 
-  @media (min-width: 640px) { padding: 80px 2.5rem 2rem; }
+  @media (min-width: 640px) { padding: 0 2.5rem; }
   position: relative;
 `;
 
@@ -28,13 +28,12 @@ const Inner = styled.div`
   align-items: center;
   justify-content: space-between;
   gap: 2rem;
-  padding: 2rem 0 4rem;
+  padding: 2rem 0;
 
   @media (min-width: 1280px) {
     flex-direction: row;
     align-items: center;
     gap: 4rem;
-    padding: 2rem 0 6rem;
   }
 `;
 

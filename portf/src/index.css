@@ -11,6 +11,12 @@
   --text-3:   rgba(255, 255, 255, 0.3);
   --border:   rgba(255, 255, 255, 0.1);
   --border-a: rgba(0, 255, 153, 0.3);
+  /* Static header height: 2rem×2 padding + 2.25rem logo × line-height 2 */
+  --nav-height: 136px;
+}
+
+@media (min-width: 1280px) {
+  :root { --nav-height: 168px; } /* header padding grows to 3rem×2 */
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
