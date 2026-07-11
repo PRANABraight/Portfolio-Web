@@ -8,9 +8,9 @@ const columnVariants = {
   animate: (i) => ({
     top: '100%',
     transition: {
-      duration: 0.25,
+      duration: 0.22,
       ease: 'easeInOut',
-      delay: 0.1 * (5 - i),
+      delay: 0.07 * (5 - i),
     },
   }),
 };
@@ -19,7 +19,7 @@ const PageTransition = () => {
   const [show, setShow] = useState(true);
 
   useEffect(() => {
-    const timer = setTimeout(() => setShow(false), 900);
+    const timer = setTimeout(() => setShow(false), 650);
     return () => clearTimeout(timer);
   }, []);
 

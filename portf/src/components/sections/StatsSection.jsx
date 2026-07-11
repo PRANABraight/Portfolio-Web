@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import styled from 'styled-components';
-import { motion, useInView } from 'framer-motion';
-import { useRef, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { gsap, useGSAP, OK, REDUCED, countUp } from '../../lib/motion';
 
 const Wrap = styled.section`
   padding: 4rem 1.25rem;
@@ -35,33 +35,11 @@ const blur = {
   hide:    { filter: 'blur(0px)', opacity: 1, transition: { duration: 0.4 } },
 };
 
-/* Count-up hook */
-const useCountUp = (end, duration = 2000, delay = 0, started = false) => {
-  const [count, setCount] = useState(0);
-  useEffect(() => {
-    if (!started) return;
-    let startTime = null;
-    let frame;
-    const step = (ts) => {
-      if (!startTime) startTime = ts + delay;
-      const progress = Math.min((ts - startTime) / duration, 1);
-      if (progress < 0) { frame = requestAnimationFrame(step); return; }
-      setCount(Math.floor(progress * end));
-      if (progress < 1) frame = requestAnimationFrame(step);
-      else setCount(end);
-    };
-    frame = requestAnimationFrame(step);
-    return () => cancelAnimationFrame(frame);
-  }, [end, duration, delay, started]);
-  return count;
-};
-
-const StatItem = ({ item, hovered, onEnter, onLeave, started }) => {
-  const count = useCountUp(item.num, 1500, item.delay * 1000, started);
+const StatItem = ({ item, hovered, onEnter, onLeave }) => {
   const isBlurred = hovered !== null && hovered !== item.id;
 
   return (
-    <motion.div
+    <div
       style={{ display: 'flex', alignItems: 'center', gap: '1rem', justifyContent: 'center', flex: '1 1 200px' }}
       onMouseOver={onEnter}
       onMouseLeave={onLeave}
@@ -72,14 +50,19 @@ const StatItem = ({ item, hovered, onEnter, onLeave, started }) => {
         animate={isBlurred ? 'show' : 'hide'}
         style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}
       >
-        <span style={{
-          fontSize: 'clamp(3rem, 6vw, 5rem)',
-          fontWeight: 800,
-          color: '#fff',
-          letterSpacing: '-0.025em',
-          lineHeight: 1,
-        }}>
-          {count}{item.suffix}
+        <span
+          className="stat-num"
+          data-count={item.num}
+          data-suffix={item.suffix}
+          style={{
+            fontSize: 'clamp(3rem, 6vw, 5rem)',
+            fontWeight: 800,
+            color: '#fff',
+            letterSpacing: '-0.025em',
+            lineHeight: 1,
+          }}
+        >
+          {item.num}{item.suffix}
         </span>
         <p style={{
           maxWidth: item.label.length < 15 ? '100px' : '150px',
@@ -91,26 +74,44 @@ const StatItem = ({ item, hovered, onEnter, onLeave, started }) => {
           {item.label}
         </p>
       </motion.div>
-    </motion.div>
+    </div>
   );
 };
 
 const STATS_FALLBACK = [
-  { id: 0, num: 1,  suffix: '+', label: 'Years of experience', delay: 0.3 },
-  { id: 1, num: 5,  suffix: '+', label: 'Projects worked on',  delay: 0.3 },
-  { id: 2, num: 4,  suffix: '+', label: 'Projects deployed',   delay: 0.3 },
+  { id: 0, num: 1,  suffix: '+', label: 'Years of experience' },
+  { id: 1, num: 5,  suffix: '+', label: 'Projects worked on' },
+  { id: 2, num: 4,  suffix: '+', label: 'Projects deployed' },
 ];
 
 const StatsSection = ({ cmsStats }) => {
   const STATS = cmsStats
-    ? cmsStats.map((s, i) => ({ id: i, num: s.num, suffix: s.suffix || '+', label: s.label, delay: 0.3 }))
+    ? cmsStats.map((s, i) => ({ id: i, num: s.num, suffix: s.suffix || '+', label: s.label }))
     : STATS_FALLBACK;
   const [hovered, setHovered] = useState(null);
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: '-80px' });
+  const scope = useRef(null);
+
+  useGSAP(() => {
+    const mm = gsap.matchMedia();
+    const nums = gsap.utils.toArray(scope.current.querySelectorAll('.stat-num'));
+
+    mm.add(OK, () => {
+      nums.forEach((el, i) => {
+        el.textContent = `0${el.dataset.suffix}`;
+        countUp(el, Number(el.dataset.count), {
+          suffix: el.dataset.suffix,
+          trigger: scope.current,
+          delay: i * 0.15,
+        });
+      });
+    });
+    mm.add(REDUCED, () => {
+      nums.forEach(el => { el.textContent = `${el.dataset.count}${el.dataset.suffix}`; });
+    });
+  }, { scope, dependencies: [cmsStats] });
 
   return (
-    <Wrap ref={ref}>
+    <Wrap ref={scope}>
       <Grid>
         {STATS.flatMap((item, i) => [
           i > 0 ? <Divider key={`div-${item.id}`} /> : null,
@@ -120,7 +121,6 @@ const StatsSection = ({ cmsStats }) => {
             hovered={hovered}
             onEnter={() => setHovered(item.id)}
             onLeave={() => setHovered(null)}
-            started={inView}
           />,
         ]).filter(Boolean)}
       </Grid>

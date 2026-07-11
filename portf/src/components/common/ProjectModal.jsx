@@ -1,4 +1,5 @@
 // src/components/common/ProjectModal.jsx
+import { useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import styled from 'styled-components';
 import { FaTimes, FaGithub, FaExternalLinkAlt, FaCheckCircle } from 'react-icons/fa';
@@ -264,7 +265,44 @@ const ActionButton = styled(motion.a)`
   `}
 `;
 
+const FOCUSABLE = 'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])';
+
 const ProjectModal = ({ project, isOpen, onClose }) => {
+  const containerRef = useRef(null);
+
+  // Escape closes; Tab cycles inside the dialog; focus returns to the opener
+  useEffect(() => {
+    if (!isOpen) return undefined;
+    const opener = document.activeElement;
+    const container = containerRef.current;
+    container?.querySelector(FOCUSABLE)?.focus();
+
+    const onKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        onClose();
+        return;
+      }
+      if (e.key !== 'Tab' || !container) return;
+      const focusables = container.querySelectorAll(FOCUSABLE);
+      if (!focusables.length) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+
+    document.addEventListener('keydown', onKeyDown);
+    return () => {
+      document.removeEventListener('keydown', onKeyDown);
+      opener?.focus?.();
+    };
+  }, [isOpen, onClose]);
+
   if (!project) return null;
 
   return (
@@ -278,6 +316,10 @@ const ProjectModal = ({ project, isOpen, onClose }) => {
           onClick={onClose}
         >
           <ModalContainer
+            ref={containerRef}
+            role="dialog"
+            aria-modal="true"
+            aria-label={project.title}
             initial={{ scale: 0.9, opacity: 0, y: 20 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.9, opacity: 0, y: 20 }}

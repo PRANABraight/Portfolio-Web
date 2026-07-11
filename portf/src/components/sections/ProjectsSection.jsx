@@ -1,10 +1,13 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { FaGithub, FaArrowRight, FaExternalLinkAlt } from 'react-icons/fa';
 import { projectsData } from '../../data/portfolioData';
 import ProjectModal from '../common/ProjectModal';
+import SectionTitle from '../common/SectionTitle';
 import { urlFor } from '../../lib/sanity';
+import { gsap, useGSAP, OK, batchReveal } from '../../lib/motion';
+import { getStackIcon } from '../../lib/iconMap';
 
 const Wrap = styled.section`
   padding: 6rem 1.25rem;
@@ -23,7 +26,7 @@ const Grid = styled.div`
 `;
 
 const Card = styled(motion.div)`
-  background: #13162D;
+  background: var(--surface-1);
   border: 1px solid rgba(255,255,255,0.1);
   border-radius: 1.25rem;
   overflow: hidden;
@@ -38,7 +41,7 @@ const ImgWrap = styled.div`
   aspect-ratio: 16 / 9;
   overflow: hidden;
   position: relative;
-  background: #0a0a18;
+  background: var(--surface-0);
 
   img {
     width: 100%;
@@ -74,8 +77,8 @@ const Status = styled.span`
   font-size: 0.7rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: ${p => p.$ongoing ? '#f59e0b' : '#00ff99'};
-  border: 1px solid ${p => p.$ongoing ? 'rgba(245,158,11,0.3)' : 'rgba(0,255,153,0.3)'};
+  color: ${p => p.$ongoing ? '#ffaa33' : '#00ff99'};
+  border: 1px solid ${p => p.$ongoing ? 'rgba(255,170,51,0.3)' : 'rgba(0,255,153,0.3)'};
   border-radius: 9999px;
   padding: 0.2rem 0.6rem;
   margin-bottom: 0.75rem;
@@ -116,19 +119,16 @@ const IconStack = styled.div`
 
 const TechIcon = styled.div`
   width: 36px; height: 36px;
-  border: 1px solid rgba(255,255,255,0.2);
+  border: 1px solid rgba(0,255,153,0.2);
   border-radius: 50%;
-  background: #0a0a18;
+  background: var(--surface-0);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.625rem;
-  font-weight: 700;
-  color: ${p => p.$color || '#00ff99'};
+  color: rgba(255,255,255,0.75);
   margin-left: ${p => p.$first ? '0' : '-8px'};
   position: relative;
   z-index: ${p => p.$z};
-  letter-spacing: 0;
 `;
 
 const Links = styled.div`
@@ -149,15 +149,13 @@ const LinkBtn = styled.a`
   &:hover { color: #00e187; }
 `;
 
-const COLORS = ['#3776AB', '#F7931E', '#47A248', '#4479A1', '#00ff99'];
-
 const ProjectCard = ({ project, onClick, isOngoing }) => {
   const icons = (project.stack ?? []).slice(0, 4);
   const hasGithub = !!project.github;
   const hasLive = !!project.deployment;
 
   return (
-    <Card onClick={onClick} whileTap={{ scale: 0.99 }}>
+    <Card className="project-card" onClick={onClick} whileTap={{ scale: 0.99 }}>
       <ImgWrap>
         {project.image
           ? <img src={project.image} alt={project.title} loading="lazy" />
@@ -170,11 +168,14 @@ const ProjectCard = ({ project, onClick, isOngoing }) => {
         <PDesc>{project.description}</PDesc>
         <BottomRow>
           <IconStack>
-            {icons.map((name, i) => (
-              <TechIcon key={name} $color={COLORS[i % COLORS.length]} $first={i === 0} $z={icons.length - i}>
-                {name.slice(0, 2).toUpperCase()}
-              </TechIcon>
-            ))}
+            {icons.map((name, i) => {
+              const Icon = getStackIcon(name);
+              return (
+                <TechIcon key={name} $first={i === 0} $z={icons.length - i} title={name} aria-label={name}>
+                  <Icon size={14} />
+                </TechIcon>
+              );
+            })}
           </IconStack>
           <Links>
             {hasGithub && (
@@ -202,6 +203,12 @@ const ProjectCard = ({ project, onClick, isOngoing }) => {
 const ProjectsSection = ({ cmsProjects }) => {
   const [selected, setSelected] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
+  const scope = useRef(null);
+
+  useGSAP(() => {
+    const mm = gsap.matchMedia();
+    mm.add(OK, () => batchReveal('.project-card', scope.current));
+  }, { scope });
 
   const open = (p) => { setSelected(p); setModalOpen(true); document.body.style.overflow = 'hidden'; };
   const close = () => { setModalOpen(false); document.body.style.overflow = ''; };
@@ -222,34 +229,17 @@ const ProjectsSection = ({ cmsProjects }) => {
   }
 
   return (
-    <Wrap id="projects">
-      <h1 className="heading">
-        A small selection of{' '}
-        <span style={{ color: '#00ff99' }}>recent projects</span>
-      </h1>
+    <Wrap id="projects" ref={scope}>
+      <SectionTitle eyebrow="// projects" mb="1rem">
+        A small selection of <span>recent projects</span>
+      </SectionTitle>
 
       <Grid>
-        {completed.map((p, i) => (
-          <motion.div
-            key={p.title}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.4, delay: i * 0.07 }}
-          >
-            <ProjectCard project={p} onClick={() => open(p)} isOngoing={false} />
-          </motion.div>
+        {completed.map((p) => (
+          <ProjectCard key={p.title} project={p} onClick={() => open(p)} isOngoing={false} />
         ))}
-        {ongoing.map((p, i) => (
-          <motion.div
-            key={p.title}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.4, delay: (completed.length + i) * 0.07 }}
-          >
-            <ProjectCard project={p} onClick={() => open(p)} isOngoing={true} />
-          </motion.div>
+        {ongoing.map((p) => (
+          <ProjectCard key={p.title} project={p} onClick={() => open(p)} isOngoing={true} />
         ))}
       </Grid>
 

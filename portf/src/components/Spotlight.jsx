@@ -1,5 +1,5 @@
 // Spotlight — exact match to radnaabazar.com component 56960
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 
 const Spotlight = ({
   gradientFirst  = 'radial-gradient(68.54% 68.72% at 55.02% 31.46%, hsla(210,100%,85%,.08) 0, hsla(210,100%,55%,.02) 50%, hsla(210,100%,45%,0) 80%)',
@@ -11,8 +11,13 @@ const Spotlight = ({
   smallWidth = 240,
   duration   = 7,
   xOffset    = 100,
-}) => (
+  className,
+}) => {
+  const reduced = useReducedMotion();
+
+  return (
   <motion.div
+    className={className}
     initial={{ opacity: 0 }}
     animate={{ opacity: 1 }}
     transition={{ duration: 1.5 }}
@@ -25,7 +30,7 @@ const Spotlight = ({
   >
     {/* Left beam */}
     <motion.div
-      animate={{ x: [0, xOffset, 0] }}
+      animate={reduced ? undefined : { x: [0, xOffset, 0] }}
       transition={{ duration, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut' }}
       style={{ position: 'absolute', top: 0, left: 0, width: '100vw', height: '100vh', zIndex: 40, pointerEvents: 'none' }}
     >
@@ -36,7 +41,7 @@ const Spotlight = ({
 
     {/* Right beam */}
     <motion.div
-      animate={{ x: [0, -xOffset, 0] }}
+      animate={reduced ? undefined : { x: [0, -xOffset, 0] }}
       transition={{ duration, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut' }}
       style={{ position: 'absolute', top: 0, right: 0, width: '100vw', height: '100vh', zIndex: 40, pointerEvents: 'none' }}
     >
@@ -45,6 +50,7 @@ const Spotlight = ({
       <div style={{ transform: 'rotate(45deg) translate(180%, -70%)', background: gradientThird, width: `${smallWidth}px`, height: `${height}px`, position: 'absolute', top: 0, right: 0, transformOrigin: 'top right' }} />
     </motion.div>
   </motion.div>
-);
+  );
+};
 
 export default Spotlight;

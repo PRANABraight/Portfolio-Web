@@ -1,7 +1,10 @@
+import { useRef } from 'react';
 import { motion } from 'framer-motion';
 import styled from 'styled-components';
 import { skillsData } from '../../data/portfolioData';
 import { getIcon } from '../../lib/iconMap';
+import { gsap, useGSAP, OK, batchReveal } from '../../lib/motion';
+import SectionTitle from '../common/SectionTitle';
 
 const Wrap = styled.section`
   padding: 6rem 1.25rem;
@@ -71,7 +74,7 @@ const StrItem = styled.li`
   &:hover { color: rgba(255,255,255,0.8); }
 `;
 
-const Grid = styled(motion.div)`
+const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
   gap: 1px;
@@ -80,9 +83,9 @@ const Grid = styled(motion.div)`
   overflow: hidden;
 `;
 
-const SkillCard = styled(motion.div)`
+const SkillCard = styled.div`
   padding: 1.25rem 0.75rem;
-  background: rgba(22,20,42,0.5);
+  background: rgba(23,21,48,0.55);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -135,19 +138,22 @@ const SName = styled.span`
   ${SkillCard}:hover & { color: rgba(255,255,255,0.6); }
 `;
 
-const gV = { hidden:{}, visible:{ transition:{ staggerChildren:0.03 } } };
-const cV = { hidden:{ opacity:0, scale:0.85 }, visible:{ opacity:1, scale:1, transition:{ duration:0.35 } } };
-
 const SkillsSection = ({ cmsSkills }) => {
   const skills = cmsSkills?.length
     ? cmsSkills.map(s => ({ name: s.name, color: s.color, icon: getIcon(s.iconName) }))
     : skillsData;
+  const scope = useRef(null);
+
+  useGSAP(() => {
+    const mm = gsap.matchMedia();
+    mm.add(OK, () => batchReveal('.skill-tile', scope.current, { stagger: 0.05 }));
+  }, { scope, dependencies: [cmsSkills] });
 
   return (
-    <Wrap id="skills">
-      <h1 className="heading">
-        Technical <span style={{ color: '#00ff99' }}>Arsenal</span>
-      </h1>
+    <Wrap id="skills" ref={scope}>
+      <SectionTitle eyebrow="// skills" mb="0">
+        Technical <span>Arsenal</span>
+      </SectionTitle>
 
       <Layout style={{ marginTop: '3rem' }}>
         <Left initial={{ opacity:0, x:-16 }} whileInView={{ opacity:1, x:0 }} viewport={{ once:true }} transition={{ duration:0.5 }}>
@@ -160,9 +166,9 @@ const SkillsSection = ({ cmsSkills }) => {
           </StrList>
         </Left>
 
-        <Grid variants={gV} initial="hidden" whileInView="visible" viewport={{ once:true, amount:0.1 }}>
+        <Grid>
           {skills.map((s, i) => (
-            <SkillCard key={i} variants={cV} $c={s.color}>
+            <SkillCard key={i} className="skill-tile" $c={s.color}>
               <SIcon $c={s.color}><s.icon /></SIcon>
               <SName>{s.name}</SName>
             </SkillCard>

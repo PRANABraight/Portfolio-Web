@@ -1,25 +1,13 @@
+import { useRef } from 'react';
 import styled from 'styled-components';
-import { motion } from 'framer-motion';
-import { colors } from '../../styles/theme';
+import { gsap, useGSAP, OK, REDUCED, revealUp } from '../../lib/motion';
+import SectionTitle from '../common/SectionTitle';
 
 const Wrap = styled.section`
   padding: 6rem 1.25rem;
   @media (min-width: 640px) { padding: 6rem 2.5rem; }
   max-width: 900px;
   margin: 0 auto;
-`;
-
-const TopText = styled(motion.div)`
-  margin-bottom: 3rem;
-  text-align: center;
-`;
-
-const Subtitle = styled.p`
-  font-size: 0.875rem;
-  color: rgb(161,161,170);
-  max-width: 600px;
-  margin: 0 auto;
-  line-height: 1.625;
 `;
 
 const TLine = styled.div`
@@ -29,22 +17,30 @@ const TLine = styled.div`
   @media (min-width: 768px) {
     padding-left: 2rem;
   }
-
-  &::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 1px;
-    background: linear-gradient(to bottom, ${colors.accentBlue}, ${colors.accentBlueSoft});
-    display: none;
-
-    @media (min-width: 768px) { display: block; }
-  }
 `;
 
-const Entry = styled(motion.div)`
+/* Faint full-height rail; the green progress bar inside is drawn by scroll */
+const Track = styled.div`
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.08);
+  display: none;
+
+  @media (min-width: 768px) { display: block; }
+`;
+
+const Progress = styled.div`
+  position: absolute;
+  inset: 0;
+  background: #00ff99;
+  box-shadow: 0 0 8px rgba(0, 255, 153, 0.5);
+  transform-origin: top;
+`;
+
+const Entry = styled.div`
   position: relative;
   padding: 0 0 3rem 0;
 
@@ -60,9 +56,16 @@ const Dot = styled.div`
   top: 0.4rem;
   width: 10px; height: 10px;
   border-radius: 50%;
-  background: ${colors.accentBlue};
-  box-shadow: 0 0 12px ${colors.accentBlueGlow};
+  background: #0f0e1a;
+  border: 2px solid rgba(0, 255, 153, 0.35);
   transform: translateX(-50%);
+  transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+
+  &.active {
+    background: #00ff99;
+    border-color: #00ff99;
+    box-shadow: 0 0 12px rgba(0, 255, 153, 0.6);
+  }
 
   @media (min-width: 768px) { display: block; }
 `;
@@ -84,10 +87,10 @@ const Year = styled.div`
 `;
 
 const TYPE_COLORS = {
-  achievement:   { bg: 'rgba(255,196,0,0.12)',  text: '#ffc400' },
-  publication:   { bg: 'rgba(96,165,250,0.12)', text: '#60a5fa' },
-  certification: { bg: 'rgba(52,211,153,0.12)', text: '#34d399' },
-  leadership:    { bg: 'rgba(167,139,250,0.12)',text: '#a78bfa' },
+  achievement:   { bg: 'rgba(255,170,51,0.12)', text: '#ffaa33' },
+  publication:   { bg: 'rgba(0,255,153,0.10)',  text: '#66ffc0' },
+  certification: { bg: 'rgba(0,255,153,0.12)',  text: '#00ff99' },
+  leadership:    { bg: 'rgba(0,255,153,0.08)',  text: '#99ffd5' },
   milestone:     { bg: 'rgba(156,163,175,0.1)', text: '#9ca3af' },
 };
 
@@ -140,41 +143,79 @@ const ENTRIES_FALLBACK = [
   },
 ];
 
-const entryVar = {
-  hidden:  { opacity: 0, x: -16 },
-  visible: (i) => ({ opacity: 1, x: 0, transition: { delay: i * 0.12, duration: 0.55, ease: [0.4,0,0.2,1] } }),
-};
-
 const JourneySection = ({ cmsJourney }) => {
   const entries = cmsJourney?.entries?.length ? cmsJourney.entries : ENTRIES_FALLBACK;
+  const scope = useRef(null);
+
+  useGSAP(() => {
+    const mm = gsap.matchMedia();
+
+    mm.add(OK, () => {
+      revealUp('.journey-top', { trigger: '.journey-top' });
+
+      // Signature moment: the rail draws itself as you read down the timeline
+      gsap.fromTo('.tl-progress',
+        { scaleY: 0 },
+        {
+          scaleY: 1,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: '.tl-line',
+            start: 'top 70%',
+            end: 'bottom 55%',
+            scrub: 0.4,
+          },
+        }
+      );
+
+      gsap.utils.toArray('.tl-entry').forEach((entry) => {
+        gsap.from(entry, {
+          x: -16,
+          autoAlpha: 0,
+          duration: 0.55,
+          ease: 'power2.out',
+          scrollTrigger: { trigger: entry, start: 'top 75%', once: true },
+        });
+        const dot = entry.querySelector('.tl-dot');
+        if (dot) {
+          gsap.timeline({
+            scrollTrigger: {
+              trigger: entry,
+              start: 'top 62%',
+              toggleActions: 'play none none reverse',
+              onEnter: () => dot.classList.add('active'),
+              onLeaveBack: () => dot.classList.remove('active'),
+            },
+          }).fromTo(dot, { scale: 1 }, { scale: 1.35, duration: 0.18, yoyo: true, repeat: 1 });
+        }
+      });
+    });
+
+    // Reduced motion: everything in its final, readable state
+    mm.add(REDUCED, () => {
+      gsap.set('.tl-progress', { scaleY: 1 });
+      scope.current?.querySelectorAll('.tl-dot').forEach(d => d.classList.add('active'));
+    });
+  }, { scope });
 
   return (
-    <Wrap id="journey">
-      <TopText
-        initial={{ opacity: 0, y: 16 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.5 }}
-      >
-        <h1 className="heading">
-          My journey <span style={{ color: '#00ff99' }}>report</span>
-        </h1>
-        <Subtitle>
-          I've had the opportunity to build software across different domains — from ML systems to government platforms. Here's my timeline.
-        </Subtitle>
-      </TopText>
+    <Wrap id="journey" ref={scope}>
+      <div className="journey-top">
+        <SectionTitle
+          eyebrow="// timeline"
+          sub="I've had the opportunity to build software across different domains — from ML systems to government platforms. Here's my timeline."
+        >
+          My journey <span>report</span>
+        </SectionTitle>
+      </div>
 
-      <TLine>
-        {entries.map((e, i) => (
-          <Entry
-            key={e.year}
-            custom={i}
-            variants={entryVar}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: '-40px' }}
-          >
-            <Dot />
+      <TLine className="tl-line">
+        <Track className="tl-track">
+          <Progress className="tl-progress" />
+        </Track>
+        {entries.map((e) => (
+          <Entry key={e.year} className="tl-entry">
+            <Dot className="tl-dot" />
             <YearRow>
               <Year>{e.year}</Year>
               {e.type && <TypeBadge $type={e.type}>{e.type}</TypeBadge>}

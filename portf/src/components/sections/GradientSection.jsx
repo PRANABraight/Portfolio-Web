@@ -1,5 +1,7 @@
 // Animated gradient blobs — matches radnaabazar.com component 48761
+import { useRef } from 'react';
 import styled, { keyframes } from 'styled-components';
+import { gsap, useGSAP, OK } from '../../lib/motion';
 
 const moveFirst = keyframes`
   0%   { transform: translate(-50%, -50%) scale(1); }
@@ -34,7 +36,7 @@ const Wrap = styled.div`
   width: 100%;
   height: 400px;
   overflow: hidden;
-  background: linear-gradient(40deg, rgb(108, 0, 162), rgb(0, 17, 82));
+  background: linear-gradient(40deg, #16142a, #0f0e1a);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -55,30 +57,30 @@ const BlobBase = styled.div`
   top: calc(50% - 40%);
   left: calc(50% - 40%);
   border-radius: 50%;
-  mix-blend-mode: hard-light;
+  mix-blend-mode: soft-light;
 `;
 
 const Blob1 = styled(BlobBase)`
-  background: radial-gradient(circle at center, rgb(18,113,255) 0%, rgba(18,113,255,0) 50%);
+  background: radial-gradient(circle at center, rgba(0,255,153,0.55) 0%, rgba(0,255,153,0) 50%);
   animation: ${moveFirst} 8s ease infinite;
 `;
 const Blob2 = styled(BlobBase)`
-  background: radial-gradient(circle at center, rgba(221,74,255,0.8) 0%, rgba(221,74,255,0) 50%);
+  background: radial-gradient(circle at center, rgba(0,255,204,0.45) 0%, rgba(0,255,204,0) 50%);
   animation: ${moveSecond} 10s ease infinite;
   transform-origin: calc(50% - 400px);
 `;
 const Blob3 = styled(BlobBase)`
-  background: radial-gradient(circle at center, rgba(100,220,255,0.8) 0%, rgba(100,220,255,0) 50%);
+  background: radial-gradient(circle at center, rgba(136,255,204,0.4) 0%, rgba(136,255,204,0) 50%);
   animation: ${moveThird} 12s ease infinite;
   transform-origin: calc(50% + 400px);
 `;
 const Blob4 = styled(BlobBase)`
-  background: radial-gradient(circle at center, rgba(200,50,50,0.8) 0%, rgba(200,50,50,0) 50%);
+  background: radial-gradient(circle at center, rgba(0,153,85,0.55) 0%, rgba(0,153,85,0) 50%);
   animation: ${moveFourth} 9s ease infinite;
   opacity: 0.7;
 `;
 const Blob5 = styled(BlobBase)`
-  background: radial-gradient(circle at center, rgba(180,180,50,0.8) 0%, rgba(180,180,50,0) 50%);
+  background: radial-gradient(circle at center, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0) 50%);
   animation: ${moveFifth} 11s ease infinite;
 `;
 
@@ -90,8 +92,26 @@ const CenterText = styled.div`
   padding: 2rem 1.25rem;
 `;
 
-const GradientSection = () => (
-  <div style={{ position: 'relative', overflow: 'hidden' }}>
+const GradientSection = () => {
+  const scope = useRef(null);
+
+  // Gentle depth: blobs drift against scroll direction while the band passes
+  useGSAP(() => {
+    const mm = gsap.matchMedia();
+    mm.add(OK, () => {
+      gsap.fromTo('.blob-layer',
+        { yPercent: -8 },
+        {
+          yPercent: 8,
+          ease: 'none',
+          scrollTrigger: { trigger: scope.current, start: 'top bottom', end: 'bottom top', scrub: true },
+        }
+      );
+    });
+  }, { scope });
+
+  return (
+  <div ref={scope} style={{ position: 'relative', overflow: 'hidden' }}>
     <Wrap>
       <svg style={{ display: 'none' }}>
         <defs>
@@ -103,7 +123,7 @@ const GradientSection = () => (
         </defs>
       </svg>
 
-      <GradientsContainer>
+      <GradientsContainer className="blob-layer">
         <Blob1 /><Blob2 /><Blob3 /><Blob4 /><Blob5 />
       </GradientsContainer>
 
@@ -117,6 +137,7 @@ const GradientSection = () => (
       </CenterText>
     </Wrap>
   </div>
-);
+  );
+};
 
 export default GradientSection;

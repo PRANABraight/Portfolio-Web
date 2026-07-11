@@ -1,6 +1,7 @@
-import { createElement } from 'react';
+import { createElement, useRef } from 'react';
 import styled from 'styled-components';
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
+import { gsap, useGSAP, OK } from '../../lib/motion';
 import { FaGithub, FaLinkedin, FaInstagram, FaEnvelope, FaArrowRight } from 'react-icons/fa';
 import resumePDF from '../../assets/Pranab_Rai_da (1).pdf';
 import profImg from '../../assets/prof.webp';
@@ -260,19 +261,42 @@ const HeroSection = ({ cmsHero }) => {
 
   const [firstName, ...rest] = heroName.split(' ');
   const lastName = rest.join(' ');
+  const scope = useRef(null);
+  const reduced = useReducedMotion();
+
+  useGSAP(() => {
+    const mm = gsap.matchMedia();
+
+    mm.add(OK, () => {
+      // Entrance: staged reveal right after the page-transition sweep clears
+      gsap.timeline({ delay: 0.55, defaults: { ease: 'power2.out', duration: 0.45 } })
+        .from('.hero-role', { y: 16, autoAlpha: 0 })
+        .from('.hero-name', { y: 24, autoAlpha: 0 }, '-=0.25')
+        .from('.hero-desc', { y: 16, autoAlpha: 0 }, '-=0.25')
+        .from('.hero-actions', { y: 16, autoAlpha: 0 }, '-=0.25')
+        .from('.hero-photo', { autoAlpha: 0, scale: 0.97, duration: 0.55 }, '-=0.35');
+
+      // Depth as the hero scrolls away
+      const scrollOut = {
+        trigger: scope.current,
+        start: 'top top',
+        end: 'bottom top',
+        scrub: true,
+      };
+      gsap.to('.hero-photo', { yPercent: -6, ease: 'none', scrollTrigger: scrollOut });
+      gsap.to('.hero-spotlight', { yPercent: 12, autoAlpha: 0.4, ease: 'none', scrollTrigger: scrollOut });
+    });
+  }, { scope });
 
   return (
-    <Section id="home">
-      <Spotlight />
+    <Section id="home" ref={scope}>
+      <Spotlight className="hero-spotlight" />
       <Inner>
         {/* ── Text ── */}
-        <TextSide
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1, transition: { delay: 1, duration: 0.4, ease: 'easeInOut' } }}
-        >
-          <RoleLabel>{roleLabel}</RoleLabel>
+        <TextSide>
+          <RoleLabel className="hero-role">{roleLabel}</RoleLabel>
 
-          <NameHeading>
+          <NameHeading className="hero-name">
             Hello I'm{' '}<br />
             <AccentName title={heroName}>
               <span className="text">
@@ -282,9 +306,9 @@ const HeroSection = ({ cmsHero }) => {
             </AccentName>
           </NameHeading>
 
-          <Description>{description}</Description>
+          <Description className="hero-desc">{description}</Description>
 
-          <Actions>
+          <Actions className="hero-actions">
             <OutlineBtn
               href={resumeHref}
               download="Pranab_Rai_Resume.pdf"
@@ -313,10 +337,7 @@ const HeroSection = ({ cmsHero }) => {
         </TextSide>
 
         {/* ── Photo ── */}
-        <PhotoSide
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1, transition: { delay: 2.4, duration: 0.4, ease: 'easeInOut' } }}
-        >
+        <PhotoSide className="hero-photo">
           <PhotoButton
             aria-label="Profile photo"
             whileHover={{ scale: 1.01 }}
@@ -353,11 +374,11 @@ const HeroSection = ({ cmsHero }) => {
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 initial={{ strokeDasharray: '24 10 0 0' }}
-                animate={{
+                animate={reduced ? { strokeDasharray: '15 120 25 25' } : {
                   strokeDasharray: ['15 120 25 25', '16 25 92 72', '4 250 22 22'],
                   rotate: [120, 360],
                 }}
-                transition={{ duration: 20, repeat: Infinity, repeatType: 'reverse' }}
+                transition={reduced ? { duration: 0 } : { duration: 20, repeat: Infinity, repeatType: 'reverse' }}
               />
             </svg>
 

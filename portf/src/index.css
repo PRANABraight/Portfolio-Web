@@ -3,7 +3,11 @@
 :root {
   --bg:       #0f0e1a;
   --bg-2:     #16142a;
-  --bg-card:  rgba(22, 20, 42, 0.6);
+  /* Surface ladder — one violet-navy hue, stepped by value only */
+  --surface-0: #0b0a16;              /* recessed: code wells, image slots */
+  --surface-1: #171530;              /* cards */
+  --surface-2: #14122b;              /* raised chrome: bars, chips */
+  --bg-card:  rgba(23, 21, 48, 0.6);
   --accent:   #00ff99;
   --accent-h: #00e187;
   --text:     #ffffff;
@@ -22,6 +26,9 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 html { scroll-behavior: smooth; background: var(--bg); }
+
+/* Lenis drives scrolling programmatically; native smooth scroll would fight it */
+html.lenis-active { scroll-behavior: auto; }
 
 body {
   font-family: 'JetBrains Mono', 'Courier New', monospace;

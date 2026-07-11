@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaTimes } from 'react-icons/fa';
 import { LuMenu } from 'react-icons/lu';
+import { scrollToId } from '../hooks/useLenis';
 
 const Header = styled.header`
   padding: 2rem 0;
@@ -162,7 +163,7 @@ const Navbar = ({ mode, setMode }) => {
   const scrollTo = (id) => {
     if (mode !== 'professional') setMode('professional');
     setTimeout(() => {
-      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+      scrollToId(id);
     }, 50);
     setOpen(false);
   };

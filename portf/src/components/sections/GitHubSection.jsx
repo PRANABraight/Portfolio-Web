@@ -1,9 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { motion } from 'framer-motion';
 import { FaGithub, FaExternalLinkAlt } from 'react-icons/fa';
 import { LuStar } from 'react-icons/lu';
 import { colors, typography } from '../../styles/theme';
+import { gsap, useGSAP, OK, REDUCED, revealUp, countUp } from '../../lib/motion';
+import SectionTitle from '../common/SectionTitle';
 
 const GH = 'PRANABraight';
 const CACHE_KEY = 'gh-stats-v1';
@@ -195,17 +197,35 @@ const fetchStats = async () => {
 const GitHubSection = () => {
   const [stats, setStats] = useState(null);
   const [failed, setFailed] = useState(false);
+  const scope = useRef(null);
 
   useEffect(() => {
     fetchStats().then(setStats).catch(() => setFailed(true));
   }, []);
 
+  useGSAP(() => {
+    if (!stats) return;
+    const mm = gsap.matchMedia();
+    const nums = gsap.utils.toArray(scope.current.querySelectorAll('.gh-num'));
+
+    mm.add(OK, () => {
+      revealUp('.gh-card', { trigger: '.gh-card' });
+      nums.forEach((el, i) => {
+        el.textContent = '0';
+        countUp(el, Number(el.dataset.count), { trigger: '.gh-card', delay: 0.2 + i * 0.12 });
+      });
+    });
+    mm.add(REDUCED, () => {
+      nums.forEach(el => { el.textContent = el.dataset.count; });
+    });
+  }, { scope, dependencies: [stats] });
+
   return (
-    <Wrap id="github">
+    <Wrap id="github" ref={scope}>
       <Header>
-        <h1 className="heading" style={{ marginBottom: '0.25rem' }}>
-          Open Source <span style={{ color: colors.accent }}>Activity</span>
-        </h1>
+        <SectionTitle eyebrow="// open source" mb="0.25rem">
+          Open Source <span>Activity</span>
+        </SectionTitle>
         <GhLink href={`https://github.com/${GH}`} target="_blank" rel="noopener noreferrer">
           <FaGithub /> github.com/{GH} <FaExternalLinkAlt style={{ fontSize: '0.75rem' }} />
         </GhLink>
@@ -219,23 +239,18 @@ const GitHubSection = () => {
       ) : !stats ? (
         <Skeleton />
       ) : (
-        <Card
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-40px' }}
-          transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
-        >
+        <Card className="gh-card">
           <StatGrid>
             <Stat>
-              <StatNum>{stats.repos}<span>+</span></StatNum>
+              <StatNum><span className="gh-num" data-count={stats.repos}>{stats.repos}</span><span>+</span></StatNum>
               <StatLabel>Repositories</StatLabel>
             </Stat>
             <Stat>
-              <StatNum>{stats.stars}<span><LuStar style={{ verticalAlign: '-0.05em', fontSize: '0.8em' }} /></span></StatNum>
+              <StatNum><span className="gh-num" data-count={stats.stars}>{stats.stars}</span><span><LuStar style={{ verticalAlign: '-0.05em', fontSize: '0.8em' }} /></span></StatNum>
               <StatLabel>Stars earned</StatLabel>
             </Stat>
             <Stat>
-              <StatNum>{stats.followers}<span>+</span></StatNum>
+              <StatNum><span className="gh-num" data-count={stats.followers}>{stats.followers}</span><span>+</span></StatNum>
               <StatLabel>Followers</StatLabel>
             </Stat>
           </StatGrid>

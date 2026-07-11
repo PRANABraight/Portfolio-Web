@@ -1,6 +1,7 @@
 // Contact/Footer CTA — exact match to radnaabazar.com component 30836
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import styled, { keyframes } from 'styled-components';
+import { gsap, useGSAP, OK, revealUp } from '../../lib/motion';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaGithub, FaLinkedin, FaInstagram, FaEnvelope, FaArrowRight } from 'react-icons/fa';
 import { colors, typography, borderRadius, transitions } from '../../styles/theme';
@@ -160,7 +161,7 @@ const Spinner = styled.span`
   position: absolute;
   inset: -1000%;
   animation: ${spinConic} 2s linear infinite;
-  background: conic-gradient(from 90deg at 50% 50%, #E2CBFF 0%, #393BB2 50%, #E2CBFF 100%);
+  background: conic-gradient(from 90deg at 50% 50%, #ccffea 0%, #009955 50%, #ccffea 100%);
 `;
 
 const ShinyLabel = styled.span`
@@ -259,6 +260,18 @@ const SOCIALS = [
 const INITIAL_FORM = { name: '', email: '', message: '', company: '' };
 
 const ContactSection = ({ setMode }) => {
+  const scope = useRef(null);
+
+  useGSAP(() => {
+    const mm = gsap.matchMedia();
+    mm.add(OK, () => {
+      revealUp(['.contact-heading', '.contact-desc', '.contact-form'], {
+        trigger: scope.current,
+        stagger: 0.12,
+      });
+    });
+  }, { scope });
+
   const [form, setForm] = useState(INITIAL_FORM);
   const [status, setStatus] = useState('idle'); // idle | loading | success | error
   const [errorMsg, setErrorMsg] = useState('');
@@ -292,20 +305,20 @@ const ContactSection = ({ setMode }) => {
   };
 
   return (
-    <Wrap id="contact" >
+    <Wrap id="contact" ref={scope}>
       <FooterBg />
       <Inner>
         <CtaBlock>
-          <Heading>
+          <Heading className="contact-heading">
             Let's{' '}
             <span>Talk</span>
           </Heading>
 
-          <CtaDesc>
+          <CtaDesc className="contact-desc">
             What led you here? What are you looking for? I would love to hear from you over a virtual coffee chat!
           </CtaDesc>
 
-          <Form onSubmit={onSubmit}>
+          <Form className="contact-form" onSubmit={onSubmit}>
             <Field>
               <Label htmlFor="contact-name">Name</Label>
               <Input

@@ -1,6 +1,8 @@
+import { useRef } from 'react';
 import styled from 'styled-components';
-import { motion } from 'framer-motion';
 import { getIcon } from '../../lib/iconMap';
+import { gsap, useGSAP, OK, batchReveal } from '../../lib/motion';
+import SectionTitle from '../common/SectionTitle';
 
 const Wrap = styled.section`
   padding: 5rem 1.25rem;
@@ -23,9 +25,16 @@ const Card = styled.div`
   position: relative;
   border-radius: 1.25rem;
   border: 1px solid rgba(255,255,255,0.08);
-  background: #13162D;
+  background: var(--surface-1);
   padding: 2rem;
   overflow: hidden;
+  transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+
+  &:hover {
+    border-color: rgba(0,255,153,0.4);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(0,255,153,0.08);
+  }
 
   &::before {
     content: '';
@@ -140,6 +149,13 @@ const ITEMS_FALLBACK = [
 ];
 
 const ExperienceSection = ({ cmsExperience }) => {
+  const scope = useRef(null);
+
+  useGSAP(() => {
+    const mm = gsap.matchMedia();
+    mm.add(OK, () => batchReveal('.exp-card', scope.current));
+  }, { scope });
+
   const ITEMS = Array.isArray(cmsExperience)
     ? cmsExperience.map(e => ({
         id: e._id,
@@ -155,25 +171,19 @@ const ExperienceSection = ({ cmsExperience }) => {
     : ITEMS_FALLBACK;
 
   return (
-    <Wrap id="experience">
-      <h1 className="heading">
-        My <span style={{ color: '#00ff99' }}>Experience</span>
-      </h1>
+    <Wrap id="experience" ref={scope}>
+      <SectionTitle eyebrow="// experience" mb="0">
+        My <span>Experience</span>
+      </SectionTitle>
 
       <Grid>
-        {ITEMS.map((item, i) => {
+        {ITEMS.map((item) => {
           const IconComponent = getIcon(item.iconName);
           const hasBullets = item.bullets?.length > 0;
           const hasMeta = item.company || item.startDate || item.location;
           const dateStr = [item.startDate, item.endDate].filter(Boolean).join(' – ');
           return (
-            <motion.div
-              key={item.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1, duration: 0.45 }}
-            >
+            <div key={item.id} className="exp-card">
               <Card>
                 <Thumb><IconComponent /></Thumb>
                 <ExpTitle>{item.title}</ExpTitle>
@@ -192,7 +202,7 @@ const ExperienceSection = ({ cmsExperience }) => {
                   <ExpDesc>{item.desc}</ExpDesc>
                 )}
               </Card>
-            </motion.div>
+            </div>
           );
         })}
       </Grid>

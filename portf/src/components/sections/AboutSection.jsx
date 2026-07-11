@@ -1,11 +1,11 @@
 import { createElement, useRef } from 'react';
 import styled, { keyframes } from 'styled-components';
-import { motion } from 'framer-motion';
 import { FaLaptopCode, FaGraduationCap, FaChartLine, FaBrain } from 'react-icons/fa';
 import { aboutData } from '../../data/portfolioData';
 import { useTypingEffect } from '../../hooks/useTypingEffect';
 import AnimatedTitle from '../common/AnimatedTitle';
 import { getIcon } from '../../lib/iconMap';
+import { gsap, useGSAP, OK, batchReveal } from '../../lib/motion';
 
 const blink = keyframes`0%,100%{opacity:1}50%{opacity:0}`;
 
@@ -26,8 +26,8 @@ const Grid = styled.div`
   }
 `;
 
-const Terminal = styled(motion.div)`
-  background: #0a0910;
+const Terminal = styled.div`
+  background: var(--surface-0);
   border: 1px solid rgba(255,255,255,0.08);
   border-radius: 1rem;
   overflow: hidden;
@@ -45,7 +45,7 @@ const TBar = styled.div`
   display: flex;
   align-items: center;
   padding: 0.6rem 0.9rem;
-  background: #111020;
+  background: var(--surface-2);
   border-bottom: 1px solid rgba(255,255,255,0.05);
   gap: 0.25rem;
 `;
@@ -102,8 +102,8 @@ const CLine = styled.div`
   .kw   { color: #00ff99; font-weight: 600; }
   .str  { color: rgba(0,255,153,0.55); }
   .cmt  { color: rgba(255,255,255,0.2); font-style: italic; }
-  .fn   { color: #88ccff; }
-  .prop { color: #ffcc88; }
+  .fn   { color: #62d9e8; }
+  .prop { color: #ffbb66; }
   .pun  { color: rgba(255,255,255,0.3); }
 `;
 
@@ -122,9 +122,9 @@ const Cards = styled.div`
   gap: 1rem;
 `;
 
-const Card = styled(motion.div)`
+const Card = styled.div`
   padding: 1.25rem;
-  background: rgba(22,20,42,0.5);
+  background: rgba(23,21,48,0.55);
   border: 1px solid rgba(255,255,255,0.07);
   border-radius: 1rem;
   display: flex;
@@ -134,7 +134,7 @@ const Card = styled(motion.div)`
 
   &:hover {
     border-color: rgba(0,255,153,0.2);
-    background: rgba(22,20,42,0.8);
+    background: rgba(23,21,48,0.85);
   }
 `;
 
@@ -180,15 +180,6 @@ const CARDS_FALLBACK = [
   { icon: <FaBrain />, title: 'Interests', text: 'Quantum Computing, NLP, Computer Vision, Time Series & MLOps best practices.' },
 ];
 
-const cardStagger = {
-  hidden:  {},
-  visible: { transition: { staggerChildren: 0.07, delayChildren: 0.1 } },
-};
-const cardItem = {
-  hidden:  { opacity: 0, x: 20 },
-  visible: { opacity: 1, x: 0, transition: { duration: 0.45, ease: [0.4,0,0.2,1] } },
-};
-
 const AboutSection = ({ cmsAbout }) => {
   // CMS may return the code as one newline-joined string (or array entries
   // containing newlines) — normalize to one array element per visual line
@@ -208,6 +199,22 @@ const AboutSection = ({ cmsAbout }) => {
 
   const { displayedLines, isComplete } = useTypingEffect(codeLines);
   const ref = useRef(null);
+  const scope = useRef(null);
+
+  useGSAP(() => {
+    const mm = gsap.matchMedia();
+    mm.add(OK, () => {
+      // Opacity-only on the terminal: transforms would break its position:sticky
+      // and fight the mousemove tilt that writes style.transform directly
+      gsap.from('.about-terminal', {
+        autoAlpha: 0,
+        duration: 0.6,
+        ease: 'power2.out',
+        scrollTrigger: { trigger: '.about-terminal', start: 'top 80%', once: true },
+      });
+      batchReveal('.about-card', scope.current);
+    });
+  }, { scope });
 
   const onMove = (e) => {
     const el = ref.current;
@@ -220,21 +227,18 @@ const AboutSection = ({ cmsAbout }) => {
   const onLeave = () => { if (ref.current) ref.current.style.transform = ''; };
 
   return (
-    <Wrap id="about">
+    <Wrap id="about" ref={scope}>
       <AnimatedTitle label="// about">About Me</AnimatedTitle>
       <Grid>
         <Terminal
           ref={ref}
-          initial={{ opacity: 0, x: -20 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.55 }}
+          className="about-terminal"
           onMouseMove={onMove}
           onMouseLeave={onLeave}
         >
           <TBar>
             <TDot $c="#FF5F57" /><TDot $c="#FEBC2E" /><TDot $c="#28C840" />
-            <TTitle>data-scientist.py</TTitle>
+            <TTitle>myself.py</TTitle>
           </TBar>
           <TBody>
             <LNums>
@@ -251,10 +255,10 @@ const AboutSection = ({ cmsAbout }) => {
           </TBody>
         </Terminal>
 
-        <motion.div variants={cardStagger} initial="hidden" whileInView="visible" viewport={{ once: true }}>
+        <div>
           <Cards>
             {cards.map(c => (
-              <Card key={c.title} variants={cardItem}>
+              <Card key={c.title} className="about-card">
                 <CIcon>{c.icon}</CIcon>
                 <CBody>
                   <h3>{c.title}</h3>
@@ -263,7 +267,7 @@ const AboutSection = ({ cmsAbout }) => {
               </Card>
             ))}
           </Cards>
-        </motion.div>
+        </div>
       </Grid>
     </Wrap>
   );

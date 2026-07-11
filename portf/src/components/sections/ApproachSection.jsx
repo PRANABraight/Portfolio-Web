@@ -4,6 +4,8 @@ import styled from 'styled-components';
 import { motion, useAnimationFrame, useMotionValue, useTransform } from 'framer-motion';
 import { FaPython, FaDatabase, FaBrain, FaGithub } from 'react-icons/fa';
 import { SiScikitlearn, SiPandas } from 'react-icons/si';
+import { gsap, useGSAP, OK, batchReveal } from '../../lib/motion';
+import SectionTitle from '../common/SectionTitle';
 
 /* ── Card base — exact match ── */
 const Card = styled.div`
@@ -12,8 +14,8 @@ const Card = styled.div`
   height: 100%;
   padding: 1rem;
   overflow: hidden;
-  background: rgb(22, 22, 29);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: var(--surface-1);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   position: relative;
   z-index: 20;
   transition: border-color 0.25s ease;
@@ -51,7 +53,7 @@ const MovingBorderWrap = styled.div`
 
 const MovingBorderInner = styled.div`
   position: relative;
-  background: rgb(22, 22, 29);
+  background: var(--surface-1);
   border: 1px solid rgba(30, 30, 40, 0.8);
   backdrop-filter: blur(16px);
   border-radius: calc(1.75rem * 0.96);
@@ -188,25 +190,28 @@ const BentoGrid = styled.div`
   @media (min-width: 1280px) { grid-template-columns: repeat(3, 1fr); }
 `;
 
-const CardWrap = styled(motion.div)`
+const CardWrap = styled.div`
   position: relative;
   cursor: default;
 `;
 
-const cardAnim = {
-  hidden:  { opacity: 0, y: 16 },
-  visible: (i) => ({ opacity: 1, y: 0, transition: { delay: i * 0.08, duration: 0.5 } }),
-};
+const ApproachSection = () => {
+  const scope = useRef(null);
 
-const ApproachSection = () => (
-  <SectionWrap id="approach">
-    <h1 className="heading">
-      My <span style={{ color: '#00ff99' }}>Approach</span>
-    </h1>
+  useGSAP(() => {
+    const mm = gsap.matchMedia();
+    mm.add(OK, () => batchReveal('.approach-card', scope.current));
+  }, { scope });
+
+  return (
+  <SectionWrap id="approach" ref={scope}>
+    <SectionTitle eyebrow="// approach" mb="0">
+      My <span>Approach</span>
+    </SectionTitle>
 
     <BentoGrid style={{ marginTop: '3rem' }}>
       {/* Card 1: primary stack */}
-      <CardWrap custom={0} variants={cardAnim} initial="hidden" whileInView="visible" viewport={{ once: true }}>
+      <CardWrap className="approach-card">
         <MovingBorderCard duration={2800} style={{ height: '100%' }}>
           <div style={{ padding: '1.5rem', width: '100%' }}>
             <div style={{ fontSize: '0.75rem', color: '#00ff99', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '0.75rem' }}>My primary tech stack</div>
@@ -225,7 +230,7 @@ const ApproachSection = () => (
       </CardWrap>
 
       {/* Card 2: approach */}
-      <CardWrap custom={1} variants={cardAnim} initial="hidden" whileInView="visible" viewport={{ once: true }}>
+      <CardWrap className="approach-card">
         <HoverCard>
           <Card>
             <CardTitle>Software Architect mindset</CardTitle>
@@ -237,7 +242,7 @@ const ApproachSection = () => (
       </CardWrap>
 
       {/* Card 3: inside scoop */}
-      <CardWrap custom={2} variants={cardAnim} initial="hidden" whileInView="visible" viewport={{ once: true }}>
+      <CardWrap className="approach-card">
         <HoverCard>
           <Card>
             <div style={{ padding: '0 1rem', marginTop: '1rem', fontSize: '0.75rem', color: '#00ff99', letterSpacing: '0.12em', textTransform: 'uppercase' }}>The Inside Scoop</div>
@@ -248,7 +253,7 @@ const ApproachSection = () => (
       </CardWrap>
 
       {/* Card 4: global / language */}
-      <CardWrap custom={3} variants={cardAnim} initial="hidden" whileInView="visible" viewport={{ once: true }}>
+      <CardWrap className="approach-card">
         <HoverCard>
           <Card>
             <CardTitle>Fluent in English and Hindi. Based in Bengaluru, India 🇮🇳</CardTitle>
@@ -258,7 +263,7 @@ const ApproachSection = () => (
       </CardWrap>
 
       {/* Card 5: collaborate */}
-      <CardWrap custom={4} variants={cardAnim} initial="hidden" whileInView="visible" viewport={{ once: true }}>
+      <CardWrap className="approach-card">
         <MovingBorderCard duration={3600}>
           <div style={{ padding: '1.5rem', width: '100%' }}>
             <div style={{ fontSize: '0.75rem', color: 'rgb(115,115,115)', letterSpacing: '0.08em', marginBottom: '1rem' }}>Do you want to work together?</div>
@@ -274,7 +279,7 @@ const ApproachSection = () => (
       </CardWrap>
 
       {/* Card 6: github */}
-      <CardWrap custom={5} variants={cardAnim} initial="hidden" whileInView="visible" viewport={{ once: true }}>
+      <CardWrap className="approach-card">
         <HoverCard>
           <Card>
             <CardTitle style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
@@ -286,6 +291,7 @@ const ApproachSection = () => (
       </CardWrap>
     </BentoGrid>
   </SectionWrap>
-);
+  );
+};
 
 export default ApproachSection;

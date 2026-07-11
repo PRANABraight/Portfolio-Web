@@ -1,8 +1,10 @@
 // Education grid — exact match to radnaabazar.com component 608
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaGraduationCap } from 'react-icons/fa';
+import { gsap, useGSAP, OK, batchReveal } from '../../lib/motion';
+import SectionTitle from '../common/SectionTitle';
 
 const Wrap = styled.section`
   padding: 6rem 1.25rem;
@@ -49,8 +51,8 @@ const Card = styled.div`
   width: 100%;
   padding: 1rem;
   overflow: hidden;
-  background: rgb(22, 22, 29);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: var(--surface-1);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   position: relative;
   z-index: 20;
   transition: border-color 0.25s ease;
@@ -157,33 +159,36 @@ const EduCard = ({ item, isHovered, onEnter, onLeave }) => (
 
 const EducationSection = ({ cmsEducation }) => {
   const [hoveredId, setHoveredId] = useState(null);
+  const scope = useRef(null);
+
+  useGSAP(() => {
+    const mm = gsap.matchMedia();
+    mm.add(OK, () => batchReveal('.edu-card', scope.current));
+  }, { scope });
+
   const EDU = cmsEducation
     ? cmsEducation.map(e => ({ id: e._id, title: e.title, org: e.org, date: e.date, dateEnd: e.dateEnd, gpa: e.gpa, desc: e.desc }))
     : EDU_FALLBACK;
 
   return (
-    <Wrap id="education">
-      <h1 className="heading" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.6rem', marginBottom: '3rem' }}>
-        <FaGraduationCap style={{ color: '#00ff99' }} />
-        <span>Education</span>
-      </h1>
+    <Wrap id="education" ref={scope}>
+      <SectionTitle eyebrow="// education" mb="0">
+        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.6rem', color: '#fff' }}>
+          <FaGraduationCap style={{ color: '#00ff99' }} />
+          Education
+        </span>
+      </SectionTitle>
 
       <Grid>
         {EDU.map((item) => (
-          <motion.div
-            key={item.id}
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.45 }}
-          >
+          <div key={item.id} className="edu-card">
             <EduCard
               item={item}
               isHovered={hoveredId === item.id}
               onEnter={() => setHoveredId(item.id)}
               onLeave={() => setHoveredId(null)}
             />
-          </motion.div>
+          </div>
         ))}
       </Grid>
     </Wrap>

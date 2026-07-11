@@ -20,6 +20,8 @@ import ContactSection from './components/sections/ContactSection';
 import PersonalSection from './components/sections/PersonalSection';
 import Footer from './components/sections/Footer';
 
+import useLenis, { scrollToTop } from './hooks/useLenis';
+import { ScrollTrigger } from './lib/motion';
 import { client } from './lib/sanity';
 import {
   HERO_QUERY, ABOUT_QUERY, JOURNEY_QUERY,
@@ -41,10 +43,21 @@ function App() {
     personal: null,
   });
 
-  // Always start the newly shown mode at the top of the page
+  useLenis();
+
+  // Always start the newly shown mode at the top of the page; the swapped
+  // section stack changes every trigger position, so re-measure.
   useEffect(() => {
-    window.scrollTo(0, 0);
+    scrollToTop(true);
+    requestAnimationFrame(() => ScrollTrigger.refresh());
   }, [mode]);
+
+  // Late-loading images change section heights
+  useEffect(() => {
+    const refresh = () => ScrollTrigger.refresh();
+    window.addEventListener('load', refresh, { once: true });
+    return () => window.removeEventListener('load', refresh);
+  }, []);
 
   useEffect(() => {
     const queries = {
@@ -67,6 +80,8 @@ function App() {
         else console.error(`Sanity ${keys[i]} query failed:`, r.reason);
       });
       setCms(prev => ({ ...prev, ...next }));
+      // CMS content can change section heights — re-measure scroll triggers
+      requestAnimationFrame(() => ScrollTrigger.refresh());
     });
   }, []);
 
