@@ -159,6 +159,7 @@ export const transitions = {
   spring:'420ms cubic-bezier(0.34,1.56,0.64,1)',
 };
 
+// Reference values only — components intentionally use per-component px media queries.
 export const breakpoints = {
   xs:'320px', sm:'640px', md:'768px', lg:'1024px', xl:'1280px', '2xl':'1536px',
 };

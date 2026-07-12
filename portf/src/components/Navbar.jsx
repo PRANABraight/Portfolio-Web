@@ -183,8 +183,16 @@ const Navbar = ({ mode, setMode }) => {
             {NAV_LINKS.map(n => (
               <NavItem
                 key={n.id}
+                role="button"
+                tabIndex={0}
                 $active={active === n.id}
                 onClick={() => scrollTo(n.id)}
+                onKeyDown={e => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    scrollTo(n.id);
+                  }
+                }}
               >
                 {n.label}
               </NavItem>
@@ -221,8 +229,16 @@ const Navbar = ({ mode, setMode }) => {
                 {NAV_LINKS.map(n => (
                   <DrawerLink
                     key={n.id}
+                    role="button"
+                    tabIndex={0}
                     $active={active === n.id}
                     onClick={() => scrollTo(n.id)}
+                    onKeyDown={e => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        scrollTo(n.id);
+                      }
+                    }}
                   >
                     {n.label}
                   </DrawerLink>

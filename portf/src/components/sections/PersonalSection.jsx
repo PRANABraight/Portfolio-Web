@@ -9,12 +9,13 @@ import {
 } from 'react-icons/lu';
 import { PiPingPong } from 'react-icons/pi';
 import { urlFor } from '../../lib/sanity';
+import { ScrollTrigger } from '../../lib/motion';
 import { colors, typography } from '../../styles/theme';
-import fitnessImg from '../../assets/personal/fitness.jpg';
-import tableTennisImg from '../../assets/personal/table-tennis.jpg';
-import booksImg from '../../assets/personal/books.jpg';
-import guitarImg from '../../assets/personal/guitar.jpg';
-import rootsImg from '../../assets/personal/roots.jpg';
+import fitnessImg from '../../assets/personal/fitness.webp';
+import tableTennisImg from '../../assets/personal/table-tennis.webp';
+import booksImg from '../../assets/personal/books.webp';
+import guitarImg from '../../assets/personal/guitar.webp';
+import rootsImg from '../../assets/personal/roots.webp';
 import lifeItImg from '../../assets/personal/life-it.webp';
 import lifeSportsImg from '../../assets/personal/life-sports.webp';
 import lifeBooksImg from '../../assets/personal/life-books.webp';
@@ -558,9 +559,7 @@ const HOBBIES = [
     key: 'books', img: booksImg,
     title: 'Enjoyer of good books & research',
     desc: "I enjoy reading fiction, non-fiction, research papers, tech blogs, and science books. Always expanding my mental model of the world.",
-    // icon: <LuBookOpen />
-    icon: '📚'
-    ,
+    icon: '📚',
   },
   {
     span: 2, right: true, nob: true,
@@ -639,7 +638,7 @@ const MusicPlayer = ({ songs }) => {
   }, [song.albumArt, song.spotifyUrl]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const artUrl = song.albumArt
-    ? urlFor(song.albumArt).width(800).height(800).url()
+    ? urlFor(song.albumArt).width(800).height(800).auto('format').url()
     : spotifyArt[song.spotifyUrl] || null;
 
   const goTo = (nextIdx) => setIdx(((nextIdx % list.length) + list.length) % list.length);
@@ -692,6 +691,13 @@ const PersonalSection = ({ cmsPersonal }) => {
   const carouselRef = useRef(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
+
+  // Lazy-loaded chunk mounts after App's mode-change refresh has already
+  // fired; re-measure once our layout exists.
+  useEffect(() => {
+    const id = requestAnimationFrame(() => ScrollTrigger.refresh());
+    return () => cancelAnimationFrame(id);
+  }, []);
 
   // Cycle personality traits
   useEffect(() => {
@@ -768,10 +774,10 @@ const PersonalSection = ({ cmsPersonal }) => {
         <BentoGrid>
           {HOBBIES.map(h => {
             const cmsImage = cmsPersonal?.hobbyImages?.[h.key];
-            const imgSrc = cmsImage ? urlFor(cmsImage).width(900).url() : h.img;
+            const imgSrc = cmsImage ? urlFor(cmsImage).width(900).auto('format').fit('max').url() : h.img;
             return (
               <BentoCell key={h.title} $span={h.span} $right={h.right} $nob={h.nob}>
-                <CellImg src={imgSrc} alt="" loading="lazy" />
+                <CellImg src={imgSrc} alt={h.title} loading="lazy" />
                 <CellScrim />
                 <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', padding: '2rem', zIndex: 1 }}>
                   <span style={{ fontSize: '2rem', marginBottom: '0.75rem', color: '#ff8a5c', display: 'inline-flex' }}>{h.icon}</span>
@@ -805,7 +811,7 @@ const PersonalSection = ({ cmsPersonal }) => {
                     <CarouselBgImg $bg={item.bg}>
                       <span style={{ fontSize: '4rem', opacity: 0.4, color: '#fff', display: 'inline-flex' }}>{item.icon}</span>
                     </CarouselBgImg>
-                    <CarouselPhoto src={item.img} alt="" loading="lazy" />
+                    <CarouselPhoto src={item.img} alt={item.title} loading="lazy" />
                     <CarouselShade />
                   </CarouselBg>
                 </CarouselCard>
@@ -815,12 +821,14 @@ const PersonalSection = ({ cmsPersonal }) => {
         </CarouselScroll>
         <CarouselBtns>
           <CarouselBtn
+            aria-label="Previous photo"
             disabled={!canScrollLeft}
             onClick={() => carouselRef.current?.scrollBy({ left: -300, behavior: 'smooth' })}
           >
             ←
           </CarouselBtn>
           <CarouselBtn
+            aria-label="Next photo"
             disabled={!canScrollRight}
             onClick={() => carouselRef.current?.scrollBy({ left: 300, behavior: 'smooth' })}
           >

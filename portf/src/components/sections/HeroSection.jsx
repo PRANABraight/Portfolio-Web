@@ -205,18 +205,12 @@ const PhotoSide = styled(motion.div)`
   @media (min-width: 1280px) { order: 2; flex-shrink: 0; }
 `;
 
-const PhotoButton = styled(motion.button)`
+const PhotoFrame = styled(motion.div)`
   position: relative;
-  background: none;
-  border: none;
-  padding: 0;
-  cursor: pointer;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-
-  &:focus-visible { outline: 2px solid var(--accent); outline-offset: 8px; }
 `;
 
 const PhotoInner = styled.div`
@@ -242,26 +236,6 @@ const Photo = styled(motion.img)`
   object-fit: cover;
   object-position: center top;
   border-radius: 50%;
-`;
-
-const PhotoCaption = styled.span`
-  pointer-events: none;
-  position: absolute;
-  left: 50%; bottom: 6%;
-  transform: translateX(-50%);
-  border-radius: 9999px;
-  background: rgba(0,0,0,0.5);
-  padding: 0.25rem 0.75rem;
-  font-size: 0.75rem;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.85);
-  opacity: 0;
-  backdrop-filter: blur(4px);
-  transition: opacity 0.3s ease;
-  white-space: nowrap;
-
-  ${PhotoButton}:hover & { opacity: 1; }
 `;
 
 /* ── SOCIALS fallback ── */
@@ -374,10 +348,8 @@ const HeroSection = ({ cmsHero }) => {
 
         {/* ── Photo ── */}
         <PhotoSide className="hero-photo">
-          <PhotoButton
-            aria-label="Profile photo"
+          <PhotoFrame
             whileHover={{ scale: 1.01 }}
-            whileTap={{ scale: 0.985 }}
             transition={{ type: 'spring', stiffness: 260, damping: 22 }}
           >
             <PhotoInner>
@@ -418,8 +390,7 @@ const HeroSection = ({ cmsHero }) => {
               />
             </svg>
 
-            <PhotoCaption>click to view ↗</PhotoCaption>
-          </PhotoButton>
+          </PhotoFrame>
         </PhotoSide>
       </Inner>
     </Section>

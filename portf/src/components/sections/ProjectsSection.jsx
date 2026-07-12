@@ -229,7 +229,7 @@ const ProjectsSection = ({ cmsProjects }) => {
       ...p,
       stack: p.stack ?? [],
       features: p.features ?? [],
-      image: p.image ? urlFor(p.image).width(800).url() : null,
+      image: p.image ? urlFor(p.image).width(800).auto('format').fit('max').url() : null,
     }));
     completed = normalized.filter(p => p.status !== 'ongoing');
     ongoing = normalized.filter(p => p.status === 'ongoing');

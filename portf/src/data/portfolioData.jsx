@@ -9,18 +9,6 @@ import attendanceImage from "../assets/attendance.jpg";
 import creditImage from "../assets/credit.jpg";
 import falconImage from "../assets/falcon.jpg";
 
-export const heroData = {
-  name: "Pranab Rai",
-  tagline: "Software Engineer | Data & ML",
-  traits: [
-    "📊 Data & Platform Engineer",
-    "🤖 Machine Learning Engineer",
-    "📈 Statistical Analysis Expert",
-    "🔍 Data Mining & Insights",
-    "🧮 Predictive Modeling Pro",
-  ],
-};
-
 export const aboutData = {
   code: [
     "class Myself:",
@@ -28,11 +16,8 @@ export const aboutData = {
     "    ",
     "    def __init__(self):",
     "        self.name = 'Pranab Rai'",
-    // "        self.role = 'Data & Platform Engineer'",
     "        self.location = 'Bengaluru, India'",
     "        self.education = 'MCA, Christ University'",
-    // "        self.experience = 'Govt of Karnataka Beneficiary Platform'",
-    // "        self.skills = ['Full Stack Data Science', 'Cloud Engineering', 'Analytics']",
     "        self.tools = ['Python', 'SQL', 'JavaScript', 'AWS']",
     "    ",
     "    def build_solutions(self):",
@@ -76,7 +61,6 @@ export const projectsData = {
       ],
       stack: ["Python", "MySQL", "FastAPI", "JavaScript", "Chart.js"],
       github: "https://github.com/PRANABraight/Credit-Risk-Analytics-Portfolio-Management-System",
-      // deployment: "https://credit-risk-analytics.vercel.app",
     },
     {
       title: "SpaceX Falcon 9 Landing Prediction",
@@ -90,7 +74,6 @@ export const projectsData = {
       ],
       stack: ["Python", "SQL", "Scikit-Learn", "Dash", "Pandas"],
       github: "https://github.com/PRANABraight/falcon-x",
-      // deployment: "https://spacex-falcon9-prediction.vercel.app",
     },
     {
       title: "Clinical Decision Support System",
@@ -118,7 +101,6 @@ export const projectsData = {
       ],
       stack: ["Python", "OpenCV", "YOLOv8", "DeepFace", "MySQL"],
       github: "https://github.com/Chloy02/Attendance-monitoring-using-Computer-Vision",
-      // deployment: "https://student-attendance-system.vercel.app",
     },
   ],
   ongoing: [
@@ -133,7 +115,6 @@ export const projectsData = {
         "Improved visibility into district-level performance",
       ],
       stack: ["Python", "Next.js", "Node.js", "MongoDB", "Excel"],
-      // github: "https://github.com/PRANABraight/karnataka-beneficiary-platform",
       deployment: "https://formulytic.vercel.app/",
     },
   ],

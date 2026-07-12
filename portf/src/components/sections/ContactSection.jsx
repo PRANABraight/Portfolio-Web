@@ -379,6 +379,7 @@ const ContactSection = ({ setMode }) => {
               />
             </Honeypot>
 
+            <div role="status" aria-live="polite">
             <AnimatePresence>
               {status === 'success' && (
                 <StatusMsg
@@ -400,6 +401,7 @@ const ContactSection = ({ setMode }) => {
                 </StatusMsg>
               )}
             </AnimatePresence>
+            </div>
 
             <ShinyBtn
               type="submit"

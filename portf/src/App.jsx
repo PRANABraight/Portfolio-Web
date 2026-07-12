@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import PageTransition from './components/PageTransition';
 import Background from './components/Background';
 import Navbar from './components/Navbar';
@@ -17,8 +17,11 @@ import JourneySection from './components/sections/JourneySection';
 import SkillsSection from './components/sections/SkillsSection';
 import GitHubSection from './components/sections/GitHubSection';
 import ContactSection from './components/sections/ContactSection';
-import PersonalSection from './components/sections/PersonalSection';
 import Footer from './components/sections/Footer';
+
+// Personal mode is hidden by default; splitting it (and its ~2MB of photo
+// assets) out of the initial bundle keeps first paint light.
+const PersonalSection = lazy(() => import('./components/sections/PersonalSection'));
 
 import useLenis, { scrollToTop } from './hooks/useLenis';
 import useSiteAccent from './hooks/useSiteAccent';
@@ -59,6 +62,18 @@ function App() {
     const refresh = () => ScrollTrigger.refresh();
     window.addEventListener('load', refresh, { once: true });
     return () => window.removeEventListener('load', refresh);
+  }, []);
+
+  // Prefetch the lazy personal-mode chunk once the browser is idle so the
+  // mode toggle feels instant.
+  useEffect(() => {
+    const preload = () => import('./components/sections/PersonalSection');
+    if ('requestIdleCallback' in window) {
+      const id = window.requestIdleCallback(preload);
+      return () => window.cancelIdleCallback(id);
+    }
+    const id = setTimeout(preload, 2000); // Safari
+    return () => clearTimeout(id);
   }, []);
 
   useEffect(() => {
@@ -110,7 +125,9 @@ function App() {
           <ContactSection setMode={setMode} />
         </main>
       ) : (
-        <PersonalSection cmsPersonal={cms.personal} />
+        <Suspense fallback={<div style={{ minHeight: '100vh' }} />}>
+          <PersonalSection cmsPersonal={cms.personal} />
+        </Suspense>
       )}
 
       <Footer />

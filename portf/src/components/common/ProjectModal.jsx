@@ -345,7 +345,7 @@ const ProjectModal = ({ project, isOpen, onClose }) => {
               <Title>{project.title}</Title>
               <Description>{project.description}</Description>
 
-              <SectionTitle>✨ Key Features</SectionTitle>
+              <SectionTitle><span aria-hidden="true">✨ </span>Key Features</SectionTitle>
               <FeaturesList>
                 {(project.features ?? []).map((feature, index) => (
                   <FeatureItem
@@ -360,7 +360,7 @@ const ProjectModal = ({ project, isOpen, onClose }) => {
                 ))}
               </FeaturesList>
 
-              <SectionTitle>🛠️ Tech Stack</SectionTitle>
+              <SectionTitle><span aria-hidden="true">🛠️ </span>Tech Stack</SectionTitle>
               <TechStack>
                 {(project.stack ?? []).map((tech, index) => (
                   <TechTag
