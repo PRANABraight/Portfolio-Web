@@ -63,10 +63,11 @@ const RoleLabel = styled.span`
 `;
 
 const NameHeading = styled.h1`
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 48px;
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 7vw, 5.5rem);
   font-weight: 600;
-  line-height: 1.1;
+  line-height: 1.05;
+  letter-spacing: -0.035em;
   color: #fff;
   margin-bottom: 1.5rem;
 
@@ -142,8 +143,9 @@ const Actions = styled.div`
   }
 `;
 
-/* outline CV button — Radnaabazar style */
+/* outline CV button — accent fills from the left on hover */
 const OutlineBtn = styled(motion.a)`
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -159,14 +161,32 @@ const OutlineBtn = styled(motion.a)`
   letter-spacing: 0.1em;
   text-transform: uppercase;
   text-decoration: none;
-  transition: background 0.2s ease, color 0.2s ease;
+  overflow: hidden;
+  transition: color 0.25s ease, box-shadow 0.25s ease;
   width: 100%;
   max-width: 220px;
 
-  &:hover {
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
     background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 0;
+  }
+
+  > * { position: relative; z-index: 1; }
+
+  svg { transition: transform 0.25s ease; }
+
+  &:hover {
     color: #14100d;
     box-shadow: 0 8px 32px rgba(var(--accent-rgb), 0.3);
+
+    &::before { transform: scaleX(1); }
+    svg { transform: translateX(4px); }
   }
   @media (min-width: 1280px) { width: auto; }
 `;
@@ -324,7 +344,7 @@ const HeroSection = ({ cmsHero }) => {
               whileTap={{ scale: 0.97 }}
               transition={{ type: 'spring', stiffness: 320, damping: 18 }}
             >
-              View CV <FaArrowRight size={12} />
+              <span>View CV</span> <FaArrowRight size={12} />
             </OutlineBtn>
 
             <Socials>

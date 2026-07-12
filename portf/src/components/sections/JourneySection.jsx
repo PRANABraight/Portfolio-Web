@@ -10,6 +10,8 @@ const Wrap = styled.section`
   @media (min-width: 640px) { padding: 6rem 2.5rem; }
   max-width: 900px;
   margin: 0 auto;
+
+  @media (min-width: 1024px) { max-width: 1000px; }
 `;
 
 const TLine = styled.div`
@@ -19,9 +21,14 @@ const TLine = styled.div`
   @media (min-width: 768px) {
     padding-left: 2rem;
   }
+
+  /* ≥1024px: centered spine, entries alternate sides */
+  @media (min-width: 1024px) {
+    padding-left: 0;
+  }
 `;
 
-/* Faint full-height rail; the green progress bar inside is drawn by scroll */
+/* Faint full-height rail; the accent progress bar inside is drawn by scroll */
 const Track = styled.div`
   position: absolute;
   left: 0;
@@ -32,6 +39,7 @@ const Track = styled.div`
   display: none;
 
   @media (min-width: 768px) { display: block; }
+  @media (min-width: 1024px) { left: 50%; transform: translateX(-0.5px); }
 `;
 
 const Progress = styled.div`
@@ -49,6 +57,20 @@ const Entry = styled.div`
   @media (min-width: 768px) { padding: 0 0 3rem 2.5rem; }
 
   &:last-child { padding-bottom: 0; }
+
+  @media (min-width: 1024px) {
+    width: calc(50% - 3rem);
+    padding: 0 0 3.5rem 0;
+
+    &[data-side='right'] { margin-left: auto; }
+    &[data-side='left']  { margin-right: auto; }
+
+    &:last-child { padding-bottom: 0; }
+
+    /* dot sits on the centered spine, 3rem outside the entry's inner edge */
+    &[data-side='right'] .tl-dot { left: -3rem; right: auto; transform: translateX(-50%); }
+    &[data-side='left'] .tl-dot  { left: auto; right: -3rem; transform: translateX(50%); }
+  }
 `;
 
 const Dot = styled.div`
@@ -171,8 +193,10 @@ const JourneySection = ({ cmsJourney }) => {
       );
 
       gsap.utils.toArray('.tl-entry').forEach((entry) => {
+        // Slide in away from the spine on whichever side the entry sits
+        const fromSpine = entry.dataset.side === 'left' ? 16 : -16;
         gsap.from(entry, {
-          x: -16,
+          x: fromSpine,
           autoAlpha: 0,
           duration: 0.55,
           ease: 'power2.out',
@@ -215,8 +239,8 @@ const JourneySection = ({ cmsJourney }) => {
         <Track className="tl-track">
           <Progress className="tl-progress" />
         </Track>
-        {entries.map((e) => (
-          <Entry key={e.year} className="tl-entry">
+        {entries.map((e, i) => (
+          <Entry key={e.year} className="tl-entry" data-side={i % 2 ? 'left' : 'right'}>
             <Dot className="tl-dot" />
             <YearRow>
               <Year>{e.year}</Year>

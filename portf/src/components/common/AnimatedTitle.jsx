@@ -7,20 +7,20 @@ const Wrap = styled.div`
 `;
 
 const Sub = styled(motion.p)`
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.75rem;
-  letter-spacing: 0.1em;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.25em;
   text-transform: uppercase;
-  color: rgba(var(--accent-rgb), 0.85);
+  color: rgba(var(--accent-rgb), 0.7);
   margin-bottom: 0.75rem;
 `;
 
 const Title = styled(motion.h2)`
-  font-family: 'JetBrains Mono', monospace;
-  font-size: clamp(1.8rem, 4vw, 2.8rem);
-  font-weight: 700;
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4.5vw, 3.25rem);
+  font-weight: 600;
   color: #ffffff;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
 `;
 
 const AnimatedTitle = ({ children, label }) => (

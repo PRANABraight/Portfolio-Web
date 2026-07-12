@@ -8,22 +8,24 @@ const Wrap = styled.div`
 `;
 
 const Eyebrow = styled.p`
-  font-size: 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
   font-weight: 600;
-  letter-spacing: 0.15em;
+  letter-spacing: 0.25em;
   text-transform: uppercase;
   color: rgba(var(--accent-rgb), 0.7);
   margin-bottom: 0.75rem;
 `;
 
 const Title = styled.h2`
-  font-size: 2.25rem;
-  font-weight: 700;
-  letter-spacing: -0.025em;
-  line-height: 1.2;
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
   color: #fff;
 
-  @media (min-width: 1280px) { font-size: 3rem; }
+  @media (min-width: 1280px) { font-size: 3.5rem; }
 
   .st-letter { display: inline-block; white-space: pre; }
 

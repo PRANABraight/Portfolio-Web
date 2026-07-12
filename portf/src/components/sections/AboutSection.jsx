@@ -7,6 +7,7 @@ import AnimatedTitle from '../common/AnimatedTitle';
 import { getIcon } from '../../lib/iconMap';
 import { gsap, useGSAP, OK, batchReveal } from '../../lib/motion';
 import { accentVars } from '../../styles/theme';
+import { premiumCard } from '../../styles/mixins';
 
 const blink = keyframes`0%,100%{opacity:1}50%{opacity:0}`;
 
@@ -33,14 +34,11 @@ const Terminal = styled.div`
   border: 1px solid rgba(255,255,255,0.08);
   border-radius: 1rem;
   overflow: hidden;
-  position: sticky;
-  top: 80px;
-  align-self: start;
+  display: flex;
+  flex-direction: column;
   transition: border-color 0.3s ease;
 
   &:hover { border-color: rgba(var(--accent-rgb), 0.25); }
-
-  @media (max-width: 968px) { position: relative; top: 0; }
 `;
 
 const TBar = styled.div`
@@ -68,11 +66,28 @@ const TTitle = styled.span`
 
 const TBody = styled.div`
   display: flex;
-  max-height: 380px;
+  flex: 1;
+  min-height: 0;
   overflow-y: auto;
 
   &::-webkit-scrollbar { width: 2px; }
   &::-webkit-scrollbar-thumb { background: rgba(var(--accent-rgb), 0.25); }
+
+  @media (max-width: 968px) { flex: initial; max-height: 380px; }
+`;
+
+const TStatus = styled.div`
+  margin-top: auto;
+  display: flex;
+  gap: 1rem;
+  padding: 0.4rem 0.9rem;
+  background: var(--surface-2);
+  border-top: 1px solid rgba(255,255,255,0.05);
+  font-size: 0.65rem;
+  letter-spacing: 0.04em;
+  color: rgba(255,255,255,0.25);
+
+  span:last-child { margin-left: auto; }
 `;
 
 const LNums = styled.div`
@@ -126,23 +141,12 @@ const Cards = styled.div`
 `;
 
 const Card = styled.div`
+  ${premiumCard};
   padding: 1.25rem;
-  background: rgba(33,25,19,0.55);
-  border: 1px solid rgba(255,255,255,0.07);
   border-radius: 1rem;
   display: flex;
   gap: 1rem;
   align-items: flex-start;
-  transition:
-    border-color 0.2s ease,
-    background 0.2s ease,
-    transform 0.32s cubic-bezier(0.34, 1.56, 0.64, 1);
-
-  &:hover {
-    border-color: rgba(var(--accent-rgb), 0.25);
-    background: rgba(33,25,19,0.85);
-    transform: translateY(-3px);
-  }
 `;
 
 /* Per-card hue ($c) with orange section accent as fallback */
@@ -212,8 +216,8 @@ const AboutSection = ({ cmsAbout }) => {
   useGSAP(() => {
     const mm = gsap.matchMedia();
     mm.add(OK, () => {
-      // Opacity-only on the terminal: transforms would break its position:sticky
-      // and fight the mousemove tilt that writes style.transform directly
+      // Opacity-only on the terminal: transforms would fight the mousemove
+      // tilt that writes style.transform directly
       gsap.from('.about-terminal', {
         autoAlpha: 0,
         duration: 0.6,
@@ -261,6 +265,11 @@ const AboutSection = ({ cmsAbout }) => {
               ))}
             </CodeBlock>
           </TBody>
+          <TStatus>
+            <span>python 3.11</span>
+            <span>utf-8</span>
+            <span>ln {displayedLines.length}, col 1</span>
+          </TStatus>
         </Terminal>
 
         <div>

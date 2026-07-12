@@ -2,7 +2,7 @@
 // Glassmorphism pill, only Professional | Personal, spring layoutId active indicator
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 const Outer = styled.div`
   position: fixed;
@@ -76,16 +76,49 @@ const ActiveBg = styled(motion.div)`
 
 const FloatingNav = ({ mode, setMode }) => {
   const [visible, setVisible] = useState(false);
+  const [footerInView, setFooterInView] = useState(false);
+  const lastY = useRef(0);
 
+  // Direction-aware: hide scrolling down (content first), reveal scrolling up.
+  // ±6px dead zone absorbs Lenis's eased sub-pixel frames at settle.
   useEffect(() => {
+    const header = document.querySelector('header') || document.querySelector('nav');
+    const threshold = header ? header.offsetHeight : 60;
+    let ticking = false;
     const onScroll = () => {
-      const header = document.querySelector('header') || document.querySelector('nav');
-      const threshold = header ? header.offsetHeight : 60;
-      setVisible(window.scrollY > threshold);
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        const y = window.scrollY;
+        const delta = y - lastY.current;
+        if (y <= threshold) setVisible(false); // at top, Navbar owns the toggle
+        else if (delta > 6) setVisible(false);
+        else if (delta < -6) setVisible(true);
+        lastY.current = y;
+        ticking = false;
+      });
     };
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
+
+  // Never cover the footer
+  useEffect(() => {
+    const footer = document.querySelector('footer');
+    if (!footer) return;
+    const io = new IntersectionObserver(
+      ([e]) => setFooterInView(e.isIntersecting),
+      { threshold: 0 }
+    );
+    io.observe(footer);
+    return () => io.disconnect();
+  }, []);
+
+  // Mode switch scrolls to top — start hidden again
+  useEffect(() => {
+    lastY.current = 0;
+    setVisible(false);
+  }, [mode]);
 
   const pillStyle = {
     background: 'linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.05) 100%)',
@@ -100,7 +133,7 @@ const FloatingNav = ({ mode, setMode }) => {
   return (
     <Outer>
       <AnimatePresence>
-        {visible && (
+        {visible && !footerInView && (
           <Pill
             style={pillStyle}
             initial={{ opacity: 0, y: 100 }}

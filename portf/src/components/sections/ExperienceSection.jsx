@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { getIcon } from '../../lib/iconMap';
 import { gsap, useGSAP, OK, batchReveal } from '../../lib/motion';
 import { accentVars } from '../../styles/theme';
+import { premiumCard } from '../../styles/mixins';
 import SectionTitle from '../common/SectionTitle';
 
 const Wrap = styled.section`
@@ -24,19 +25,11 @@ const Grid = styled.div`
 `;
 
 const Card = styled.div`
+  ${premiumCard};
   position: relative;
   border-radius: 1.25rem;
-  border: 1px solid rgba(255,255,255,0.08);
-  background: var(--surface-1);
   padding: 2rem;
   overflow: hidden;
-  transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
-
-  &:hover {
-    border-color: rgba(var(--accent-rgb), 0.4);
-    transform: translateY(-3px);
-    box-shadow: 0 8px 24px rgba(var(--accent-rgb), 0.08);
-  }
 
   &::before {
     content: '';

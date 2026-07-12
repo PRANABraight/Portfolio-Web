@@ -122,7 +122,7 @@ export const accentVars = (name) => {
 export const typography = {
   fontFamily: {
     primary: "'JetBrains Mono', 'Courier New', monospace",
-    display:  "'JetBrains Mono', 'Courier New', monospace",
+    display:  "'Space Grotesk', 'Helvetica Neue', sans-serif",
     mono:     "'JetBrains Mono', 'Courier New', monospace",
   },
   fontSize: {

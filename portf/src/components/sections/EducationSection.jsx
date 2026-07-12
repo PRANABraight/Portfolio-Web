@@ -6,6 +6,7 @@ import { FaGraduationCap } from 'react-icons/fa';
 import { gsap, useGSAP, OK, batchReveal } from '../../lib/motion';
 import SectionTitle from '../common/SectionTitle';
 import { accentVars } from '../../styles/theme';
+import { premiumCard } from '../../styles/mixins';
 
 const Wrap = styled.section`
   ${accentVars('education')}
@@ -48,17 +49,15 @@ const HoverBg = styled(motion.span)`
 
 /* card itself — exact bg + border from radna source */
 const Card = styled.div`
+  ${premiumCard};
   border-radius: 1.5rem;
   height: 100%;
   width: 100%;
   padding: 1rem;
   overflow: hidden;
-  background: var(--surface-1);
-  border: 1px solid rgba(255, 255, 255, 0.12);
   position: relative;
   z-index: 20;
   transition:
-    border-color 0.25s ease,
     transform 0.32s cubic-bezier(0.34, 1.56, 0.64, 1),
     box-shadow 0.25s ease;
 
@@ -77,9 +76,10 @@ const Card = styled.div`
   }
 
   &:hover {
-    border-color: rgba(var(--accent-rgb), 0.6);
     transform: translateY(-4px);
-    box-shadow: 0 12px 32px rgba(var(--accent-rgb), 0.12);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.06),
+      0 16px 44px -12px rgba(var(--accent-rgb), 0.28);
 
     &::after { transform: translateX(260%) skewX(-15deg); }
   }

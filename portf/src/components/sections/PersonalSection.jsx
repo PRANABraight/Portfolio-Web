@@ -122,11 +122,12 @@ const FeaturedHeader = styled.div`
 `;
 
 const FeaturedTitle = styled.h4`
+  font-family: var(--font-display);
   font-size: clamp(1.8rem, 4vw, 3rem);
   font-weight: 500;
   max-width: 900px;
   margin: 0 auto;
-  letter-spacing: -0.025em;
+  letter-spacing: -0.03em;
   color: #fff;
   line-height: 1.25;
 `;

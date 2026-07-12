@@ -128,7 +128,7 @@ const GradientSection = () => {
       </GradientsContainer>
 
       <CenterText>
-        <h2 style={{ fontSize: 'clamp(1.5rem, 3vw, 2.2rem)', fontWeight: 800, letterSpacing: '-0.025em', marginBottom: '0.75rem' }}>
+        <h2 style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.75rem)', fontWeight: 600, letterSpacing: '-0.03em', marginBottom: '0.75rem' }}>
           Building scalable, data-driven systems
         </h2>
         <p style={{ fontSize: '0.875rem', color: 'rgba(255,255,255,0.8)', maxWidth: '500px', margin: '0 auto', lineHeight: 1.625 }}>

@@ -6,22 +6,19 @@ import { FaPython, FaDatabase, FaBrain, FaGithub } from 'react-icons/fa';
 import { SiScikitlearn, SiPandas } from 'react-icons/si';
 import { gsap, useGSAP, OK, batchReveal } from '../../lib/motion';
 import { accentVars } from '../../styles/theme';
+import { premiumCard } from '../../styles/mixins';
 import SectionTitle from '../common/SectionTitle';
 
 /* ── Card base — exact match ── */
 const Card = styled.div`
+  ${premiumCard};
   border-radius: 16px;
   width: 100%;
   height: 100%;
   padding: 1rem;
   overflow: hidden;
-  background: var(--surface-1);
-  border: 1px solid rgba(255, 255, 255, 0.12);
   position: relative;
   z-index: 20;
-  transition: border-color 0.25s ease;
-
-  &:hover { border-color: rgba(var(--accent-rgb), 0.6); }
 `;
 
 const CardTitle = styled.h4`

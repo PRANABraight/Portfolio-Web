@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Space+Grotesk:wght@400..700&display=swap');
 
 :root {
   --bg:       #14100d;
@@ -24,6 +24,8 @@
   --border-a: rgba(251, 191, 36, 0.3);
   /* Static header height: 2rem×2 padding + 2.25rem logo × line-height 2 */
   --nav-height: 136px;
+  --font-display: 'Space Grotesk', 'Helvetica Neue', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Courier New', monospace;
 }
 
 @media (min-width: 1280px) {
@@ -36,6 +38,10 @@
   inherits: true;
   initial-value: #fbbf24;
 }
+
+/* Interpolate the registered property on <html> (where useSiteAccent mutates it) —
+   every var(--site-accent) consumer glides between section hues. */
+html { transition: --site-accent 800ms ease; }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -57,8 +63,16 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  font-family: 'JetBrains Mono', monospace;
+/* Display faces carry the personality; labels/code stay mono for the developer identity */
+h1, h2, h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  color: var(--text);
+}
+
+h4, h5, h6 {
+  font-family: var(--font-mono);
   font-weight: 700;
   color: var(--text);
 }

@@ -55,9 +55,9 @@ const CtaBlock = styled.div`
 `;
 
 const Heading = styled.h1`
-  font-size: clamp(2rem, 5vw, 3.2rem);
-  font-weight: 800;
-  letter-spacing: -0.025em;
+  font-size: clamp(2.25rem, 5.5vw, 3.75rem);
+  font-weight: 600;
+  letter-spacing: -0.03em;
   text-align: center;
   max-width: 45vw;
   min-width: 280px;
@@ -195,6 +195,7 @@ const Hr = styled.hr`
 
 /* "See my personal Side" outline button */
 const PersonalBtn = styled(motion.button)`
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -208,10 +209,27 @@ const PersonalBtn = styled(motion.button)`
   font-size: 0.875rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
+  overflow: hidden;
+  transition: color 0.25s ease, box-shadow 0.25s ease;
   margin-top: 1rem;
 
-  &:hover { background: var(--accent); color: ${colors.bg}; border-color: var(--accent); }
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  > * { position: relative; }
+
+  &:hover {
+    color: ${colors.bg};
+    box-shadow: 0 8px 24px rgba(var(--accent-rgb), 0.25);
+    &::before { transform: scaleX(1); }
+  }
 `;
 
 /* Bottom row */
@@ -422,7 +440,7 @@ const ContactSection = ({ setMode }) => {
             onClick={() => setMode && setMode('personal')}
             whileTap={{ scale: 0.97 }}
           >
-            Peer through my Personal Life ↗
+            <span>Peer through my Personal Life ↗</span>
           </PersonalBtn>
         </CtaBlock>
 

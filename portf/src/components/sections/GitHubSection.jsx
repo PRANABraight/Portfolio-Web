@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { FaGithub, FaExternalLinkAlt } from 'react-icons/fa';
 import { LuStar } from 'react-icons/lu';
 import { colors, typography, accentVars } from '../../styles/theme';
+import { premiumCard } from '../../styles/mixins';
 import { gsap, useGSAP, OK, REDUCED, revealUp, countUp } from '../../lib/motion';
 import SectionTitle from '../common/SectionTitle';
 
@@ -46,16 +47,12 @@ const GhLink = styled.a`
 `;
 
 const Card = styled(motion.div)`
-  border: 1px solid rgba(255,255,255,0.07);
+  ${premiumCard};
   border-radius: 1rem;
-  background: ${colors.bgCard};
   padding: 1.5rem 1.75rem;
   display: flex;
   flex-direction: column;
   gap: 1.4rem;
-  transition: border-color 0.25s ease;
-
-  &:hover { border-color: rgba(var(--accent-rgb), 0.2); }
 `;
 
 const StatGrid = styled.div`

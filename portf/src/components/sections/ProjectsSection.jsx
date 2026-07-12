@@ -8,6 +8,7 @@ import SectionTitle from '../common/SectionTitle';
 import { urlFor } from '../../lib/sanity';
 import FloatingOrbs from '../common/FloatingOrbs';
 import { gsap, useGSAP, OK, batchReveal } from '../../lib/motion';
+import { premiumCard } from '../../styles/mixins';
 import { getStackIcon } from '../../lib/iconMap';
 import { accentVars } from '../../styles/theme';
 
@@ -30,16 +31,31 @@ const Grid = styled.div`
 `;
 
 const Card = styled(motion.div)`
-  background: var(--surface-1);
-  border: 1px solid rgba(255,255,255,0.1);
+  ${premiumCard};
+  position: relative;
   border-radius: 1.25rem;
   overflow: hidden;
   cursor: pointer;
-  transition: border-color 0.25s ease, box-shadow 0.25s ease;
 
-  &:hover {
-    border-color: rgba(var(--accent-rgb), 0.4);
-    box-shadow: 0 8px 32px rgba(var(--accent-rgb), 0.15);
+  /* Cursor-tracked glow, revealed on hover (pointer devices only) */
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(
+      240px at var(--mx, 50%) var(--my, 50%),
+      rgba(var(--accent-rgb), 0.12),
+      transparent 70%
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  @media (hover: hover) {
+    &:hover::after { opacity: 1; }
   }
 `;
 
@@ -164,8 +180,14 @@ const ProjectCard = ({ project, onClick, isOngoing }) => {
   const hasGithub = !!project.github;
   const hasLive = !!project.deployment;
 
+  const onMove = (e) => {
+    const r = e.currentTarget.getBoundingClientRect();
+    e.currentTarget.style.setProperty('--mx', `${e.clientX - r.left}px`);
+    e.currentTarget.style.setProperty('--my', `${e.clientY - r.top}px`);
+  };
+
   return (
-    <Card className="project-card" onClick={onClick} whileTap={{ scale: 0.99 }}>
+    <Card className="project-card" onClick={onClick} onMouseMove={onMove} whileTap={{ scale: 0.99 }}>
       <ImgWrap>
         {project.image
           ? <img src={project.image} alt={project.title} loading="lazy" />
