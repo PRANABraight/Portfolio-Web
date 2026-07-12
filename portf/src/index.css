@@ -1,26 +1,40 @@
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
 
 :root {
-  --bg:       #0f0e1a;
-  --bg-2:     #16142a;
-  /* Surface ladder — one violet-navy hue, stepped by value only */
-  --surface-0: #0b0a16;              /* recessed: code wells, image slots */
-  --surface-1: #171530;              /* cards */
-  --surface-2: #14122b;              /* raised chrome: bars, chips */
-  --bg-card:  rgba(23, 21, 48, 0.6);
-  --accent:   #00ff99;
-  --accent-h: #00e187;
+  --bg:       #14100d;
+  --bg-2:     #1c1512;
+  /* Surface ladder — one warm brown-black hue, stepped by value only */
+  --surface-0: #0f0b08;              /* recessed: code wells, image slots */
+  --surface-1: #211913;              /* cards */
+  --surface-2: #1d1611;              /* raised chrome: bars, chips */
+  --bg-card:  rgba(33, 25, 19, 0.6);
+  --accent:   #fbbf24;
+  --accent-h: #f59e0b;
+  /* Per-section accent system — sections override these via accentVars() (theme.js) */
+  --accent-rgb:  251, 191, 36;
+  --accent-soft: #fde68a;
+  --accent-deep: #78350f;
+  /* Scroll-synced accent for fixed chrome (Navbar/FloatingNav/Spotlight), set by useSiteAccent() */
+  --site-accent:     #fbbf24;
+  --site-accent-rgb: 251, 191, 36;
   --text:     #ffffff;
   --text-2:   rgba(255, 255, 255, 0.6);
   --text-3:   rgba(255, 255, 255, 0.3);
   --border:   rgba(255, 255, 255, 0.1);
-  --border-a: rgba(0, 255, 153, 0.3);
+  --border-a: rgba(251, 191, 36, 0.3);
   /* Static header height: 2rem×2 padding + 2.25rem logo × line-height 2 */
   --nav-height: 136px;
 }
 
 @media (min-width: 1280px) {
   :root { --nav-height: 168px; } /* header padding grows to 3rem×2 */
+}
+
+/* Registered so fixed chrome can transition smoothly between section hues (Chromium/Safari; Firefox snaps) */
+@property --site-accent {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #fbbf24;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -63,7 +77,8 @@ button { font-family: 'JetBrains Mono', monospace; cursor: pointer; }
 ::-webkit-scrollbar-track { background: var(--bg); }
 ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 2px; }
 
-::selection { background: rgba(0, 255, 153, 0.2); color: white; }
+/* var() resolves against the selected element's cascade — selection tint shifts per section */
+::selection { background: rgba(var(--accent-rgb), 0.22); color: white; }
 
 *:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
 
@@ -101,7 +116,7 @@ button { font-family: 'JetBrains Mono', monospace; cursor: pointer; }
   .h1 { font-size: 80px; }
 }
 
-.text-accent { color: #00ff99; }
+.text-accent { color: var(--accent); }
 .text-white-200 { color: rgba(255, 255, 255, 0.8); }
 
 /* Container — max-w-7xl equivalent */

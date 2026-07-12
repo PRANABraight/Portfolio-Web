@@ -2,9 +2,11 @@ import { useRef } from 'react';
 import styled from 'styled-components';
 import { getIcon } from '../../lib/iconMap';
 import { gsap, useGSAP, OK, batchReveal } from '../../lib/motion';
+import { accentVars } from '../../styles/theme';
 import SectionTitle from '../common/SectionTitle';
 
 const Wrap = styled.section`
+  ${accentVars('experience')}
   padding: 5rem 1.25rem;
   @media (min-width: 640px) { padding: 5rem 2.5rem; }
   max-width: 1280px;
@@ -31,9 +33,9 @@ const Card = styled.div`
   transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
 
   &:hover {
-    border-color: rgba(0,255,153,0.4);
+    border-color: rgba(var(--accent-rgb), 0.4);
     transform: translateY(-3px);
-    box-shadow: 0 8px 24px rgba(0,255,153,0.08);
+    box-shadow: 0 8px 24px rgba(var(--accent-rgb), 0.08);
   }
 
   &::before {
@@ -44,7 +46,7 @@ const Card = styled.div`
     transform: translateX(-50%);
     width: 70%;
     height: 140px;
-    background: radial-gradient(ellipse at top, rgba(0,255,153,0.1) 0%, transparent 70%);
+    background: radial-gradient(ellipse at top, rgba(var(--accent-rgb), 0.1) 0%, transparent 70%);
     pointer-events: none;
   }
 `;
@@ -52,12 +54,12 @@ const Card = styled.div`
 const Thumb = styled.div`
   width: 64px; height: 64px;
   border-radius: 1rem;
-  background: rgba(0,255,153,0.08);
-  border: 1px solid rgba(0,255,153,0.15);
+  background: rgba(var(--accent-rgb), 0.08);
+  border: 1px solid rgba(var(--accent-rgb), 0.15);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #00ff99;
+  color: var(--accent);
   font-size: 1.5rem;
   margin-bottom: 1.25rem;
 `;
@@ -73,7 +75,7 @@ const ExpTitle = styled.h3`
 const CompanyRow = styled.p`
   font-size: 0.875rem;
   font-weight: 600;
-  color: #00ff99;
+  color: var(--accent);
   margin-bottom: 0.25rem;
 `;
 
@@ -104,7 +106,7 @@ const BulletItem = styled.li`
     content: '▸';
     position: absolute;
     left: 0;
-    color: #00ff99;
+    color: var(--accent);
     font-size: 0.6rem;
     top: 0.25rem;
   }
@@ -153,7 +155,17 @@ const ExperienceSection = ({ cmsExperience }) => {
 
   useGSAP(() => {
     const mm = gsap.matchMedia();
-    mm.add(OK, () => batchReveal('.exp-card', scope.current));
+    mm.add(OK, () => {
+      batchReveal('.exp-card', scope.current);
+      // Scale pop on the icon markers as the section reveals
+      gsap.from('.exp-thumb', {
+        scale: 0,
+        duration: 0.5,
+        ease: 'back.out(2)',
+        stagger: 0.12,
+        scrollTrigger: { trigger: scope.current, start: 'top 75%', once: true },
+      });
+    });
   }, { scope });
 
   const ITEMS = Array.isArray(cmsExperience)
@@ -185,7 +197,7 @@ const ExperienceSection = ({ cmsExperience }) => {
           return (
             <div key={item.id} className="exp-card">
               <Card>
-                <Thumb><IconComponent /></Thumb>
+                <Thumb className="exp-thumb"><IconComponent /></Thumb>
                 <ExpTitle>{item.title}</ExpTitle>
                 {item.company && <CompanyRow>{item.company}</CompanyRow>}
                 {hasMeta && (

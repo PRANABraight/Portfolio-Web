@@ -21,6 +21,7 @@ import PersonalSection from './components/sections/PersonalSection';
 import Footer from './components/sections/Footer';
 
 import useLenis, { scrollToTop } from './hooks/useLenis';
+import useSiteAccent from './hooks/useSiteAccent';
 import { ScrollTrigger } from './lib/motion';
 import { client } from './lib/sanity';
 import {
@@ -44,6 +45,7 @@ function App() {
   });
 
   useLenis();
+  useSiteAccent([mode]);
 
   // Always start the newly shown mode at the top of the page; the swapped
   // section stack changes every trigger position, so re-measure.

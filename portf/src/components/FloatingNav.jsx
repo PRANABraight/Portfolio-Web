@@ -52,12 +52,12 @@ const Tab = styled.a`
   min-width: 80px;
   text-decoration: none;
   transition: all 0.3s ease;
-  color: ${p => p.$active ? '#00ff99' : 'rgba(255,255,255,0.8)'};
+  color: ${p => (p.$active ? p.$tint ?? 'var(--site-accent)' : 'rgba(255,255,255,0.8)')};
   letter-spacing: 0.025em;
   user-select: none;
 
   &:hover {
-    color: ${p => p.$active ? '#00ff99' : 'rgba(255,255,255,0.95)'};
+    color: ${p => (p.$active ? p.$tint ?? 'var(--site-accent)' : 'rgba(255,255,255,0.95)')};
     transform: scale(1.05);
   }
   &:active { transform: scale(0.95); }
@@ -109,14 +109,15 @@ const FloatingNav = ({ mode, setMode }) => {
             transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
           >
             {[
-              { key: 'professional', label: 'Professional' },
-              { key: 'personal',     label: 'Personal' },
+              { key: 'professional', label: 'Professional' },              // follows scroll accent
+              { key: 'personal',     label: 'Personal', tint: '#ff8a5c' }, // coral "fun mode"
             ].map(tab => {
               const isActive = mode === tab.key;
               return (
                 <Tab
                   key={tab.key}
                   $active={isActive}
+                  $tint={tab.tint}
                   onClick={() => setMode(tab.key)}
                   onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setMode(tab.key); } }}
                   role="button"

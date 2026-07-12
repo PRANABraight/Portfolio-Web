@@ -1,9 +1,11 @@
 import { useRef } from 'react';
 import styled from 'styled-components';
 import { gsap, useGSAP, OK, REDUCED, revealUp } from '../../lib/motion';
+import { accentVars } from '../../styles/theme';
 import SectionTitle from '../common/SectionTitle';
 
 const Wrap = styled.section`
+  ${accentVars('journey')}
   padding: 6rem 1.25rem;
   @media (min-width: 640px) { padding: 6rem 2.5rem; }
   max-width: 900px;
@@ -35,8 +37,8 @@ const Track = styled.div`
 const Progress = styled.div`
   position: absolute;
   inset: 0;
-  background: #00ff99;
-  box-shadow: 0 0 8px rgba(0, 255, 153, 0.5);
+  background: linear-gradient(180deg, #fbbf24, #ff8a5c);
+  box-shadow: 0 0 8px rgba(251, 191, 36, 0.5);
   transform-origin: top;
 `;
 
@@ -56,15 +58,15 @@ const Dot = styled.div`
   top: 0.4rem;
   width: 10px; height: 10px;
   border-radius: 50%;
-  background: #0f0e1a;
-  border: 2px solid rgba(0, 255, 153, 0.35);
+  background: #14100d;
+  border: 2px solid rgba(var(--accent-rgb), 0.35);
   transform: translateX(-50%);
   transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 
   &.active {
-    background: #00ff99;
-    border-color: #00ff99;
-    box-shadow: 0 0 12px rgba(0, 255, 153, 0.6);
+    background: var(--accent);
+    border-color: var(--accent);
+    box-shadow: 0 0 12px rgba(var(--accent-rgb), 0.6);
   }
 
   @media (min-width: 768px) { display: block; }
@@ -83,15 +85,15 @@ const Year = styled.div`
   font-weight: 700;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: #00ff99;
+  color: var(--accent);
 `;
 
 const TYPE_COLORS = {
-  achievement:   { bg: 'rgba(255,170,51,0.12)', text: '#ffaa33' },
-  publication:   { bg: 'rgba(0,255,153,0.10)',  text: '#66ffc0' },
-  certification: { bg: 'rgba(0,255,153,0.12)',  text: '#00ff99' },
-  leadership:    { bg: 'rgba(0,255,153,0.08)',  text: '#99ffd5' },
-  milestone:     { bg: 'rgba(156,163,175,0.1)', text: '#9ca3af' },
+  achievement:   { bg: 'rgba(255,138,92,0.12)',  text: '#ff8a5c' },
+  publication:   { bg: 'rgba(253,186,116,0.10)', text: '#fdba74' },
+  certification: { bg: 'rgba(251,191,36,0.12)',   text: '#fbbf24' },
+  leadership:    { bg: 'rgba(251,146,60,0.10)', text: '#fb923c' },
+  milestone:     { bg: 'rgba(168,162,158,0.1)',  text: '#a8a29e' },
 };
 
 const TypeBadge = styled.span`
@@ -101,8 +103,8 @@ const TypeBadge = styled.span`
   text-transform: uppercase;
   padding: 0.15rem 0.55rem;
   border-radius: 999px;
-  background: ${({ $type }) => TYPE_COLORS[$type]?.bg || 'rgba(156,163,175,0.1)'};
-  color: ${({ $type }) => TYPE_COLORS[$type]?.text || '#9ca3af'};
+  background: ${({ $type }) => TYPE_COLORS[$type]?.bg || 'rgba(168,162,158,0.1)'};
+  color: ${({ $type }) => TYPE_COLORS[$type]?.text || '#a8a29e'};
 `;
 
 const EntryTitle = styled.h3`
@@ -115,7 +117,7 @@ const EntryTitle = styled.h3`
 
 const EntryDesc = styled.p`
   font-size: 0.875rem;
-  color: rgb(161,161,170);
+  color: rgb(168,162,158);
   line-height: 1.625;
   max-width: 680px;
 `;

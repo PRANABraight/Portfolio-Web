@@ -5,6 +5,7 @@ import { motion, useAnimationFrame, useMotionValue, useTransform } from 'framer-
 import { FaPython, FaDatabase, FaBrain, FaGithub } from 'react-icons/fa';
 import { SiScikitlearn, SiPandas } from 'react-icons/si';
 import { gsap, useGSAP, OK, batchReveal } from '../../lib/motion';
+import { accentVars } from '../../styles/theme';
 import SectionTitle from '../common/SectionTitle';
 
 /* ── Card base — exact match ── */
@@ -20,13 +21,13 @@ const Card = styled.div`
   z-index: 20;
   transition: border-color 0.25s ease;
 
-  &:hover { border-color: rgba(0, 255, 153, 0.6); }
+  &:hover { border-color: rgba(var(--accent-rgb), 0.6); }
 `;
 
 const CardTitle = styled.h4`
   font-size: 1rem;
   font-weight: 700;
-  color: #e4e4e7;
+  color: #e7e5e4;
   letter-spacing: 0.025em;
   margin-top: 1rem;
   padding: 0 1rem;
@@ -34,7 +35,7 @@ const CardTitle = styled.h4`
 
 const CardDesc = styled.p`
   font-size: 0.875rem;
-  color: #a1a1aa;
+  color: #a8a29e;
   letter-spacing: 0.025em;
   line-height: 1.625;
   margin-top: 2rem;
@@ -66,7 +67,7 @@ const MovingBorderInner = styled.div`
   font-size: 0.875rem;
 `;
 
-const MovingDot = ({ duration = 2000, rx = '30%', ry = '30%' }) => {
+const MovingDot = ({ duration = 2000, rx = '30%', ry = '30%', color = '#fb923c' }) => {
   const pathRef = useRef(null);
   const progress = useMotionValue(0);
 
@@ -100,17 +101,17 @@ const MovingDot = ({ duration = 2000, rx = '30%', ry = '30%' }) => {
       >
         <div style={{
           height: 20, width: 20, borderRadius: '50%', opacity: 0.8,
-          background: 'radial-gradient(#00ff99 40%, transparent 60%)',
+          background: `radial-gradient(${color} 40%, transparent 60%)`,
         }} />
       </motion.div>
     </>
   );
 };
 
-const MovingBorderCard = ({ children, duration = 3000, className }) => (
+const MovingBorderCard = ({ children, duration = 3000, dotColor, className }) => (
   <MovingBorderWrap>
     <div style={{ position: 'absolute', inset: 0, borderRadius: 18, overflow: 'hidden' }}>
-      <MovingDot duration={duration} />
+      <MovingDot duration={duration} color={dotColor} />
     </div>
     <MovingBorderInner style={{ borderRadius: 17 }}>
       {children}
@@ -131,7 +132,7 @@ const HoverCard = ({ children }) => {
         <motion.span
           style={{
             position: 'absolute', inset: 0, height: '100%', width: '100%',
-            background: 'rgba(6, 78, 59, 0.8)', display: 'block', borderRadius: 24,
+            background: 'rgba(124, 45, 18, 0.8)', display: 'block', borderRadius: 24,
           }}
           layoutId="hoverBg"
           initial={{ opacity: 0 }}
@@ -150,7 +151,7 @@ const TECHS = [
   { icon: <FaDatabase />,   color: '#4479A1', label: 'SQL' },
   { icon: <SiScikitlearn />,color: '#F7931E', label: 'Sklearn' },
   { icon: <SiPandas />,     color: '#150458', label: 'Pandas' },
-  { icon: <FaBrain />,      color: '#00ff99', label: 'ML/AI' },
+  { icon: <FaBrain />,      color: '#fbbf24', label: 'ML/AI' },
 ];
 
 const TechGrid = styled.div`
@@ -167,14 +168,15 @@ const TechChip = styled.div`
   gap: 0.375rem;
   padding: 0.375rem 0.75rem;
   border-radius: 9999px;
-  border: 1px solid rgba(0,255,153,0.2);
-  background: rgba(0,255,153,0.05);
+  border: 1px solid rgba(var(--accent-rgb), 0.2);
+  background: rgba(var(--accent-rgb), 0.05);
   font-size: 0.75rem;
   color: rgba(255,255,255,0.8);
 `;
 
 /* ── Grid layout ── */
 const SectionWrap = styled.section`
+  ${accentVars('approach')}
   padding: 6rem 1.25rem;
   @media (min-width: 640px) { padding: 6rem 2.5rem; }
   max-width: 1280px;
@@ -190,10 +192,18 @@ const BentoGrid = styled.div`
   @media (min-width: 1280px) { grid-template-columns: repeat(3, 1fr); }
 `;
 
-const CardWrap = styled.div`
+const CardWrap = styled(motion.div)`
   position: relative;
   cursor: default;
 `;
+
+/* Cycling dot colors for the moving-border cards */
+const DOT_COLORS = ['#fb923c', '#fbbf24', '#ff8a5c'];
+
+const cardHover = {
+  whileHover: { scale: 1.02 },
+  transition: { type: 'spring', stiffness: 300, damping: 20 },
+};
 
 const ApproachSection = () => {
   const scope = useRef(null);
@@ -211,12 +221,12 @@ const ApproachSection = () => {
 
     <BentoGrid style={{ marginTop: '3rem' }}>
       {/* Card 1: primary stack */}
-      <CardWrap className="approach-card">
-        <MovingBorderCard duration={2800} style={{ height: '100%' }}>
+      <CardWrap className="approach-card" {...cardHover}>
+        <MovingBorderCard duration={2800} dotColor={DOT_COLORS[0]} style={{ height: '100%' }}>
           <div style={{ padding: '1.5rem', width: '100%' }}>
-            <div style={{ fontSize: '0.75rem', color: '#00ff99', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '0.75rem' }}>My primary tech stack</div>
+            <div style={{ fontSize: '0.75rem', color: 'var(--accent)', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '0.75rem' }}>My primary tech stack</div>
             <h3 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#fff', letterSpacing: '-0.025em', marginBottom: '0.5rem' }}>Python · SQL</h3>
-            <p style={{ fontSize: '0.875rem', color: 'rgb(115,115,115)', lineHeight: 1.625 }}>Building end-to-end data pipelines, ML models, and analytical systems with the Python data science ecosystem.</p>
+            <p style={{ fontSize: '0.875rem', color: 'rgb(120,113,108)', lineHeight: 1.625 }}>Building end-to-end data pipelines, ML models, and analytical systems with the Python data science ecosystem.</p>
             <TechGrid>
               {TECHS.map(t => (
                 <TechChip key={t.label}>
@@ -230,7 +240,7 @@ const ApproachSection = () => {
       </CardWrap>
 
       {/* Card 2: approach */}
-      <CardWrap className="approach-card">
+      <CardWrap className="approach-card" {...cardHover}>
         <HoverCard>
           <Card>
             <CardTitle>Software Architect mindset</CardTitle>
@@ -242,10 +252,10 @@ const ApproachSection = () => {
       </CardWrap>
 
       {/* Card 3: inside scoop */}
-      <CardWrap className="approach-card">
+      <CardWrap className="approach-card" {...cardHover}>
         <HoverCard>
           <Card>
-            <div style={{ padding: '0 1rem', marginTop: '1rem', fontSize: '0.75rem', color: '#00ff99', letterSpacing: '0.12em', textTransform: 'uppercase' }}>The Inside Scoop</div>
+            <div style={{ padding: '0 1rem', marginTop: '1rem', fontSize: '0.75rem', color: 'var(--accent)', letterSpacing: '0.12em', textTransform: 'uppercase' }}>The Inside Scoop</div>
             <CardTitle>Finishing MCA, exploring what's next</CardTitle>
             <CardDesc>Completing my Master of Computer Applications at Christ University, Bengaluru. Actively looking for Data Engineering and ML Engineering roles.</CardDesc>
           </Card>
@@ -253,7 +263,7 @@ const ApproachSection = () => {
       </CardWrap>
 
       {/* Card 4: global / language */}
-      <CardWrap className="approach-card">
+      <CardWrap className="approach-card" {...cardHover}>
         <HoverCard>
           <Card>
             <CardTitle>Fluent in English and Hindi. Based in Bengaluru, India 🇮🇳</CardTitle>
@@ -263,14 +273,14 @@ const ApproachSection = () => {
       </CardWrap>
 
       {/* Card 5: collaborate */}
-      <CardWrap className="approach-card">
-        <MovingBorderCard duration={3600}>
+      <CardWrap className="approach-card" {...cardHover}>
+        <MovingBorderCard duration={3600} dotColor={DOT_COLORS[1]}>
           <div style={{ padding: '1.5rem', width: '100%' }}>
-            <div style={{ fontSize: '0.75rem', color: 'rgb(115,115,115)', letterSpacing: '0.08em', marginBottom: '1rem' }}>Do you want to work together?</div>
+            <div style={{ fontSize: '0.75rem', color: 'rgb(120,113,108)', letterSpacing: '0.08em', marginBottom: '1rem' }}>Do you want to work together?</div>
             <h3 style={{ fontSize: '1.2rem', fontWeight: 700, color: '#fff', letterSpacing: '-0.025em' }}>Let's build something impactful.</h3>
             <a
               href="mailto:pranabrai137@gmail.com"
-              style={{ display: 'inline-block', marginTop: '1rem', color: '#00ff99', fontSize: '0.875rem', textDecoration: 'none' }}
+              style={{ display: 'inline-block', marginTop: '1rem', color: 'var(--accent)', fontSize: '0.875rem', textDecoration: 'none' }}
             >
               pranabrai137@gmail.com ↗
             </a>
@@ -279,11 +289,11 @@ const ApproachSection = () => {
       </CardWrap>
 
       {/* Card 6: github */}
-      <CardWrap className="approach-card">
+      <CardWrap className="approach-card" {...cardHover}>
         <HoverCard>
           <Card>
             <CardTitle style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <FaGithub style={{ color: '#00ff99' }} /> github.com/PRANABraight
+              <FaGithub style={{ color: 'var(--accent)' }} /> github.com/PRANABraight
             </CardTitle>
             <CardDesc>Open source projects in data science, ML, and full-stack development. Check out Credit Risk Analytics, Falcon 9 ML, and more.</CardDesc>
           </Card>

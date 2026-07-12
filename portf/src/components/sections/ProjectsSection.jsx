@@ -6,10 +6,14 @@ import { projectsData } from '../../data/portfolioData';
 import ProjectModal from '../common/ProjectModal';
 import SectionTitle from '../common/SectionTitle';
 import { urlFor } from '../../lib/sanity';
+import FloatingOrbs from '../common/FloatingOrbs';
 import { gsap, useGSAP, OK, batchReveal } from '../../lib/motion';
 import { getStackIcon } from '../../lib/iconMap';
+import { accentVars } from '../../styles/theme';
 
 const Wrap = styled.section`
+  ${accentVars('projects')}
+  position: relative;
   padding: 6rem 1.25rem;
   @media (min-width: 640px) { padding: 6rem 2.5rem; }
   max-width: 1280px;
@@ -31,9 +35,12 @@ const Card = styled(motion.div)`
   border-radius: 1.25rem;
   overflow: hidden;
   cursor: pointer;
-  transition: border-color 0.25s ease;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
 
-  &:hover { border-color: rgba(0,255,153,0.4); }
+  &:hover {
+    border-color: rgba(var(--accent-rgb), 0.4);
+    box-shadow: 0 8px 32px rgba(var(--accent-rgb), 0.15);
+  }
 `;
 
 const ImgWrap = styled.div`
@@ -77,8 +84,8 @@ const Status = styled.span`
   font-size: 0.7rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: ${p => p.$ongoing ? '#ffaa33' : '#00ff99'};
-  border: 1px solid ${p => p.$ongoing ? 'rgba(255,170,51,0.3)' : 'rgba(0,255,153,0.3)'};
+  color: ${p => p.$ongoing ? '#ff8a5c' : '#fbbf24'};
+  border: 1px solid ${p => p.$ongoing ? 'rgba(255,138,92,0.3)' : 'rgba(251,191,36,0.3)'};
   border-radius: 9999px;
   padding: 0.2rem 0.6rem;
   margin-bottom: 0.75rem;
@@ -98,7 +105,7 @@ const PTitle = styled.h3`
 const PDesc = styled.p`
   font-size: 0.875rem;
   line-height: 1.625;
-  color: #BEC1DD;
+  color: #d6cfc7;
   margin-bottom: 1.25rem;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -119,7 +126,7 @@ const IconStack = styled.div`
 
 const TechIcon = styled.div`
   width: 36px; height: 36px;
-  border: 1px solid rgba(0,255,153,0.2);
+  border: 1px solid rgba(var(--accent-rgb), 0.2);
   border-radius: 50%;
   background: var(--surface-0);
   display: flex;
@@ -129,6 +136,9 @@ const TechIcon = styled.div`
   margin-left: ${p => p.$first ? '0' : '-8px'};
   position: relative;
   z-index: ${p => p.$z};
+  transition: transform 0.2s ease;
+
+  &:hover { transform: translateY(-3px); }
 `;
 
 const Links = styled.div`
@@ -142,11 +152,11 @@ const LinkBtn = styled.a`
   align-items: center;
   gap: 0.3rem;
   font-size: 0.8125rem;
-  color: #00ff99;
+  color: var(--accent);
   text-decoration: none;
   transition: color 0.2s ease;
 
-  &:hover { color: #00e187; }
+  &:hover { color: var(--accent-soft); }
 `;
 
 const ProjectCard = ({ project, onClick, isOngoing }) => {
@@ -230,6 +240,7 @@ const ProjectsSection = ({ cmsProjects }) => {
 
   return (
     <Wrap id="projects" ref={scope}>
+      <FloatingOrbs count={3} rgbs={[null, '249, 115, 22']} />
       <SectionTitle eyebrow="// projects" mb="1rem">
         A small selection of <span>recent projects</span>
       </SectionTitle>

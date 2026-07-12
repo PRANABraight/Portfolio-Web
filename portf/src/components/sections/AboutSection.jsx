@@ -6,10 +6,12 @@ import { useTypingEffect } from '../../hooks/useTypingEffect';
 import AnimatedTitle from '../common/AnimatedTitle';
 import { getIcon } from '../../lib/iconMap';
 import { gsap, useGSAP, OK, batchReveal } from '../../lib/motion';
+import { accentVars } from '../../styles/theme';
 
 const blink = keyframes`0%,100%{opacity:1}50%{opacity:0}`;
 
 const Wrap = styled.section`
+  ${accentVars('about')}
   padding: 6rem 1.25rem;
   max-width: 1100px;
   margin: 0 auto;
@@ -36,7 +38,7 @@ const Terminal = styled.div`
   align-self: start;
   transition: border-color 0.3s ease;
 
-  &:hover { border-color: rgba(0,255,153,0.2); }
+  &:hover { border-color: rgba(var(--accent-rgb), 0.25); }
 
   @media (max-width: 968px) { position: relative; top: 0; }
 `;
@@ -70,7 +72,7 @@ const TBody = styled.div`
   overflow-y: auto;
 
   &::-webkit-scrollbar { width: 2px; }
-  &::-webkit-scrollbar-thumb { background: rgba(0,255,153,0.2); }
+  &::-webkit-scrollbar-thumb { background: rgba(var(--accent-rgb), 0.25); }
 `;
 
 const LNums = styled.div`
@@ -95,22 +97,23 @@ const CodeBlock = styled.div`
 
 const CLine = styled.div`
   font-size: 0.75rem;
-  color: rgb(163,163,163);
+  color: rgb(168,162,158);
   white-space: pre-wrap;
   line-height: 1.8;
 
-  .kw   { color: #00ff99; font-weight: 600; }
-  .str  { color: rgba(0,255,153,0.55); }
+  /* triad editor theme: orange keywords, amber strings/fns, coral props */
+  .kw   { color: #fb923c; font-weight: 600; }
+  .str  { color: #fde68a; }
   .cmt  { color: rgba(255,255,255,0.2); font-style: italic; }
-  .fn   { color: #62d9e8; }
-  .prop { color: #ffbb66; }
+  .fn   { color: #fbbf24; }
+  .prop { color: #ffb894; }
   .pun  { color: rgba(255,255,255,0.3); }
 `;
 
 const TCursor = styled.span`
   display: inline-block;
   width: 2px; height: 0.85em;
-  background: #00ff99;
+  background: var(--accent);
   margin-left: 1px;
   vertical-align: text-bottom;
   animation: ${blink} 1s step-end infinite;
@@ -124,27 +127,32 @@ const Cards = styled.div`
 
 const Card = styled.div`
   padding: 1.25rem;
-  background: rgba(23,21,48,0.55);
+  background: rgba(33,25,19,0.55);
   border: 1px solid rgba(255,255,255,0.07);
   border-radius: 1rem;
   display: flex;
   gap: 1rem;
   align-items: flex-start;
-  transition: border-color 0.2s ease, background 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    transform 0.32s cubic-bezier(0.34, 1.56, 0.64, 1);
 
   &:hover {
-    border-color: rgba(0,255,153,0.2);
-    background: rgba(23,21,48,0.85);
+    border-color: rgba(var(--accent-rgb), 0.25);
+    background: rgba(33,25,19,0.85);
+    transform: translateY(-3px);
   }
 `;
 
+/* Per-card hue ($c) with orange section accent as fallback */
 const CIcon = styled.div`
   width: 36px; height: 36px;
   border-radius: 8px;
-  background: rgba(0,255,153,0.08);
-  border: 1px solid rgba(0,255,153,0.15);
+  background: ${p => p.$c ? `${p.$c}14` : 'rgba(var(--accent-rgb), 0.08)'};
+  border: 1px solid ${p => p.$c ? `${p.$c}29` : 'rgba(var(--accent-rgb), 0.15)'};
   display: flex; align-items: center; justify-content: center;
-  color: #00ff99;
+  color: ${p => p.$c ?? 'var(--accent)'};
   font-size: 1rem;
   flex-shrink: 0;
 `;
@@ -159,7 +167,7 @@ const CBody = styled.div`
   }
   p {
     font-size: 0.75rem;
-    color: rgb(163,163,163);
+    color: rgb(168,162,158);
     line-height: 1.625;
     margin: 0;
   }
@@ -257,9 +265,9 @@ const AboutSection = ({ cmsAbout }) => {
 
         <div>
           <Cards>
-            {cards.map(c => (
+            {cards.map((c, i) => (
               <Card key={c.title} className="about-card">
-                <CIcon>{c.icon}</CIcon>
+                <CIcon $c={['#fb923c', '#fbbf24', '#ff8a5c', '#fdba74'][i % 4]}>{c.icon}</CIcon>
                 <CBody>
                   <h3>{c.title}</h3>
                   <p>{c.text}</p>

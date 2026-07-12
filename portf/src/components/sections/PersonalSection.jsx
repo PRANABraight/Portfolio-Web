@@ -38,7 +38,7 @@ const BigHello = styled.h1`
   text-align: center;
   margin-top: 1.5rem;
   padding: 1.5rem 0;
-  background: linear-gradient(to bottom, #9ca3af, #ffffff);
+  background: linear-gradient(to bottom, #a8a29e, #ffffff);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -57,7 +57,7 @@ const NicknameText = styled.div`
 `;
 
 const AccentWord = styled.span`
-  color: #00ff99;
+  color: #ff8a5c;
   font-weight: 700;
 `;
 
@@ -135,14 +135,14 @@ const FeaturedDesc = styled.p`
   max-width: 600px;
   margin: 1rem auto 0;
   font-weight: 400;
-  color: rgba(212,212,212,0.8);
+  color: rgba(214,211,209,0.8);
 `;
 
 const BentoGrid = styled.div`
   display: grid;
   grid-template-columns: 1fr;
   margin-top: 3rem;
-  border: 1px solid rgba(64,64,64,0.5);
+  border: 1px solid rgba(68,64,60,0.5);
   border-radius: 8px;
   overflow: hidden;
 
@@ -154,12 +154,12 @@ const BentoCell = styled.div`
   height: 350px;
   overflow: hidden;
   position: relative;
-  border-bottom: 1px solid rgba(64,64,64,0.5);
+  border-bottom: 1px solid rgba(68,64,60,0.5);
 
   @media (min-width: 1024px) {
     height: min(calc(100vh - 400px), 600px);
-    border-bottom: ${p => p.$nob ? 'none' : '1px solid rgba(64,64,64,0.5)'};
-    border-right: ${p => p.$right ? '1px solid rgba(64,64,64,0.5)' : 'none'};
+    border-bottom: ${p => p.$nob ? 'none' : '1px solid rgba(68,64,60,0.5)'};
+    border-right: ${p => p.$right ? '1px solid rgba(68,64,60,0.5)' : 'none'};
     grid-column: span ${p => p.$span || 1};
   }
 `;
@@ -174,7 +174,7 @@ const CellTitle = styled.p`
 
 const CellDesc = styled.p`
   font-size: 0.875rem;
-  color: rgba(212,212,212,0.7);
+  color: rgba(214,211,209,0.7);
   font-weight: 400;
   max-width: 380px;
   line-height: 1.625;
@@ -195,7 +195,7 @@ const CellImg = styled.img`
 const CellScrim = styled.div`
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(10,9,16,0.9) 0%, rgba(10,9,16,0.45) 45%, rgba(10,9,16,0.15) 100%);
+  background: linear-gradient(to top, rgba(16,11,8,0.9) 0%, rgba(16,11,8,0.45) 45%, rgba(16,11,8,0.15) 100%);
 `;
 
 /* ══════════════════════════════════════════════════════
@@ -211,7 +211,7 @@ const CarouselTitle = styled.h2`
   padding: 0 1.25rem;
   font-size: clamp(1.3rem, 4vw, 3rem);
   font-weight: 700;
-  color: rgba(229,229,229,0.9);
+  color: rgba(231,229,228,0.9);
   margin-bottom: 0;
 `;
 
@@ -247,7 +247,7 @@ const CarouselCard = styled(motion.button)`
   position: relative;
   z-index: 10;
   flex-shrink: 0;
-  background: #121218;
+  background: #161210;
   border: none;
   cursor: pointer;
   padding: 0;
@@ -303,7 +303,7 @@ const CarouselBg = styled.div`
 const CarouselBgImg = styled.div`
   width: 100%;
   height: 100%;
-  background: ${p => p.$bg || '#121218'};
+  background: ${p => p.$bg || '#161210'};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -326,7 +326,7 @@ const CarouselPhoto = styled.img`
 const CarouselShade = styled.div`
   position: absolute;
   inset: 0;
-  background: linear-gradient(to bottom, rgba(10,9,16,0.75) 0%, rgba(10,9,16,0.25) 45%, rgba(10,9,16,0.55) 100%);
+  background: linear-gradient(to bottom, rgba(16,11,8,0.75) 0%, rgba(16,11,8,0.25) 45%, rgba(16,11,8,0.55) 100%);
 `;
 
 const CarouselBtns = styled.div`
@@ -342,13 +342,13 @@ const CarouselBtn = styled.button`
   z-index: 40;
   height: 40px; width: 40px;
   border-radius: 50%;
-  background: #f3f4f6;
+  background: #f5f5f4;
   border: none;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #6b7280;
+  color: #78716c;
   font-size: 0.875rem;
   transition: opacity 0.2s ease;
   &:disabled { opacity: 0.4; cursor: not-allowed; }
@@ -390,7 +390,7 @@ const MusicCard = styled.div`
   width: 100%;
   max-width: 380px;
   border-radius: 16px;
-  background: #181818;
+  background: #1a1614;
   border: 1px solid rgba(255,255,255,0.07);
   padding: 1.25rem;
   color: #fff;
@@ -399,7 +399,7 @@ const MusicCard = styled.div`
   gap: 1rem;
   transition: background 0.25s ease;
 
-  &:hover { background: #202020; }
+  &:hover { background: #221c18; }
 `;
 
 const MusicImg = styled.img`
@@ -416,7 +416,7 @@ const MusicDisc = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #2a2840, #16142a);
+  background: linear-gradient(135deg, #2e211a, #1c1512);
   color: ${colors.accent};
   font-size: 3.5rem;
 `;
@@ -459,7 +459,7 @@ const MusicControls = styled.div`
     width: 48px; height: 48px;
     border-radius: 50%;
     background: #1db954;
-    color: #0f0e1a;
+    color: #14100d;
     font-size: 1rem;
     display: flex;
     align-items: center;
@@ -497,7 +497,7 @@ const ThankWrap = styled.div`
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  background: linear-gradient(to bottom, #0f0e1a, #141420);
+  background: linear-gradient(to bottom, #14100d, #1a1410);
 `;
 
 const Beam = styled.div`
@@ -507,7 +507,7 @@ const Beam = styled.div`
   width: 1px;
   height: 56px;
   border-radius: 9999px;
-  background: linear-gradient(to bottom, #00ff99, rgba(0,255,153,0.5), transparent);
+  background: linear-gradient(to bottom, #ff8a5c, rgba(255,138,92,0.5), transparent);
   animation: ${beamFall} ${p => p.$dur}s linear infinite;
   animation-delay: ${p => p.$delay}s;
   opacity: 0;
@@ -532,7 +532,7 @@ const ThankTitle = styled.h2`
 const ThankYou = styled.div`
   font-size: clamp(1.5rem, 4vw, 3.5rem);
   font-weight: 700;
-  background: linear-gradient(to right, #a855f7, #8b5cf6, #ec4899);
+  background: linear-gradient(to right, #f59e0b, #fb923c, #ff8a5c);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -586,11 +586,11 @@ const HOBBIES = [
 ];
 
 const CAROUSEL_ITEMS = [
-  { category: 'Computer, IT', title: 'Interest, Work', bg: '#1a1a28', icon: <LuMonitor />, img: lifeItImg },
-  { category: 'Sports', title: 'Volleyball and Table Tennis', bg: '#1a2818', icon: <LuVolleyball />, img: lifeSportsImg },
-  { category: 'Books', title: 'Fiction & Research', bg: '#2a1a18', icon: <LuBookOpen />, img: lifeBooksImg },
-  { category: 'Music', title: 'Guitar & Piano', bg: '#1a182a', icon: <LuMusic />, img: lifeMusicImg },
-  { category: 'Heritage', title: 'Culture & Roots', bg: '#181a2a', icon: <LuLandmark />, img: lifeHeritageImg },
+  { category: 'Computer, IT', title: 'Interest, Work', bg: '#1a1410', icon: <LuMonitor />, img: lifeItImg },
+  { category: 'Sports', title: 'Volleyball and Table Tennis', bg: '#1c1810', icon: <LuVolleyball />, img: lifeSportsImg },
+  { category: 'Books', title: 'Fiction & Research', bg: '#221410', icon: <LuBookOpen />, img: lifeBooksImg },
+  { category: 'Music', title: 'Guitar & Piano', bg: '#1c1210', icon: <LuMusic />, img: lifeMusicImg },
+  { category: 'Heritage', title: 'Culture & Roots', bg: '#1a1310', icon: <LuLandmark />, img: lifeHeritageImg },
 ];
 
 const FALLBACK_SONG = {
@@ -720,7 +720,7 @@ const PersonalSection = ({ cmsPersonal }) => {
           <span
             style={{
               display: 'inline-block',
-              background: 'linear-gradient(to bottom, #9ca3af, #fff)',
+              background: 'linear-gradient(to bottom, #a8a29e, #fff)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
             }}
@@ -774,7 +774,7 @@ const PersonalSection = ({ cmsPersonal }) => {
                 <CellImg src={imgSrc} alt="" loading="lazy" />
                 <CellScrim />
                 <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', padding: '2rem', zIndex: 1 }}>
-                  <span style={{ fontSize: '2rem', marginBottom: '0.75rem', color: '#00ff99', display: 'inline-flex' }}>{h.icon}</span>
+                  <span style={{ fontSize: '2rem', marginBottom: '0.75rem', color: '#ff8a5c', display: 'inline-flex' }}>{h.icon}</span>
                   <CellTitle>{h.title}</CellTitle>
                   <CellDesc>{h.desc}</CellDesc>
                 </div>

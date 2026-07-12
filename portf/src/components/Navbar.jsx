@@ -10,6 +10,8 @@ import { scrollToId } from '../hooks/useLenis';
 const Header = styled.header`
   padding: 2rem 0;
   color: white;
+  /* --site-accent is registered via @property, so accent color-shifts ease per section */
+  transition: color 0.4s ease;
 
   @media (min-width: 1280px) { padding: 3rem 0; }
 `;
@@ -35,7 +37,7 @@ const Logo = styled(motion.a)`
   letter-spacing: -0.025em;
   cursor: pointer;
 
-  span { color: #00ff99; }
+  span { color: var(--site-accent); }
 `;
 
 /* Desktop nav links */
@@ -51,15 +53,15 @@ const NavItem = styled.a`
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.875rem;
   font-weight: 500;
-  color: ${p => p.$active ? '#00ff99' : 'rgba(255,255,255,0.8)'};
+  color: ${p => p.$active ? 'var(--site-accent)' : 'rgba(255,255,255,0.8)'};
   text-decoration: none;
   text-transform: capitalize;
-  border-bottom: ${p => p.$active ? '2px solid #00ff99' : '2px solid transparent'};
+  border-bottom: ${p => p.$active ? '2px solid var(--site-accent)' : '2px solid transparent'};
   padding-bottom: 2px;
   transition: color 0.2s ease, border-color 0.2s ease;
   cursor: pointer;
 
-  &:hover { color: #00ff99; }
+  &:hover { color: var(--site-accent); }
 `;
 
 /* Mobile hamburger (Sheet/drawer from right) */
@@ -70,7 +72,7 @@ const MobileBtn = styled(motion.button)`
   width: 36px; height: 36px;
   background: none;
   border: none;
-  color: #00ff99;
+  color: var(--site-accent);
   font-size: 1.5rem;
   cursor: pointer;
 
@@ -83,7 +85,7 @@ const Drawer = styled(motion.div)`
   right: 0;
   width: 75%;
   max-width: 320px;
-  background: #0f0e1a;
+  background: #14100d;
   z-index: 300;
   display: flex;
   flex-direction: column;
@@ -94,7 +96,7 @@ const Drawer = styled(motion.div)`
 const DrawerOverlay = styled(motion.div)`
   position: fixed;
   inset: 0;
-  background: #0f0e1a;
+  background: #14100d;
   z-index: 299;
 `;
 
@@ -104,7 +106,7 @@ const DrawerClose = styled.button`
   top: 2rem;
   background: none;
   border: none;
-  color: #00ff99;
+  color: var(--site-accent);
   font-size: 1.875rem;
   cursor: pointer;
   display: flex;
@@ -125,14 +127,14 @@ const DrawerLink = styled.a`
   font-family: 'JetBrains Mono', monospace;
   font-size: 1.25rem;
   font-weight: 500;
-  color: ${p => p.$active ? '#00ff99' : 'rgba(255,255,255,0.8)'};
+  color: ${p => p.$active ? 'var(--site-accent)' : 'rgba(255,255,255,0.8)'};
   text-decoration: none;
   text-transform: capitalize;
-  border-bottom: ${p => p.$active ? '2px solid #00ff99' : 'none'};
+  border-bottom: ${p => p.$active ? '2px solid var(--site-accent)' : 'none'};
   transition: color 0.2s ease;
   cursor: pointer;
 
-  &:hover { color: #00ff99; }
+  &:hover { color: var(--site-accent); }
 `;
 
 const NAV_LINKS = [

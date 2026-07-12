@@ -4,9 +4,11 @@ import styled from 'styled-components';
 import { skillsData } from '../../data/portfolioData';
 import { getIcon } from '../../lib/iconMap';
 import { gsap, useGSAP, OK, batchReveal } from '../../lib/motion';
+import { accentVars } from '../../styles/theme';
 import SectionTitle from '../common/SectionTitle';
 
 const Wrap = styled.section`
+  ${accentVars('skills')}
   padding: 6rem 1.25rem;
   @media (min-width: 640px) { padding: 6rem 2.5rem; }
   max-width: 1280px;
@@ -37,9 +39,9 @@ const Left = styled(motion.div)`
 const Quote = styled.blockquote`
   font-size: 0.875rem;
   font-style: italic;
-  color: rgb(161,161,170);
+  color: rgb(168,162,158);
   line-height: 1.625;
-  border-left: 2px solid #00ff99;
+  border-left: 2px solid var(--accent);
   padding-left: 1.25rem;
   margin: 0 0 2rem;
 `;
@@ -48,7 +50,7 @@ const SLabel = styled.div`
   font-size: 0.75rem;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: rgb(115,115,115);
+  color: rgb(120,113,108);
   margin-bottom: 1rem;
 `;
 
@@ -66,11 +68,11 @@ const StrItem = styled.li`
   padding: 0.75rem 0;
   border-bottom: 1px solid rgba(255,255,255,0.05);
   font-size: 0.75rem;
-  color: rgb(161,161,170);
+  color: rgb(168,162,158);
   transition: color 0.2s ease;
 
   &:last-child { border-bottom: none; }
-  &::before { content: '▹'; color: #00ff99; font-size: 0.75rem; flex-shrink: 0; }
+  &::before { content: '▹'; color: var(--accent); font-size: 0.75rem; flex-shrink: 0; }
   &:hover { color: rgba(255,255,255,0.8); }
 `;
 
@@ -85,13 +87,13 @@ const Grid = styled.div`
 
 const SkillCard = styled.div`
   padding: 1.25rem 0.75rem;
-  background: rgba(23,21,48,0.55);
+  background: rgba(33,25,19,0.55);
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 0.5rem;
   cursor: default;
-  transition: background 0.2s ease;
+  transition: background 0.2s ease, transform 320ms cubic-bezier(0.34, 1.56, 0.64, 1);
   position: relative;
   overflow: hidden;
 
@@ -106,7 +108,14 @@ const SkillCard = styled.div`
 
   &:hover {
     background: rgba(28,26,50,0.9);
+    transform: translateY(-4px) scale(1.03);
+    z-index: 1;
     &::after { opacity: 1; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: background 0.2s ease;
+    &:hover { transform: none; }
   }
 `;
 
@@ -128,7 +137,7 @@ const SIcon = styled.div`
 
 const SName = styled.span`
   font-size: 0.75rem;
-  color: rgb(115,115,115);
+  color: rgb(120,113,108);
   text-align: center;
   letter-spacing: 0.03em;
   position: relative;

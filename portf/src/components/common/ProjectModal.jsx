@@ -3,9 +3,10 @@ import { useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import styled from 'styled-components';
 import { FaTimes, FaGithub, FaExternalLinkAlt, FaCheckCircle } from 'react-icons/fa';
-import { colors, typography, spacing, borderRadius } from '../../styles/theme';
+import { colors, typography, spacing, borderRadius, accentVars } from '../../styles/theme';
 
 const Overlay = styled(motion.div)`
+  ${accentVars('projects')}
   position: fixed;
   top: 0;
   left: 0;
@@ -150,7 +151,7 @@ const SectionTitle = styled.h3`
   font-weight: 600;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: #00ff99;
+  color: var(--accent);
   margin: ${spacing['2xl']} 0 ${spacing.lg} 0;
   display: flex;
   align-items: center;
@@ -170,21 +171,21 @@ const FeatureItem = styled(motion.li)`
   align-items: flex-start;
   gap: ${spacing.md};
   padding: ${spacing.md};
-  background: rgba(0, 255, 153, 0.03);
+  background: rgba(var(--accent-rgb), 0.03);
   border-radius: ${borderRadius.md};
-  border-left: 2px solid #00ff99;
-  color: rgb(161,161,170);
+  border-left: 2px solid var(--accent);
+  color: rgb(168,162,158);
   font-size: ${typography.fontSize.sm};
   line-height: ${typography.lineHeight.relaxed};
   transition: all 200ms;
 
   &:hover {
-    background: rgba(0, 255, 153, 0.06);
+    background: rgba(var(--accent-rgb), 0.06);
     transform: translateX(4px);
   }
 
   svg {
-    color: #00ff99;
+    color: var(--accent);
     flex-shrink: 0;
     margin-top: 2px;
   }
@@ -198,20 +199,20 @@ const TechStack = styled.div`
 `;
 
 const TechTag = styled(motion.span)`
-  background: rgba(0, 255, 153, 0.06);
-  color: rgba(0, 255, 153, 0.75);
+  background: rgba(var(--accent-rgb), 0.06);
+  color: rgba(var(--accent-rgb), 0.75);
   padding: 0.375rem ${spacing.md};
   border-radius: 4px;
   font-family: 'JetBrains Mono', monospace;
   font-size: ${typography.fontSize.xs};
   font-weight: 500;
   letter-spacing: 0.025em;
-  border: 1px solid rgba(0, 255, 153, 0.2);
+  border: 1px solid rgba(var(--accent-rgb), 0.2);
   transition: all 200ms;
 
   &:hover {
-    background: rgba(0, 255, 153, 0.12);
-    border-color: rgba(0, 255, 153, 0.4);
+    background: rgba(var(--accent-rgb), 0.12);
+    border-color: rgba(var(--accent-rgb), 0.4);
     transform: translateY(-2px);
   }
 `;
@@ -241,24 +242,24 @@ const ActionButton = styled(motion.a)`
   text-decoration: none;
 
   ${props => props.$primary ? `
-    background: #00ff99;
-    color: #0f0e1a;
-    border: 2px solid #00ff99;
-    box-shadow: 0 4px 16px rgba(0, 255, 153, 0.25);
+    background: var(--accent);
+    color: #14100d;
+    border: 2px solid var(--accent);
+    box-shadow: 0 4px 16px rgba(var(--accent-rgb), 0.25);
     font-weight: 700;
 
     &:hover {
       opacity: 0.88;
       transform: translateY(-2px);
-      color: #0f0e1a;
+      color: #14100d;
     }
   ` : `
     background: transparent;
-    color: rgb(161,161,170);
+    color: rgb(168,162,158);
     border: 1px solid rgba(255, 255, 255, 0.12);
 
     &:hover {
-      border-color: rgba(0, 255, 153, 0.3);
+      border-color: rgba(var(--accent-rgb), 0.3);
       color: #ffffff;
       transform: translateY(-2px);
     }

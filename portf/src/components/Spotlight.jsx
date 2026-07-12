@@ -2,9 +2,10 @@
 import { motion, useReducedMotion } from 'framer-motion';
 
 const Spotlight = ({
-  gradientFirst  = 'radial-gradient(68.54% 68.72% at 55.02% 31.46%, hsla(210,100%,85%,.08) 0, hsla(210,100%,55%,.02) 50%, hsla(210,100%,45%,0) 80%)',
-  gradientSecond = 'radial-gradient(50% 50% at 50% 50%, hsla(210,100%,85%,.06) 0, hsla(210,100%,55%,.02) 80%, transparent 100%)',
-  gradientThird  = 'radial-gradient(50% 50% at 50% 50%, hsla(210,100%,85%,.04) 0, hsla(210,100%,45%,.02) 80%, transparent 100%)',
+  // Beams tinted by the scroll-synced site accent so they follow the section hue
+  gradientFirst  = 'radial-gradient(68.54% 68.72% at 55.02% 31.46%, rgba(var(--site-accent-rgb), .09) 0, rgba(var(--site-accent-rgb), .02) 50%, transparent 80%)',
+  gradientSecond = 'radial-gradient(50% 50% at 50% 50%, rgba(var(--site-accent-rgb), .07) 0, rgba(var(--site-accent-rgb), .02) 80%, transparent 100%)',
+  gradientThird  = 'radial-gradient(50% 50% at 50% 50%, rgba(var(--site-accent-rgb), .05) 0, rgba(var(--site-accent-rgb), .02) 80%, transparent 100%)',
   translateY = -350,
   width      = 560,
   height     = 1380,

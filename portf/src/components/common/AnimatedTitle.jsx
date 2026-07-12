@@ -11,7 +11,7 @@ const Sub = styled(motion.p)`
   font-size: 0.75rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #00ff99;
+  color: rgba(var(--accent-rgb), 0.85);
   margin-bottom: 0.75rem;
 `;
 

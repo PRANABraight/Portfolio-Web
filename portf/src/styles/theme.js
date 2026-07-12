@@ -1,83 +1,122 @@
-// Radnaabazar-inspired design system
-// BG: #0f0e1a | Accent: #00ff99 | Font: JetBrains Mono
+// Radnaabazar-inspired design system — warm edition
+// BG: #14100d | Accent: #fbbf24 | Font: JetBrains Mono
 
 export const colors = {
-  bg:       '#0f0e1a',
-  bg2:      '#16142a',
-  // Surface ladder — same violet-navy hue as bg, stepped by value only
-  surface0: '#0b0a16',
-  surface1: '#171530',
-  surface2: '#14122b',
-  bgCard:   'rgba(23, 21, 48, 0.6)',
-  accent:   '#00ff99',
-  accentH:  '#00e187',
+  bg:       '#14100d',
+  bg2:      '#1c1512',
+  // Surface ladder — same warm brown-black hue as bg, stepped by value only
+  surface0: '#0f0b08',
+  surface1: '#211913',
+  surface2: '#1d1611',
+  bgCard:   'rgba(33, 25, 19, 0.6)',
+  accent:   '#fbbf24',
+  accentH:  '#f59e0b',
   text:     '#ffffff',
   text2:    'rgba(255, 255, 255, 0.6)',
   text3:    'rgba(255, 255, 255, 0.3)',
   border:   'rgba(255, 255, 255, 0.1)',
-  borderA:  'rgba(0, 255, 153, 0.3)',
+  borderA:  'rgba(251, 191, 36, 0.3)',
 
   // backward-compat aliases
   background: {
-    primary:   '#0f0e1a',
-    secondary: '#16142a',
-    tertiary:  '#1e1c30',
-    card:      'rgba(23, 21, 48, 0.6)',
-    glass:     'rgba(23, 21, 48, 0.4)',
-    console:   '#0b0a16',
-    hover:     'rgba(0, 255, 153, 0.05)',
-    active:    'rgba(0, 255, 153, 0.1)',
+    primary:   '#14100d',
+    secondary: '#1c1512',
+    tertiary:  '#241b15',
+    card:      'rgba(33, 25, 19, 0.6)',
+    glass:     'rgba(33, 25, 19, 0.4)',
+    console:   '#0f0b08',
+    hover:     'rgba(251, 191, 36, 0.05)',
+    active:    'rgba(251, 191, 36, 0.1)',
   },
   text: {
     primary:   '#ffffff',
     secondary: 'rgba(255, 255, 255, 0.6)',
     muted:     'rgba(255, 255, 255, 0.3)',
-    inverse:   '#0f0e1a',
-    link:      '#00ff99',
+    inverse:   '#14100d',
+    link:      '#fbbf24',
   },
   border: {
     default: 'rgba(255, 255, 255, 0.1)',
-    hover:   'rgba(0, 255, 153, 0.4)',
+    hover:   'rgba(251, 191, 36, 0.4)',
     light:   'rgba(255, 255, 255, 0.06)',
-    focus:   'rgba(0, 255, 153, 0.7)',
+    focus:   'rgba(251, 191, 36, 0.7)',
     subtle:  'rgba(255, 255, 255, 0.04)',
   },
   gradient: {
-    primary:   'linear-gradient(135deg, #00ff99 0%, #00cc77 100%)',
-    secondary: 'linear-gradient(135deg, #00ff99 0%, #00ffcc 100%)',
-    success:   'linear-gradient(135deg, #00ff99 0%, #00dd88 100%)',
-    warm:      'linear-gradient(135deg, #00ff99 0%, #88ffcc 100%)',
+    primary:   'linear-gradient(135deg, #fbbf24 0%, #fde68a 100%)',
+    secondary: 'linear-gradient(135deg, #f97316 0%, #fb923c 100%)',
+    cool:      'linear-gradient(135deg, #fbbf24 0%, #f97316 100%)', /* legacy name — now warm */
+    warm:      'linear-gradient(135deg, #ff8a5c 0%, #ffb894 100%)',
+    success:   'linear-gradient(135deg, #fbbf24 0%, #fde68a 100%)',
+    brand:     'linear-gradient(90deg, #fbbf24, #f97316, #ff8a5c)',
+    rainbow:   'linear-gradient(90deg, #fbbf24, #f97316, #ff8a5c)', // alias of brand
   },
-  shadow: {
+  shadow: {  // blue/purple/green names are legacy — all warm amber now
     sm:     '0 1px 4px rgba(0,0,0,0.6)',
     md:     '0 4px 20px rgba(0,0,0,0.7)',
     lg:     '0 12px 40px rgba(0,0,0,0.8)',
     xl:     '0 24px 64px rgba(0,0,0,0.85)',
-    blue:   '0 8px 24px rgba(0,255,153,0.15)',
-    purple: '0 8px 24px rgba(0,255,153,0.1)',
-    green:  '0 8px 24px rgba(0,255,153,0.15)',
-    orange: '0 8px 24px rgba(0,255,153,0.1)',
+    blue:   '0 8px 24px rgba(251,191,36,0.15)',
+    purple: '0 8px 24px rgba(251,191,36,0.1)',
+    green:  '0 8px 24px rgba(251,191,36,0.15)',
+    orange: '0 8px 24px rgba(251,191,36,0.1)',
   },
   syntax: {
-    keyword:     '#00ff99',
-    string:      'rgba(0, 255, 153, 0.6)',
+    keyword:     '#fb923c',
+    string:      '#fde68a',
     comment:     'rgba(255, 255, 255, 0.25)',
-    function:    '#62d9e8',
-    property:    '#ffbb66',
+    function:    '#fbbf24',
+    property:    '#ffb894',
     punctuation: 'rgba(255, 255, 255, 0.4)',
   },
   primary: {
-    main:  '#00ff99', light: '#44ffbb', dark: '#00cc77',
-    50:'#e6fff5',100:'#ccffea',200:'#99ffd5',300:'#66ffc0',400:'#33ffaa',
-    500:'#00ff99',600:'#00cc77',700:'#009955',800:'#006633',900:'#003311',
+    main:  '#fbbf24', light: '#fcd34d', dark: '#d97706',
+    50:'#fffbeb',100:'#fef3c7',200:'#fde68a',300:'#fcd34d',400:'#fbbf24',
+    500:'#fbbf24',600:'#d97706',700:'#b45309',800:'#92400e',900:'#451a03',
   },
   secondary: {
-    main:  '#00ff99', light: '#44ffbb', dark: '#00cc77',
-    50:'#e6fff5',100:'#ccffea',200:'#99ffd5',300:'#66ffc0',400:'#33ffaa',
-    500:'#00ff99',600:'#00cc77',700:'#009955',800:'#006633',900:'#003311',
+    main:  '#fbbf24', light: '#fcd34d', dark: '#d97706',
+    50:'#fffbeb',100:'#fef3c7',200:'#fde68a',300:'#fcd34d',400:'#fbbf24',
+    500:'#fbbf24',600:'#d97706',700:'#b45309',800:'#92400e',900:'#451a03',
   },
-  success:  { main: '#00ff99', light: '#44ffbb', dark: '#00cc77' },
+  success:  { main: '#fbbf24', light: '#fcd34d', dark: '#d97706' },
   warning:  { main: '#ffaa33', light: '#ffcc66', dark: '#dd8800' },
+};
+
+// Per-section accent palette — scroll walks amber→orange→coral→amber.
+// hex: main accent | rgb: triplet for rgba(var(--accent-rgb), α) | soft: hover/gradient end | deep: dark fill
+// 60-30-10 analogous-warm triad: amber dominant, orange secondary, coral rare highlight.
+// Warm hues (~43° / ~27° / ~18°) at comparable lightness on #14100d.
+const AMBER = { hex: '#fbbf24', rgb: '251, 191, 36',  soft: '#fde68a', deep: '#78350f' };
+const ORANGE = { hex: '#f97316', rgb: '249, 115, 22',  soft: '#fb923c', deep: '#7c2d12' };
+const CORAL = { hex: '#ff8a5c', rgb: '255, 138, 92',  soft: '#ffb894', deep: '#5c2413' };
+
+export const sectionAccents = {
+  hero:       AMBER,
+  stats:      AMBER,
+  education:  ORANGE,
+  about:      ORANGE,
+  approach:   ORANGE,
+  projects:   AMBER,
+  experience: ORANGE,
+  journey:    CORAL,
+  skills:     AMBER,
+  github:     AMBER,
+  contact:    AMBER,
+  personal:   CORAL,
+};
+
+// Drop into a section's outermost styled wrapper: ${accentVars('education')}
+// Everything inside then reads var(--accent), rgba(var(--accent-rgb), α), etc.
+export const accentVars = (name) => {
+  const a = sectionAccents[name];
+  return `
+    --accent: ${a.hex};
+    --accent-h: ${a.soft};
+    --accent-rgb: ${a.rgb};
+    --accent-soft: ${a.soft};
+    --accent-deep: ${a.deep};
+  `;
 };
 
 export const typography = {
@@ -124,4 +163,4 @@ export const breakpoints = {
   xs:'320px', sm:'640px', md:'768px', lg:'1024px', xl:'1280px', '2xl':'1536px',
 };
 
-export default { colors, typography, spacing, borderRadius, transitions, breakpoints };
+export default { colors, typography, spacing, borderRadius, transitions, breakpoints, sectionAccents };

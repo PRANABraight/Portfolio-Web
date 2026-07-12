@@ -2,8 +2,10 @@ import { useState, useRef } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { gsap, useGSAP, OK, REDUCED, countUp } from '../../lib/motion';
+import { accentVars } from '../../styles/theme';
 
 const Wrap = styled.section`
+  ${accentVars('stats')}
   padding: 4rem 1.25rem;
   @media (min-width: 640px) { padding: 4rem 2.5rem; }
   max-width: 1280px;
@@ -40,6 +42,7 @@ const StatItem = ({ item, hovered, onEnter, onLeave }) => {
 
   return (
     <div
+      className="stat-item"
       style={{ display: 'flex', alignItems: 'center', gap: '1rem', justifyContent: 'center', flex: '1 1 200px' }}
       onMouseOver={onEnter}
       onMouseLeave={onLeave}
@@ -57,7 +60,8 @@ const StatItem = ({ item, hovered, onEnter, onLeave }) => {
           style={{
             fontSize: 'clamp(3rem, 6vw, 5rem)',
             fontWeight: 800,
-            color: '#fff',
+            color: 'var(--accent)',
+            textShadow: '0 0 24px rgba(var(--accent-rgb), 0.15)',
             letterSpacing: '-0.025em',
             lineHeight: 1,
           }}
@@ -96,6 +100,16 @@ const StatsSection = ({ cmsStats }) => {
     const nums = gsap.utils.toArray(scope.current.querySelectorAll('.stat-num'));
 
     mm.add(OK, () => {
+      // Bubbly scale-pop as the stats enter
+      gsap.from(scope.current.querySelectorAll('.stat-item'), {
+        scale: 0.85,
+        y: 20,
+        autoAlpha: 0,
+        duration: 0.6,
+        ease: 'back.out(2)',
+        stagger: 0.12,
+        scrollTrigger: { trigger: scope.current, start: 'top 80%', once: true },
+      });
       nums.forEach((el, i) => {
         el.textContent = `0${el.dataset.suffix}`;
         countUp(el, Number(el.dataset.count), {

@@ -5,8 +5,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FaGraduationCap } from 'react-icons/fa';
 import { gsap, useGSAP, OK, batchReveal } from '../../lib/motion';
 import SectionTitle from '../common/SectionTitle';
+import { accentVars } from '../../styles/theme';
 
 const Wrap = styled.section`
+  ${accentVars('education')}
   padding: 6rem 1.25rem;
   @media (min-width: 640px) { padding: 6rem 2.5rem; }
   max-width: 1280px;
@@ -33,13 +35,13 @@ const CardWrap = styled.div`
   width: 100%;
 `;
 
-/* hover background (emerald like radna) */
+/* hover background — deep sky */
 const HoverBg = styled(motion.span)`
   position: absolute;
   inset: 0;
   height: 100%;
   width: 100%;
-  background: rgba(6, 78, 59, 0.8);
+  background: rgba(95, 50, 25, 0.8);
   display: block;
   border-radius: 24px;
 `;
@@ -55,9 +57,32 @@ const Card = styled.div`
   border: 1px solid rgba(255, 255, 255, 0.12);
   position: relative;
   z-index: 20;
-  transition: border-color 0.25s ease;
+  transition:
+    border-color 0.25s ease,
+    transform 0.32s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.25s ease;
 
-  &:hover { border-color: rgba(0, 255, 153, 0.6); }
+  /* diagonal sheen sweep */
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(105deg, transparent, rgba(255, 255, 255, 0.06), transparent);
+    transform: translateX(-150%) skewX(-15deg);
+    transition: transform 0.6s ease;
+    pointer-events: none;
+  }
+
+  &:hover {
+    border-color: rgba(var(--accent-rgb), 0.6);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(var(--accent-rgb), 0.12);
+
+    &::after { transform: translateX(260%) skewX(-15deg); }
+  }
 `;
 
 const CardInner = styled.div`
@@ -69,7 +94,7 @@ const CardInner = styled.div`
 const CardTitle = styled.h4`
   font-size: 0.875rem;
   font-weight: 700;
-  color: #e4e4e7;
+  color: #e7e5e4;
   letter-spacing: 0.025em;
   margin-top: 1rem;
 `;
@@ -85,7 +110,7 @@ const Gpa = styled.div`
   align-items: center;
   gap: 0.75rem;
   justify-content: flex-end;
-  color: #00ff99;
+  color: var(--accent);
   font-size: 0.875rem;
   font-weight: 700;
   margin-top: 0.5rem;
@@ -96,7 +121,7 @@ const Gpa = styled.div`
 const CardDesc = styled.p`
   margin-top: 2rem;
   font-size: 0.75rem;
-  color: #a1a1aa;
+  color: #a8a29e;
   letter-spacing: 0.025em;
   line-height: 1.625;
 `;
@@ -174,7 +199,7 @@ const EducationSection = ({ cmsEducation }) => {
     <Wrap id="education" ref={scope}>
       <SectionTitle eyebrow="// education" mb="0">
         <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.6rem', color: '#fff' }}>
-          <FaGraduationCap style={{ color: '#00ff99' }} />
+          <FaGraduationCap style={{ color: 'var(--accent)' }} />
           Education
         </span>
       </SectionTitle>

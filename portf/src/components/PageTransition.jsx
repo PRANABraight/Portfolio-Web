@@ -1,7 +1,10 @@
-// Page load transition — exact match to radnaabazar.com component 11494
-// 6 green columns sweep top→bottom, then primary overlay fades out
+// Page load transition — 6 deep-toned rainbow columns sweep top→bottom,
+// then primary overlay fades out
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect } from 'react';
+
+// Deep amber→orange→rust blend (brand triad, muted)
+const COLUMN_COLORS = ['#78350f', '#7c2d12', '#9a3412', '#b45309', '#92400e', '#5c2413'];
 
 const columnVariants = {
   initial: { top: '0%' },
@@ -27,7 +30,7 @@ const PageTransition = () => {
     <AnimatePresence>
       {show && (
         <>
-          {/* 6 green columns */}
+          {/* 6 rainbow columns */}
           <div
             style={{
               position: 'fixed', inset: 0, zIndex: 9998,
@@ -44,7 +47,7 @@ const PageTransition = () => {
                 style={{
                   height: '100%',
                   flex: 1,
-                  background: 'rgb(6, 78, 59)',
+                  background: COLUMN_COLORS[i],
                   position: 'relative',
                 }}
               />
@@ -55,7 +58,7 @@ const PageTransition = () => {
           <motion.div
             style={{
               position: 'fixed', inset: 0,
-              background: '#0f0e1a',
+              background: '#14100d',
               zIndex: 9997,
               pointerEvents: 'none',
             }}

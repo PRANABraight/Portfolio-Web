@@ -1,16 +1,19 @@
 import { createElement, useRef } from 'react';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { motion, useReducedMotion } from 'framer-motion';
 import { gsap, useGSAP, OK } from '../../lib/motion';
 import { FaGithub, FaLinkedin, FaInstagram, FaEnvelope, FaArrowRight } from 'react-icons/fa';
 import resumePDF from '../../assets/Pranab_Rai_da (1).pdf';
 import profImg from '../../assets/prof.webp';
 import Spotlight from '../Spotlight';
+import FloatingOrbs from '../common/FloatingOrbs';
+import { accentVars } from '../../styles/theme';
 import { getIcon } from '../../lib/iconMap';
 import { urlFor } from '../../lib/sanity';
 
 /* ── layout ── */
 const Section = styled.section`
+  ${accentVars('hero')}
   min-height: calc(100vh - var(--nav-height));
   display: flex;
   align-items: center;
@@ -22,6 +25,8 @@ const Section = styled.section`
 `;
 
 const Inner = styled.div`
+  position: relative;
+  z-index: 1;
   max-width: 1280px;
   width: 100%;
   display: flex;
@@ -69,8 +74,13 @@ const NameHeading = styled.h1`
   @media (max-width: 480px)  { font-size: 32px; }
 `;
 
+const shimmer = keyframes`
+  0%   { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+`;
+
 const AccentName = styled.span`
-  color: #00ff99;
+  color: var(--accent);
   position: relative;
   display: inline-block;
   overflow: hidden;
@@ -81,12 +91,19 @@ const AccentName = styled.span`
     z-index: 1;
     transition: color 0.5s ease;
     display: inline-block;
+    /* subtle amber shimmer looping across the name */
+    background: linear-gradient(90deg, #fbbf24, #fde68a, #fbbf24);
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: ${shimmer} 6s linear infinite;
   }
 
   .bg-slide {
     position: absolute;
     inset: 0;
-    background: #00ff99;
+    background: var(--accent);
     transform: scaleX(0);
     transform-origin: left;
     transition: transform 0.5s ease;
@@ -94,7 +111,12 @@ const AccentName = styled.span`
   }
 
   &:hover .bg-slide { transform: scaleX(1); }
-  &:hover .text { color: #0f0e1a; }
+  &:hover .text {
+    color: #14100d;
+    background: none;
+    -webkit-text-fill-color: #14100d;
+    animation: none;
+  }
 `;
 
 const Description = styled.p`
@@ -128,9 +150,9 @@ const OutlineBtn = styled(motion.a)`
   gap: 0.5rem;
   height: 56px;
   padding: 0 2rem;
-  border: 1px solid #00ff99;
+  border: 1px solid var(--accent);
   border-radius: 9999px;
-  color: #00ff99;
+  color: var(--accent);
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.875rem;
   font-weight: 600;
@@ -141,7 +163,11 @@ const OutlineBtn = styled(motion.a)`
   width: 100%;
   max-width: 220px;
 
-  &:hover { background: #00ff99; color: #0f0e1a; }
+  &:hover {
+    background: var(--accent);
+    color: #14100d;
+    box-shadow: 0 8px 32px rgba(var(--accent-rgb), 0.3);
+  }
   @media (min-width: 1280px) { width: auto; }
 `;
 
@@ -154,15 +180,19 @@ const Socials = styled.div`
 
 const SIcon = styled(motion.a)`
   width: 36px; height: 36px;
-  border: 1px solid #00ff99;
+  border: 1px solid var(--accent);
   border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
-  color: #00ff99;
+  color: var(--accent);
   font-size: 0.875rem;
   text-decoration: none;
   transition: all 0.5s ease;
 
-  &:hover { background: #00ff99; color: #0f0e1a; }
+  &:hover {
+    background: var(--accent);
+    color: #14100d;
+    box-shadow: 0 4px 16px rgba(var(--accent-rgb), 0.35);
+  }
 `;
 
 /* ── RIGHT: photo ── */
@@ -186,14 +216,14 @@ const PhotoButton = styled(motion.button)`
   align-items: center;
   justify-content: center;
 
-  &:focus-visible { outline: 2px solid #00ff99; outline-offset: 8px; }
+  &:focus-visible { outline: 2px solid var(--accent); outline-offset: 8px; }
 `;
 
 const PhotoInner = styled.div`
   width: 298px; height: 298px;
   border-radius: 50%;
   padding: 3px;
-  box-shadow: 0 8px 24px rgba(0,255,153,0.25);
+  box-shadow: 0 8px 24px rgba(var(--accent-rgb),0.25);
   position: relative;
   z-index: 1;
 
@@ -291,6 +321,8 @@ const HeroSection = ({ cmsHero }) => {
   return (
     <Section id="home" ref={scope}>
       <Spotlight className="hero-spotlight" />
+      {/* amber orbs + one orange, foreshadowing the next section hue */}
+      <FloatingOrbs count={3} rgbs={[null, '249, 115, 22']} />
       <Inner>
         {/* ── Text ── */}
         <TextSide>
@@ -314,7 +346,9 @@ const HeroSection = ({ cmsHero }) => {
               download="Pranab_Rai_Resume.pdf"
               target={cmsHero?.resumeUrl ? '_blank' : undefined}
               rel="noopener noreferrer"
+              whileHover={{ scale: 1.04 }}
               whileTap={{ scale: 0.97 }}
+              transition={{ type: 'spring', stiffness: 320, damping: 18 }}
             >
               View CV <FaArrowRight size={12} />
             </OutlineBtn>
@@ -327,7 +361,9 @@ const HeroSection = ({ cmsHero }) => {
                   target={s.href?.startsWith('http') ? '_blank' : undefined}
                   rel="noopener noreferrer"
                   aria-label={s.label}
+                  whileHover={{ scale: 1.15, rotate: 8 }}
                   whileTap={{ scale: 0.92 }}
+                  transition={{ type: 'spring', stiffness: 380, damping: 15 }}
                 >
                   {s.icon}
                 </SIcon>
@@ -369,7 +405,7 @@ const HeroSection = ({ cmsHero }) => {
             >
               <motion.circle
                 cx="253" cy="253" r="250"
-                stroke="#00ff99"
+                stroke="var(--accent)"
                 strokeWidth="4"
                 strokeLinecap="round"
                 strokeLinejoin="round"

@@ -4,11 +4,13 @@ import styled, { keyframes } from 'styled-components';
 import { gsap, useGSAP, OK, revealUp } from '../../lib/motion';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaGithub, FaLinkedin, FaInstagram, FaEnvelope, FaArrowRight } from 'react-icons/fa';
-import { colors, typography, borderRadius, transitions } from '../../styles/theme';
+import { colors, typography, borderRadius, transitions, accentVars } from '../../styles/theme';
+import FloatingOrbs from '../common/FloatingOrbs';
 
 const spinConic = keyframes`from{transform:rotate(0deg)}to{transform:rotate(360deg)}`;
 
 const Wrap = styled.section`
+  ${accentVars('contact')}
   position: relative;
   overflow: hidden;
   width: 100%;
@@ -61,7 +63,7 @@ const Heading = styled.h1`
   min-width: 280px;
   line-height: 1.15;
 
-  span { color: ${colors.accent}; }
+  span { color: var(--accent); }
 
   @media (max-width: 768px) { max-width: 90vw; }
 `;
@@ -110,7 +112,7 @@ const inputStyles = `
   transition: border-color ${transitions.base};
 
   &::placeholder { color: ${colors.text3}; }
-  &:focus { border-color: ${colors.border.focus}; }
+  &:focus { border-color: rgba(var(--accent-rgb), 0.7); }
 `;
 
 const Input = styled.input`${inputStyles}`;
@@ -135,7 +137,7 @@ const StatusMsg = styled(motion.p)`
   font-size: 0.8125rem;
   text-align: center;
   margin: 0;
-  color: ${p => (p.$error ? colors.warning.main : colors.accent)};
+  color: ${p => (p.$error ? colors.warning.main : 'var(--accent)')};
 `;
 
 /* Shiny animated button (exact from source component 24750) */
@@ -153,7 +155,9 @@ const ShinyBtn = styled(motion.button)`
   cursor: pointer;
   justify-self: center;
   margin: 0 auto;
+  transition: box-shadow 0.3s ease;
 
+  &:hover:not(:disabled) { box-shadow: 0 8px 32px rgba(var(--accent-rgb), 0.25); }
   &:disabled { opacity: 0.6; cursor: not-allowed; }
 `;
 
@@ -161,7 +165,7 @@ const Spinner = styled.span`
   position: absolute;
   inset: -1000%;
   animation: ${spinConic} 2s linear infinite;
-  background: conic-gradient(from 90deg at 50% 50%, #ccffea 0%, #009955 50%, #ccffea 100%);
+  background: conic-gradient(from 90deg at 50% 50%, #fef3c7 0%, #b45309 50%, #fef3c7 100%);
 `;
 
 const ShinyLabel = styled.span`
@@ -197,9 +201,9 @@ const PersonalBtn = styled(motion.button)`
   height: 44px;
   padding: 0 1.5rem;
   border-radius: 9999px;
-  border: 1px solid ${colors.accent};
+  border: 1px solid var(--accent);
   background: transparent;
-  color: ${colors.accent};
+  color: var(--accent);
   font-family: ${typography.fontFamily.mono};
   font-size: 0.875rem;
   font-weight: 600;
@@ -207,7 +211,7 @@ const PersonalBtn = styled(motion.button)`
   transition: all 0.2s ease;
   margin-top: 1rem;
 
-  &:hover { background: ${colors.accent}; color: ${colors.bg}; border-color: ${colors.accent}; }
+  &:hover { background: var(--accent); color: ${colors.bg}; border-color: var(--accent); }
 `;
 
 /* Bottom row */
@@ -237,17 +241,17 @@ const SocialRow = styled.div`
 
 const SocialBtn = styled(motion.a)`
   width: 36px; height: 36px;
-  border: 1px solid ${colors.accent};
+  border: 1px solid var(--accent);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: ${colors.accent};
+  color: var(--accent);
   font-size: 0.875rem;
   text-decoration: none;
   transition: all 0.5s ease;
 
-  &:hover { background: ${colors.accent}; color: ${colors.bg}; }
+  &:hover { background: var(--accent); color: ${colors.bg}; }
 `;
 
 const SOCIALS = [
@@ -307,6 +311,7 @@ const ContactSection = ({ setMode }) => {
   return (
     <Wrap id="contact" ref={scope}>
       <FooterBg />
+      <FloatingOrbs count={3} rgbs={[null, '249, 115, 22']} />
       <Inner>
         <CtaBlock>
           <Heading className="contact-heading">

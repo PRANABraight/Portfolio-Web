@@ -3,7 +3,7 @@ import styled, { keyframes } from 'styled-components';
 import { motion } from 'framer-motion';
 import { FaGithub, FaExternalLinkAlt } from 'react-icons/fa';
 import { LuStar } from 'react-icons/lu';
-import { colors, typography } from '../../styles/theme';
+import { colors, typography, accentVars } from '../../styles/theme';
 import { gsap, useGSAP, OK, REDUCED, revealUp, countUp } from '../../lib/motion';
 import SectionTitle from '../common/SectionTitle';
 
@@ -20,6 +20,7 @@ const LANG_COLORS = {
 };
 
 const Wrap = styled.section`
+  ${accentVars('github')}
   padding: 3rem 1.25rem;
   @media (min-width: 640px) { padding: 3rem 2.5rem; }
   max-width: 760px;
@@ -36,7 +37,7 @@ const GhLink = styled.a`
   align-items: center;
   gap: 0.375rem;
   font-size: 0.75rem;
-  color: rgb(163,163,163);
+  color: rgb(168,162,158);
   margin-top: 0.75rem;
   text-decoration: none;
   transition: color 0.2s ease;
@@ -54,7 +55,7 @@ const Card = styled(motion.div)`
   gap: 1.4rem;
   transition: border-color 0.25s ease;
 
-  &:hover { border-color: rgba(0,255,153,0.2); }
+  &:hover { border-color: rgba(var(--accent-rgb), 0.2); }
 `;
 
 const StatGrid = styled.div`
@@ -156,7 +157,7 @@ const FallbackCard = styled.a`
 
   svg { font-size: 1.5rem; color: ${colors.accent}; }
 
-  &:hover { border-color: rgba(0,255,153,0.25); color: ${colors.text.primary}; }
+  &:hover { border-color: rgba(var(--accent-rgb), 0.25); color: ${colors.text.primary}; }
 `;
 
 const fetchStats = async () => {
