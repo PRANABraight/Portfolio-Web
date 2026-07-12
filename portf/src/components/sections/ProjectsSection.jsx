@@ -100,8 +100,9 @@ const Status = styled.span`
   font-size: 0.7rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: ${p => p.$ongoing ? '#ff8a5c' : '#fbbf24'};
-  border: 1px solid ${p => p.$ongoing ? 'rgba(255,138,92,0.3)' : 'rgba(251,191,36,0.3)'};
+  /* active work earns the accent; shipped work rests neutral */
+  color: ${p => p.$ongoing ? '#fbbf24' : 'rgba(255,255,255,0.5)'};
+  border: 1px solid ${p => p.$ongoing ? 'rgba(251,191,36,0.3)' : 'rgba(255,255,255,0.15)'};
   border-radius: 9999px;
   padding: 0.2rem 0.6rem;
   margin-bottom: 0.75rem;

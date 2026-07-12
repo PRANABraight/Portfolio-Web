@@ -64,7 +64,7 @@ const MovingBorderInner = styled.div`
   font-size: 0.875rem;
 `;
 
-const MovingDot = ({ duration = 2000, rx = '30%', ry = '30%', color = '#fb923c' }) => {
+const MovingDot = ({ duration = 2000, rx = '30%', ry = '30%', color = '#fbbf24' }) => {
   const pathRef = useRef(null);
   const progress = useMotionValue(0);
 
@@ -195,7 +195,7 @@ const CardWrap = styled(motion.div)`
 `;
 
 /* Cycling dot colors for the moving-border cards */
-const DOT_COLORS = ['#fb923c', '#fbbf24', '#ff8a5c'];
+const DOT_COLORS = ['#fbbf24', 'rgba(255,255,255,0.7)', '#fde68a'];
 
 const cardHover = {
   whileHover: { scale: 1.02 },

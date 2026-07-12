@@ -1,13 +1,14 @@
-// Background — exact match to radnaabazar.com
-// #14100d base + bg-grid-white/[0.03] + radial vignette mask
+// Background — neutral charcoal base + grid + aurora ribbons + vignette + grain.
+// A faint gold ribbon drifts through the upper sky, a warm-white one through
+// the lower depths — animated light, single accent, nothing loud.
 import { memo } from 'react';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 
 const Wrap = styled.div`
   position: fixed;
   inset: 0;
   z-index: -1;
-  background: #14100d;
+  background: #0e0e10;
   overflow: hidden;
 `;
 
@@ -23,13 +24,55 @@ const Grid = styled.div`
   -webkit-mask-image: radial-gradient(ellipse 85% 75% at 50% 42%, black 35%, transparent 100%);
 `;
 
-/* Ultra-faint fixed color washes so the dark bg reads richer without competing */
-const Wash = styled.div`
+/* Aurora ribbons — oversized skewed bands, blurred into soft light, drifting on
+   transform-only keyframes (GPU-cheap). Counter-phased durations so the two
+   never sync. The global reduced-motion rule in index.css freezes them; the 0%
+   pose is composed to read as static washes. */
+const warmDrift = keyframes`
+  0%   { transform: translate3d(-12%, -4%, 0) rotate(-14deg) scaleY(1); }
+  50%  { transform: translate3d(10%, 3%, 0) rotate(-11deg) scaleY(1.15); }
+  100% { transform: translate3d(-12%, -4%, 0) rotate(-14deg) scaleY(1); }
+`;
+const coolDrift = keyframes`
+  0%   { transform: translate3d(10%, 4%, 0) rotate(12deg) scaleY(1.1); }
+  50%  { transform: translate3d(-12%, -3%, 0) rotate(15deg) scaleY(1); }
+  100% { transform: translate3d(10%, 4%, 0) rotate(12deg) scaleY(1.1); }
+`;
+
+const Ribbon = styled.div`
   position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(900px 700px at 12% 8%, rgba(251, 146, 60, 0.03), transparent 70%),
-    radial-gradient(900px 700px at 88% 92%, rgba(251, 191, 36, 0.03), transparent 70%);
+  left: -25%;
+  width: 150%;
+  height: 42%;
+  filter: blur(90px);
+  will-change: transform;
+  pointer-events: none;
+`;
+
+/* Gold — upper sky */
+const WarmRibbon = styled(Ribbon)`
+  top: -6%;
+  background: linear-gradient(
+    100deg,
+    transparent 22%,
+    rgba(251, 191, 36, 0.06) 42%,
+    rgba(253, 230, 138, 0.04) 58%,
+    transparent 78%
+  );
+  animation: ${warmDrift} 60s ease-in-out infinite;
+`;
+
+/* Warm white — lower depths */
+const CoolRibbon = styled(Ribbon)`
+  bottom: -8%;
+  background: linear-gradient(
+    80deg,
+    transparent 22%,
+    rgba(255, 255, 255, 0.035) 44%,
+    rgba(253, 230, 138, 0.02) 60%,
+    transparent 78%
+  );
+  animation: ${coolDrift} 75s ease-in-out infinite;
 `;
 
 /* Ambient light behind the content column, tinted by the section in view.
@@ -45,11 +88,11 @@ const AccentWash = styled.div`
   );
 `;
 
-/* mask-image: radial-gradient(ellipse at center, transparent 20%, black) — exact from radna */
+/* mask-image: radial-gradient(ellipse at center, transparent 20%, black) */
 const Vignette = styled.div`
   position: absolute;
   inset: 0;
-  background: #14100d;
+  background: #0e0e10;
   pointer-events: none;
   mask-image: radial-gradient(ellipse at center, transparent 20%, black);
   -webkit-mask-image: radial-gradient(ellipse at center, transparent 20%, black);
@@ -71,7 +114,8 @@ const Grain = styled.div`
 const Background = memo(() => (
   <Wrap>
     <Grid />
-    <Wash />
+    <WarmRibbon />
+    <CoolRibbon />
     <AccentWash />
     <Vignette />
     <Grain />

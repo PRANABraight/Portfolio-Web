@@ -1,38 +1,39 @@
-// Radnaabazar-inspired design system — warm edition
-// BG: #14100d | Accent: #fbbf24 | Font: JetBrains Mono
+// Neutral premium design system — single gold accent on neutral charcoal
+// BG: #0e0e10 | Accent: #fbbf24 gold (the only hue on the page)
+// 60-30-10: neutral charcoal / white-opacity ladder / gold on action & identity only.
 
 export const colors = {
-  bg:       '#14100d',
-  bg2:      '#1c1512',
-  // Surface ladder — same warm brown-black hue as bg, stepped by value only
-  surface0: '#0f0b08',
-  surface1: '#211913',
-  surface2: '#1d1611',
-  bgCard:   'rgba(33, 25, 19, 0.6)',
+  bg:       '#0e0e10',
+  bg2:      '#131316',
+  // Surface ladder — one neutral charcoal hue, stepped by value only
+  surface0: '#09090b',
+  surface1: '#17171b',
+  surface2: '#121215',
+  bgCard:   'rgba(23, 23, 27, 0.6)',
   accent:   '#fbbf24',
   accentH:  '#f59e0b',
   text:     '#ffffff',
   text2:    'rgba(255, 255, 255, 0.6)',
-  text3:    'rgba(255, 255, 255, 0.3)',
+  text3:    'rgba(255, 255, 255, 0.35)',
   border:   'rgba(255, 255, 255, 0.1)',
   borderA:  'rgba(251, 191, 36, 0.3)',
 
   // backward-compat aliases
   background: {
-    primary:   '#14100d',
-    secondary: '#1c1512',
-    tertiary:  '#241b15',
-    card:      'rgba(33, 25, 19, 0.6)',
-    glass:     'rgba(33, 25, 19, 0.4)',
-    console:   '#0f0b08',
+    primary:   '#0e0e10',
+    secondary: '#131316',
+    tertiary:  '#1a1a1f',
+    card:      'rgba(23, 23, 27, 0.6)',
+    glass:     'rgba(23, 23, 27, 0.4)',
+    console:   '#09090b',
     hover:     'rgba(251, 191, 36, 0.05)',
     active:    'rgba(251, 191, 36, 0.1)',
   },
   text: {
     primary:   '#ffffff',
     secondary: 'rgba(255, 255, 255, 0.6)',
-    muted:     'rgba(255, 255, 255, 0.3)',
-    inverse:   '#14100d',
+    muted:     'rgba(255, 255, 255, 0.35)',
+    inverse:   '#0e0e10',
     link:      '#fbbf24',
   },
   border: {
@@ -43,30 +44,33 @@ export const colors = {
     subtle:  'rgba(255, 255, 255, 0.04)',
   },
   gradient: {
+    // Single-hue only — gold sheens and neutral fades, no rainbows
     primary:   'linear-gradient(135deg, #fbbf24 0%, #fde68a 100%)',
-    secondary: 'linear-gradient(135deg, #f97316 0%, #fb923c 100%)',
-    cool:      'linear-gradient(135deg, #fbbf24 0%, #f97316 100%)', /* legacy name — now warm */
-    warm:      'linear-gradient(135deg, #ff8a5c 0%, #ffb894 100%)',
+    secondary: 'linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.6) 100%)',
+    cool:      'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)',
+    warm:      'linear-gradient(135deg, #fbbf24 0%, #fde68a 100%)',
     success:   'linear-gradient(135deg, #fbbf24 0%, #fde68a 100%)',
-    brand:     'linear-gradient(90deg, #fbbf24, #f97316, #ff8a5c)',
-    rainbow:   'linear-gradient(90deg, #fbbf24, #f97316, #ff8a5c)', // alias of brand
+    brand:     'linear-gradient(90deg, #fbbf24, #fde68a, #fbbf24)', // metal sheen
+    rainbow:   'linear-gradient(90deg, #fbbf24, #fde68a, #fbbf24)', // alias of brand
   },
-  shadow: {  // blue/purple/green names are legacy — all warm amber now
-    sm:     '0 1px 4px rgba(0,0,0,0.6)',
-    md:     '0 4px 20px rgba(0,0,0,0.7)',
-    lg:     '0 12px 40px rgba(0,0,0,0.8)',
-    xl:     '0 24px 64px rgba(0,0,0,0.85)',
-    blue:   '0 8px 24px rgba(251,191,36,0.15)',
-    purple: '0 8px 24px rgba(251,191,36,0.1)',
-    green:  '0 8px 24px rgba(251,191,36,0.15)',
-    orange: '0 8px 24px rgba(251,191,36,0.1)',
+  shadow: {
+    // Neutral depth + hairline light ring; gold reserved for glow variants
+    sm:     '0 1px 4px rgba(0,0,0,0.5)',
+    md:     '0 4px 20px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.03)',
+    lg:     '0 12px 40px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04)',
+    xl:     '0 24px 64px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.04)',
+    blue:   '0 8px 24px rgba(251,191,36,0.12)',
+    purple: '0 8px 24px rgba(251,191,36,0.12)',
+    green:  '0 8px 24px rgba(251,191,36,0.12)',
+    orange: '0 8px 24px rgba(251,191,36,0.15)',
   },
   syntax: {
-    keyword:     '#fb923c',
+    // Gold-on-graphite editor: gold marks the language, neutrals carry the rest
+    keyword:     '#fbbf24',
     string:      '#fde68a',
     comment:     'rgba(255, 255, 255, 0.25)',
-    function:    '#fbbf24',
-    property:    '#ffb894',
+    function:    'rgba(255, 255, 255, 0.85)',
+    property:    'rgba(255, 255, 255, 0.6)',
     punctuation: 'rgba(255, 255, 255, 0.4)',
   },
   primary: {
@@ -80,30 +84,28 @@ export const colors = {
     500:'#fbbf24',600:'#d97706',700:'#b45309',800:'#92400e',900:'#451a03',
   },
   success:  { main: '#fbbf24', light: '#fcd34d', dark: '#d97706' },
-  warning:  { main: '#ffaa33', light: '#ffcc66', dark: '#dd8800' },
+  warning:  { main: '#fbbf24', light: '#fde68a', dark: '#d97706' },
 };
 
-// Per-section accent palette — scroll walks amber→orange→coral→amber.
-// hex: main accent | rgb: triplet for rgba(var(--accent-rgb), α) | soft: hover/gradient end | deep: dark fill
-// 60-30-10 analogous-warm triad: amber dominant, orange secondary, coral rare highlight.
-// Warm hues (~43° / ~27° / ~18°) at comparable lightness on #14100d.
-const AMBER = { hex: '#fbbf24', rgb: '251, 191, 36',  soft: '#fde68a', deep: '#78350f' };
-const ORANGE = { hex: '#f97316', rgb: '249, 115, 22',  soft: '#fb923c', deep: '#7c2d12' };
-const CORAL = { hex: '#ff8a5c', rgb: '255, 138, 92',  soft: '#ffb894', deep: '#5c2413' };
+// Single-accent decision: one gold across every section. The accentVars()/
+// --site-accent machinery stays wired (sections keep their hooks), it just
+// resolves to the same hue everywhere — restraint reads premium, and a future
+// re-walk only means editing this map.
+const GOLD = { hex: '#fbbf24', rgb: '251, 191, 36', soft: '#fde68a', deep: '#78350f' };
 
 export const sectionAccents = {
-  hero:       AMBER,
-  stats:      AMBER,
-  education:  ORANGE,
-  about:      ORANGE,
-  approach:   ORANGE,
-  projects:   AMBER,
-  experience: ORANGE,
-  journey:    CORAL,
-  skills:     AMBER,
-  github:     AMBER,
-  contact:    AMBER,
-  personal:   CORAL,
+  hero:       GOLD,
+  stats:      GOLD,
+  education:  GOLD,
+  about:      GOLD,
+  approach:   GOLD,
+  projects:   GOLD,
+  experience: GOLD,
+  journey:    GOLD,
+  skills:     GOLD,
+  github:     GOLD,
+  contact:    GOLD,
+  personal:   GOLD,
 };
 
 // Drop into a section's outermost styled wrapper: ${accentVars('education')}

@@ -58,7 +58,7 @@ const NicknameText = styled.div`
 `;
 
 const AccentWord = styled.span`
-  color: #ff8a5c;
+  color: #fbbf24;
   font-weight: 700;
 `;
 
@@ -418,7 +418,7 @@ const MusicDisc = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #2e211a, #1c1512);
+  background: linear-gradient(135deg, #1e1e23, #131316);
   color: ${colors.accent};
   font-size: 3.5rem;
 `;
@@ -461,7 +461,7 @@ const MusicControls = styled.div`
     width: 48px; height: 48px;
     border-radius: 50%;
     background: #1db954;
-    color: #14100d;
+    color: #0e0e10;
     font-size: 1rem;
     display: flex;
     align-items: center;
@@ -499,7 +499,7 @@ const ThankWrap = styled.div`
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  background: linear-gradient(to bottom, #14100d, #1a1410);
+  background: linear-gradient(to bottom, #0e0e10, #141414);
 `;
 
 const Beam = styled.div`
@@ -509,7 +509,7 @@ const Beam = styled.div`
   width: 1px;
   height: 56px;
   border-radius: 9999px;
-  background: linear-gradient(to bottom, #ff8a5c, rgba(255,138,92,0.5), transparent);
+  background: linear-gradient(to bottom, #fbbf24, rgba(251,191,36,0.5), transparent);
   animation: ${beamFall} ${p => p.$dur}s linear infinite;
   animation-delay: ${p => p.$delay}s;
   opacity: 0;
@@ -534,7 +534,7 @@ const ThankTitle = styled.h2`
 const ThankYou = styled.div`
   font-size: clamp(1.5rem, 4vw, 3.5rem);
   font-weight: 700;
-  background: linear-gradient(to right, #f59e0b, #fb923c, #ff8a5c);
+  background: linear-gradient(to right, #fbbf24, #fde68a, #fbbf24);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -781,7 +781,7 @@ const PersonalSection = ({ cmsPersonal }) => {
                 <CellImg src={imgSrc} alt={h.title} loading="lazy" />
                 <CellScrim />
                 <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', padding: '2rem', zIndex: 1 }}>
-                  <span style={{ fontSize: '2rem', marginBottom: '0.75rem', color: '#ff8a5c', display: 'inline-flex' }}>{h.icon}</span>
+                  <span style={{ fontSize: '2rem', marginBottom: '0.75rem', color: '#fbbf24', display: 'inline-flex' }}>{h.icon}</span>
                   <CellTitle>{h.title}</CellTitle>
                   <CellDesc>{h.desc}</CellDesc>
                 </div>

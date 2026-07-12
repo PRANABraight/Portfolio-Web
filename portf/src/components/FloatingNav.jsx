@@ -143,7 +143,7 @@ const FloatingNav = ({ mode, setMode }) => {
           >
             {[
               { key: 'professional', label: 'Professional' },              // follows scroll accent
-              { key: 'personal',     label: 'Personal', tint: '#ff8a5c' }, // coral "fun mode"
+              { key: 'personal',     label: 'Personal', tint: '#fde68a' }, // pale gold "fun mode"
             ].map(tab => {
               const isActive = mode === tab.key;
               return (

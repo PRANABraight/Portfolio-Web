@@ -116,12 +116,12 @@ const CLine = styled.div`
   white-space: pre-wrap;
   line-height: 1.8;
 
-  /* triad editor theme: orange keywords, amber strings/fns, coral props */
-  .kw   { color: #fb923c; font-weight: 600; }
+  /* gold-on-graphite editor: gold marks the language, neutrals carry the rest */
+  .kw   { color: #fbbf24; font-weight: 600; }
   .str  { color: #fde68a; }
   .cmt  { color: rgba(255,255,255,0.2); font-style: italic; }
-  .fn   { color: #fbbf24; }
-  .prop { color: #ffb894; }
+  .fn   { color: rgba(255,255,255,0.85); }
+  .prop { color: rgba(255,255,255,0.6); }
   .pun  { color: rgba(255,255,255,0.3); }
 `;
 
@@ -276,7 +276,7 @@ const AboutSection = ({ cmsAbout }) => {
           <Cards>
             {cards.map((c, i) => (
               <Card key={c.title} className="about-card">
-                <CIcon $c={['#fb923c', '#fbbf24', '#ff8a5c', '#fdba74'][i % 4]}>{c.icon}</CIcon>
+                <CIcon $c={['#fbbf24', 'rgba(255,255,255,0.75)', '#fde68a', 'rgba(255,255,255,0.75)'][i % 4]}>{c.icon}</CIcon>
                 <CBody>
                   <h3>{c.title}</h3>
                   <p>{c.text}</p>

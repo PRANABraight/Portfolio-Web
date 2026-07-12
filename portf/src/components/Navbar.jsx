@@ -85,7 +85,7 @@ const Drawer = styled(motion.div)`
   right: 0;
   width: 75%;
   max-width: 320px;
-  background: #14100d;
+  background: #0e0e10;
   z-index: 300;
   display: flex;
   flex-direction: column;
@@ -96,7 +96,7 @@ const Drawer = styled(motion.div)`
 const DrawerOverlay = styled(motion.div)`
   position: fixed;
   inset: 0;
-  background: #14100d;
+  background: #0e0e10;
   z-index: 299;
 `;
 

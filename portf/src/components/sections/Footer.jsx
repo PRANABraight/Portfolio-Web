@@ -18,7 +18,7 @@ const El = styled.footer`
     left: 0;
     right: 0;
     height: 2px;
-    background: linear-gradient(90deg, #fbbf24, #f97316, #ff8a5c, #fbbf24);
+    background: linear-gradient(90deg, transparent, #fbbf24, #fde68a, #fbbf24, transparent);
     background-size: 200% 100%;
     animation: ${rainbowSlide} 12s linear infinite;
   }
@@ -71,9 +71,7 @@ const Links = styled.nav`
     }
   }
 
-  a:nth-child(1):hover { color: #fbbf24; }
-  a:nth-child(2):hover { color: #f97316; }
-  button:hover { color: #f97316; }
+  a:hover, button:hover { color: #fbbf24; }
 
   @media (prefers-reduced-motion: reduce) {
     a, button {

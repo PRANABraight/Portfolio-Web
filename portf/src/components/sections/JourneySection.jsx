@@ -45,7 +45,7 @@ const Track = styled.div`
 const Progress = styled.div`
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, #fbbf24, #ff8a5c);
+  background: linear-gradient(180deg, #fbbf24, rgba(251,191,36,0.25));
   box-shadow: 0 0 8px rgba(251, 191, 36, 0.5);
   transform-origin: top;
 `;
@@ -80,7 +80,7 @@ const Dot = styled.div`
   top: 0.4rem;
   width: 10px; height: 10px;
   border-radius: 50%;
-  background: #14100d;
+  background: #0e0e10;
   border: 2px solid rgba(var(--accent-rgb), 0.35);
   transform: translateX(-50%);
   transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
@@ -110,11 +110,12 @@ const Year = styled.div`
   color: var(--accent);
 `;
 
+/* Single-accent discipline: wins earn gold, everything else stays neutral */
 const TYPE_COLORS = {
-  achievement:   { bg: 'rgba(255,138,92,0.12)',  text: '#ff8a5c' },
-  publication:   { bg: 'rgba(253,186,116,0.10)', text: '#fdba74' },
-  certification: { bg: 'rgba(251,191,36,0.12)',   text: '#fbbf24' },
-  leadership:    { bg: 'rgba(251,146,60,0.10)', text: '#fb923c' },
+  achievement:   { bg: 'rgba(251,191,36,0.12)',  text: '#fbbf24' },
+  publication:   { bg: 'rgba(255,255,255,0.07)', text: 'rgba(255,255,255,0.75)' },
+  certification: { bg: 'rgba(255,255,255,0.07)', text: 'rgba(255,255,255,0.75)' },
+  leadership:    { bg: 'rgba(255,255,255,0.07)', text: 'rgba(255,255,255,0.75)' },
   milestone:     { bg: 'rgba(168,162,158,0.1)',  text: '#a8a29e' },
 };
 

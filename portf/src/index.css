@@ -1,13 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Space+Grotesk:wght@400..700&display=swap');
 
 :root {
-  --bg:       #14100d;
-  --bg-2:     #1c1512;
-  /* Surface ladder — one warm brown-black hue, stepped by value only */
-  --surface-0: #0f0b08;              /* recessed: code wells, image slots */
-  --surface-1: #211913;              /* cards */
-  --surface-2: #1d1611;              /* raised chrome: bars, chips */
-  --bg-card:  rgba(33, 25, 19, 0.6);
+  --bg:       #0e0e10;
+  --bg-2:     #131316;
+  /* Surface ladder — one neutral charcoal hue, stepped by value only */
+  --surface-0: #09090b;              /* recessed: code wells, image slots */
+  --surface-1: #17171b;              /* cards */
+  --surface-2: #121215;              /* raised chrome: bars, chips */
+  --bg-card:  rgba(23, 23, 27, 0.6);
   --accent:   #fbbf24;
   --accent-h: #f59e0b;
   /* Per-section accent system — sections override these via accentVars() (theme.js) */
@@ -19,7 +19,7 @@
   --site-accent-rgb: 251, 191, 36;
   --text:     #ffffff;
   --text-2:   rgba(255, 255, 255, 0.6);
-  --text-3:   rgba(255, 255, 255, 0.3);
+  --text-3:   rgba(255, 255, 255, 0.35);
   --border:   rgba(255, 255, 255, 0.1);
   --border-a: rgba(251, 191, 36, 0.3);
   /* Static header height: 2rem×2 padding + 2.25rem logo × line-height 2 */
@@ -89,7 +89,8 @@ button { font-family: 'JetBrains Mono', monospace; cursor: pointer; }
 
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: var(--bg); }
-::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 2px; }
+/* Scrollbar rides --site-accent so it hue-shifts with the section in view */
+::-webkit-scrollbar-thumb { background: var(--site-accent); border-radius: 2px; }
 
 /* var() resolves against the selected element's cascade — selection tint shifts per section */
 ::selection { background: rgba(var(--accent-rgb), 0.22); color: white; }

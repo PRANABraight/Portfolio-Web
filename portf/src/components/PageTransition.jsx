@@ -58,7 +58,7 @@ const PageTransition = () => {
           <motion.div
             style={{
               position: 'fixed', inset: 0,
-              background: '#14100d',
+              background: '#0e0e10',
               zIndex: 9997,
               pointerEvents: 'none',
             }}

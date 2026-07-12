@@ -243,7 +243,7 @@ const ActionButton = styled(motion.a)`
 
   ${props => props.$primary ? `
     background: var(--accent);
-    color: #14100d;
+    color: #0e0e10;
     border: 2px solid var(--accent);
     box-shadow: 0 4px 16px rgba(var(--accent-rgb), 0.25);
     font-weight: 700;
@@ -251,7 +251,7 @@ const ActionButton = styled(motion.a)`
     &:hover {
       opacity: 0.88;
       transform: translateY(-2px);
-      color: #14100d;
+      color: #0e0e10;
     }
   ` : `
     background: transparent;

@@ -36,7 +36,7 @@ const Wrap = styled.div`
   width: 100%;
   height: 400px;
   overflow: hidden;
-  background: linear-gradient(40deg, #1c1512, #14100d);
+  background: linear-gradient(40deg, #131316, #0e0e10);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -61,21 +61,21 @@ const BlobBase = styled.div`
 `;
 
 const Blob1 = styled(BlobBase)`
-  background: radial-gradient(circle at center, rgba(251,146,60,0.55) 0%, rgba(251,146,60,0) 50%);
+  background: radial-gradient(circle at center, rgba(251,191,36,0.5) 0%, rgba(251,191,36,0) 50%);
   animation: ${moveFirst} 8s ease infinite;
 `;
 const Blob2 = styled(BlobBase)`
-  background: radial-gradient(circle at center, rgba(251,191,36,0.45) 0%, rgba(251,191,36,0) 50%);
+  background: radial-gradient(circle at center, rgba(253,230,138,0.35) 0%, rgba(253,230,138,0) 50%);
   animation: ${moveSecond} 10s ease infinite;
   transform-origin: calc(50% - 400px);
 `;
 const Blob3 = styled(BlobBase)`
-  background: radial-gradient(circle at center, rgba(196,181,253,0.4) 0%, rgba(196,181,253,0) 50%);
+  background: radial-gradient(circle at center, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0) 50%);
   animation: ${moveThird} 12s ease infinite;
   transform-origin: calc(50% + 400px);
 `;
 const Blob4 = styled(BlobBase)`
-  background: radial-gradient(circle at center, rgba(251,191,36,0.55) 0%, rgba(251,191,36,0) 50%);
+  background: radial-gradient(circle at center, rgba(245,158,11,0.45) 0%, rgba(245,158,11,0) 50%);
   animation: ${moveFourth} 9s ease infinite;
   opacity: 0.7;
 `;

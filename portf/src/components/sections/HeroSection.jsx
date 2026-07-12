@@ -1,5 +1,5 @@
 import { createElement, useRef } from 'react';
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 import { motion, useReducedMotion } from 'framer-motion';
 import { gsap, useGSAP, OK } from '../../lib/motion';
 import { FaGithub, FaLinkedin, FaInstagram, FaEnvelope, FaArrowRight } from 'react-icons/fa';
@@ -75,11 +75,6 @@ const NameHeading = styled.h1`
   @media (max-width: 480px)  { font-size: 32px; }
 `;
 
-const shimmer = keyframes`
-  0%   { background-position: 0% 50%; }
-  100% { background-position: 200% 50%; }
-`;
-
 const AccentName = styled.span`
   color: var(--accent);
   position: relative;
@@ -92,13 +87,7 @@ const AccentName = styled.span`
     z-index: 1;
     transition: color 0.5s ease;
     display: inline-block;
-    /* subtle amber shimmer looping across the name */
-    background: linear-gradient(90deg, #fbbf24, #fde68a, #fbbf24);
-    background-size: 200% 100%;
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    animation: ${shimmer} 6s linear infinite;
+    color: #fbbf24;
   }
 
   .bg-slide {
@@ -112,12 +101,7 @@ const AccentName = styled.span`
   }
 
   &:hover .bg-slide { transform: scaleX(1); }
-  &:hover .text {
-    color: #14100d;
-    background: none;
-    -webkit-text-fill-color: #14100d;
-    animation: none;
-  }
+  &:hover .text { color: #0e0e10; }
 `;
 
 const Description = styled.p`
@@ -182,7 +166,7 @@ const OutlineBtn = styled(motion.a)`
   svg { transition: transform 0.25s ease; }
 
   &:hover {
-    color: #14100d;
+    color: #0e0e10;
     box-shadow: 0 8px 32px rgba(var(--accent-rgb), 0.3);
 
     &::before { transform: scaleX(1); }
@@ -210,7 +194,7 @@ const SIcon = styled(motion.a)`
 
   &:hover {
     background: var(--accent);
-    color: #14100d;
+    color: #0e0e10;
     box-shadow: 0 4px 16px rgba(var(--accent-rgb), 0.35);
   }
 `;
