@@ -43,7 +43,7 @@ const GhLink = styled.a`
   text-decoration: none;
   transition: color 0.2s ease;
 
-  &:hover { color: ${colors.accent}; }
+  &:hover { color: var(--accent); }
 `;
 
 const Card = styled(motion.div)`
@@ -77,7 +77,7 @@ const StatNum = styled.span`
   letter-spacing: -0.025em;
   color: ${colors.text.primary};
 
-  span { color: ${colors.accent}; }
+  span { color: var(--accent); }
 `;
 
 const StatLabel = styled.span`
@@ -152,7 +152,7 @@ const FallbackCard = styled.a`
   padding: 1rem;
   transition: border-color 0.25s ease, color 0.25s ease;
 
-  svg { font-size: 1.5rem; color: ${colors.accent}; }
+  svg { font-size: 1.5rem; color: var(--accent); }
 
   &:hover { border-color: rgba(var(--accent-rgb), 0.25); color: ${colors.text.primary}; }
 `;

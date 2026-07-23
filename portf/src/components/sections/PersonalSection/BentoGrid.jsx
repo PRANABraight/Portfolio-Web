@@ -27,7 +27,7 @@ const FeaturedHeader = styled.div`
 `;
 
 const FeaturedTitle = styled.h4`
-  font-family: var(--font-display);
+  font-family: var(--font-display-personal);
   font-size: clamp(1.8rem, 4vw, 3rem);
   font-weight: 500;
   max-width: 900px;
@@ -46,45 +46,60 @@ const FeaturedDesc = styled.p`
 `;
 
 const Grid = styled.div`
-  display: grid;
-  grid-template-columns: 1fr;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2.5rem 2rem;
   margin-top: 3rem;
+  padding: 3rem 2rem;
+  background: ${colors.surface1Warm};
   border: 1px solid ${colors.border.default};
   border-radius: 8px;
-  overflow: hidden;
-
-  @media (min-width: 1024px) { grid-template-columns: repeat(6, 1fr); }
 `;
 
 const BentoCell = styled.div`
-  padding: 2rem;
-  height: 350px;
-  overflow: hidden;
   position: relative;
-  border-bottom: 1px solid ${colors.border.default};
+  width: 260px;
+  background: #f5f0e8;
+  padding: 0.75rem 0.75rem 0;
+  border-radius: 2px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.45);
+  transform: rotate(${p => p.$tilt}deg);
+  transition: transform 0.3s ease;
+  cursor: default;
 
-  @media (min-width: 1024px) {
-    height: min(calc(100vh - 400px), 600px);
-    border-bottom: ${p => p.$nob ? 'none' : `1px solid ${colors.border.default}`};
-    border-right: ${p => p.$right ? `1px solid ${colors.border.default}` : 'none'};
-    grid-column: span ${p => p.$span || 1};
-  }
+  &:hover { transform: rotate(0deg) scale(1.03); z-index: 5; }
+`;
+
+const CellPhoto = styled.div`
+  position: relative;
+  width: 100%;
+  height: 220px;
+  overflow: hidden;
+  background: ${colors.surface1Warm};
+`;
+
+const CellCaption = styled.div`
+  padding: 0.85rem 0.25rem 1rem;
+  text-align: center;
 `;
 
 const CellTitle = styled.p`
-  font-size: clamp(1.1rem, 2vw, 1.4rem);
+  font-family: var(--font-display-personal);
+  font-style: italic;
+  display: inline;
+  font-size: 1.05rem;
   font-weight: 500;
-  letter-spacing: -0.025em;
-  color: #fff;
-  margin-bottom: 0.5rem;
+  letter-spacing: -0.015em;
+  color: #2a2118;
 `;
 
 const CellDesc = styled.p`
-  font-size: 0.875rem;
-  color: ${colors.text2};
+  font-size: 0.75rem;
+  color: rgba(42, 33, 24, 0.65);
   font-weight: 400;
-  max-width: 380px;
-  line-height: 1.625;
+  line-height: 1.5;
+  margin-top: 0.35rem;
 `;
 
 const CellImg = styled.img`
@@ -92,17 +107,6 @@ const CellImg = styled.img`
   height: 100%;
   object-fit: cover;
   object-position: center;
-  position: absolute;
-  inset: 0;
-  opacity: 0.5;
-  z-index: 0;
-`;
-
-/* bottom-heavy scrim keeps title/desc readable over the photo */
-const CellScrim = styled.div`
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.45) 45%, rgba(0,0,0,0.15) 100%);
 `;
 
 const HOBBIES = [
@@ -145,6 +149,9 @@ const HOBBIES = [
 
 const fadeIn = { initial: { opacity: 0 }, animate: { opacity: 1, transition: { delay: 1.5, duration: 0.4, ease: 'easeIn' } } };
 
+// ponytail: fixed offsets, not random — deterministic layout, no re-render jitter
+const TILTS = [-3, 2, -2, 3, -1.5];
+
 const BentoGrid = ({ cmsPersonal }) => (
   <FeaturedWrap {...fadeIn}>
     <FeaturedHeader>
@@ -155,18 +162,19 @@ const BentoGrid = ({ cmsPersonal }) => (
     </FeaturedHeader>
 
     <Grid>
-      {HOBBIES.map(h => {
+      {HOBBIES.map((h, i) => {
         const cmsImage = cmsPersonal?.hobbyImages?.[h.key];
         const imgSrc = cmsImage ? urlFor(cmsImage).width(900).auto('format').fit('max').url() : h.img;
         return (
-          <BentoCell key={h.title} $span={h.span} $right={h.right} $nob={h.nob}>
-            <CellImg src={imgSrc} alt={h.title} loading="lazy" />
-            <CellScrim />
-            <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', padding: '2rem', zIndex: 1 }}>
-              <span style={{ fontSize: '2rem', marginBottom: '0.75rem', color: colors.accent, display: 'inline-flex' }}>{h.icon}</span>
+          <BentoCell key={h.title} $tilt={TILTS[i % TILTS.length]}>
+            <CellPhoto>
+              <CellImg src={imgSrc} alt={h.title} loading="lazy" />
+            </CellPhoto>
+            <CellCaption>
+              <span style={{ color: i % 2 === 0 ? 'var(--accent)' : 'var(--accent-2)', display: 'inline-flex', marginRight: '0.4rem', verticalAlign: 'middle' }}>{h.icon}</span>
               <CellTitle>{h.title}</CellTitle>
               <CellDesc>{h.desc}</CellDesc>
-            </div>
+            </CellCaption>
           </BentoCell>
         );
       })}

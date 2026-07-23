@@ -48,7 +48,7 @@ function App() {
   });
 
   useLenis();
-  useSiteAccent([mode]);
+  useSiteAccent(mode, [mode]);
 
   // Always start the newly shown mode at the top of the page; the swapped
   // section stack changes every trigger position, so re-measure.

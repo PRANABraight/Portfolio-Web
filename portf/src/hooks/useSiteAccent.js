@@ -27,8 +27,12 @@ const setSiteAccent = (key) => {
 /* Keeps --site-accent on <html> in sync with the section currently in view,
    so fixed chrome (Navbar, FloatingNav, Spotlight) hue-shifts with scroll.
    `deps` should change whenever the section stack remounts (e.g. mode). */
-export default function useSiteAccent(deps = []) {
+export default function useSiteAccent(mode, deps = []) {
   useEffect(() => {
+    if (mode === 'personal') {
+      setSiteAccent('personal');
+      return; // nothing to scroll-trigger in a single-section mode
+    }
     setSiteAccent('hero');
     const triggers = Object.entries(ID_TO_ACCENT)
       .map(([id, key]) => {

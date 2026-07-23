@@ -7,7 +7,7 @@ import lifeSportsImg from '../../../assets/personal/life-sports.webp';
 import lifeBooksImg from '../../../assets/personal/life-books.webp';
 import lifeMusicImg from '../../../assets/personal/life-music.webp';
 import lifeHeritageImg from '../../../assets/personal/life-heritage.webp';
-import { colors } from '../../../styles/theme';
+import { colors, typography } from '../../../styles/theme';
 
 const CarouselWrap = styled(motion.div)`
   width: 100%;
@@ -55,12 +55,36 @@ const CarouselCard = styled(motion.button)`
   position: relative;
   z-index: 10;
   flex-shrink: 0;
-  background: ${colors.surface1};
+  background: ${colors.surface1Warm};
   border: none;
   cursor: pointer;
   padding: 0;
 
+  &::before, &::after {
+    content: '';
+    position: absolute;
+    left: 0; right: 0;
+    height: 14px;
+    background-image: radial-gradient(circle at 7px 7px, transparent 3px, rgba(0,0,0,0.55) 3px);
+    background-size: 14px 14px;
+    z-index: 45;
+    pointer-events: none;
+  }
+  &::before { top: 0; }
+  &::after { bottom: 0; }
+
   @media (min-width: 768px) { height: 40rem; width: 24rem; }
+`;
+
+const CarouselFrameNo = styled.span`
+  position: absolute;
+  top: 0.9rem;
+  left: 0.9rem;
+  z-index: 40;
+  font-family: ${typography.fontFamily.mono};
+  font-size: 0.7rem;
+  color: ${p => p.$alt ? 'var(--accent-2)' : 'var(--accent)'};
+  letter-spacing: 0.05em;
 `;
 
 const CarouselGradient = styled.div`
@@ -163,11 +187,11 @@ const CarouselBtn = styled.button`
 `;
 
 const CAROUSEL_ITEMS = [
-  { category: 'Computer, IT', title: 'Interest, Work', bg: colors.surface1, icon: <LuMonitor />, img: lifeItImg },
-  { category: 'Sports', title: 'Volleyball and Table Tennis', bg: colors.surface1, icon: <LuVolleyball />, img: lifeSportsImg },
-  { category: 'Books', title: 'Fiction & Research', bg: colors.surface1, icon: <LuBookOpen />, img: lifeBooksImg },
-  { category: 'Music', title: 'Guitar & Piano', bg: colors.surface1, icon: <LuMusic />, img: lifeMusicImg },
-  { category: 'Heritage', title: 'Culture & Roots', bg: colors.surface1, icon: <LuLandmark />, img: lifeHeritageImg },
+  { category: 'Computer, IT', title: 'Interest, Work', bg: colors.surface1Warm, icon: <LuMonitor />, img: lifeItImg },
+  { category: 'Sports', title: 'Volleyball and Table Tennis', bg: colors.surface1Warm, icon: <LuVolleyball />, img: lifeSportsImg },
+  { category: 'Books', title: 'Fiction & Research', bg: colors.surface1Warm, icon: <LuBookOpen />, img: lifeBooksImg },
+  { category: 'Music', title: 'Guitar & Piano', bg: colors.surface1Warm, icon: <LuMusic />, img: lifeMusicImg },
+  { category: 'Heritage', title: 'Culture & Roots', bg: colors.surface1Warm, icon: <LuLandmark />, img: lifeHeritageImg },
 ];
 
 const fadeIn = { initial: { opacity: 0 }, animate: { opacity: 1, transition: { delay: 1.5, duration: 0.4, ease: 'easeIn' } } };
@@ -198,6 +222,7 @@ const Carousel = () => {
               style={{ borderRadius: 24 }}
             >
               <CarouselCard>
+                <CarouselFrameNo $alt={i % 2 === 1}>{String(i + 1).padStart(2, '0')}</CarouselFrameNo>
                 <CarouselGradient />
                 <CarouselLabel>{item.category}</CarouselLabel>
                 <CarouselCardTitle>{item.title}</CarouselCardTitle>

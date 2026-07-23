@@ -9,6 +9,7 @@ export const colors = {
   surface0: '#09090b',
   surface1: '#17171b',
   surface2: '#121215',
+  surface1Warm: '#1c1712', // warm card tone — personal mode only
   bgCard:   'rgba(23, 23, 27, 0.6)',
   accent:   '#fbbf24',
   accentH:  '#f59e0b',
@@ -87,37 +88,47 @@ export const colors = {
   warning:  { main: '#fbbf24', light: '#fde68a', dark: '#d97706' },
 };
 
-// Single-accent decision: one gold across every section. The accentVars()/
-// --site-accent machinery stays wired (sections keep their hooks), it just
-// resolves to the same hue everywhere — restraint reads premium, and a future
-// re-walk only means editing this map.
+// Two-hue decision: gold marks identity/achievement/conversion sections, teal
+// marks technical/process sections — a rotation that encodes something real
+// as you scroll instead of one flat hue everywhere. `personal` gets its own
+// clay identity, paired with sage for the intra-section variety a single
+// scroll position can't get from cross-section rotation (see pairAccents).
 const GOLD = { hex: '#fbbf24', rgb: '251, 191, 36', soft: '#fde68a', deep: '#78350f' };
+const TEAL = { hex: '#4fb8a8', rgb: '79, 184, 168', soft: '#9fe0d4', deep: '#1f4d47' };
+const CLAY = { hex: '#e8734a', rgb: '232, 115, 74', soft: '#f4b494', deep: '#7c2d12' };
+const SAGE = { hex: '#93a875', rgb: '147, 168, 117', soft: '#c3d1ac', deep: '#3f4a2e' };
 
 export const sectionAccents = {
-  hero:       GOLD,
-  stats:      GOLD,
-  education:  GOLD,
-  about:      GOLD,
-  approach:   GOLD,
-  projects:   GOLD,
-  experience: GOLD,
-  journey:    GOLD,
-  skills:     GOLD,
-  github:     GOLD,
-  contact:    GOLD,
-  personal:   GOLD,
+  hero:       GOLD, // identity anchor
+  stats:      TEAL, // raw technical numbers
+  education:  GOLD, // credential
+  about:      GOLD, // personal narrative
+  approach:   TEAL, // methodology/process
+  projects:   GOLD, // flagship showcase
+  experience: GOLD, // credential
+  journey:    TEAL, // technical growth timeline
+  skills:     TEAL, // technical
+  github:     TEAL, // pure code activity
+  contact:    GOLD, // CTA keeps the brand color
+  personal:   CLAY,
 };
+
+// Personal mode has no cross-section rotation to lean on (it's one section),
+// so it gets a second in-section hue instead — see accentVars().
+const pairAccents = { personal: SAGE };
 
 // Drop into a section's outermost styled wrapper: ${accentVars('education')}
 // Everything inside then reads var(--accent), rgba(var(--accent-rgb), α), etc.
 export const accentVars = (name) => {
   const a = sectionAccents[name];
+  const b = pairAccents[name];
   return `
     --accent: ${a.hex};
     --accent-h: ${a.soft};
     --accent-rgb: ${a.rgb};
     --accent-soft: ${a.soft};
     --accent-deep: ${a.deep};
+    ${b ? `--accent-2: ${b.hex}; --accent-2-rgb: ${b.rgb}; --accent-2-soft: ${b.soft};` : ''}
   `;
 };
 
@@ -126,6 +137,7 @@ export const typography = {
     primary: "'JetBrains Mono', 'Courier New', monospace",
     display:  "'Space Grotesk', 'Helvetica Neue', sans-serif",
     mono:     "'JetBrains Mono', 'Courier New', monospace",
+    personalDisplay: "'Fraunces', 'Georgia', serif",
   },
   fontSize: {
     xs:   '0.75rem',   /* text-xs */

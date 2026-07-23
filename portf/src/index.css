@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Space+Grotesk:wght@400..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Space+Grotesk:wght@400..700&display=swap');
 
 :root {
   --bg:       #0e0e10;
@@ -26,6 +26,7 @@
   --nav-height: 136px;
   --font-display: 'Space Grotesk', 'Helvetica Neue', sans-serif;
   --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+  --font-display-personal: 'Fraunces', 'Georgia', serif;
 }
 
 @media (min-width: 1280px) {

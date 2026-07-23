@@ -8,7 +8,7 @@ const MusicCard = styled.div`
   width: 100%;
   max-width: 380px;
   border-radius: 16px;
-  background: ${colors.surface1};
+  background: ${colors.surface1Warm};
   border: 1px solid rgba(255,255,255,0.07);
   padding: 1.25rem;
   color: #fff;
@@ -35,7 +35,7 @@ const MusicDisc = styled.div`
   align-items: center;
   justify-content: center;
   background: linear-gradient(135deg, #1e1e23, #131316);
-  color: ${colors.accent};
+  color: var(--accent);
   font-size: 3.5rem;
 `;
 

@@ -11,6 +11,7 @@ const IntroWrap = styled(motion.div)`
 `;
 
 const BigHello = styled.h1`
+  font-family: var(--font-display-personal);
   font-size: clamp(2.5rem, 7vw, 5.5rem);
   font-weight: 600;
   max-width: 1280px;
@@ -37,7 +38,7 @@ const NicknameText = styled.div`
 `;
 
 const AccentWord = styled.span`
-  color: ${colors.accent};
+  color: var(--accent);
   font-weight: 700;
 `;
 

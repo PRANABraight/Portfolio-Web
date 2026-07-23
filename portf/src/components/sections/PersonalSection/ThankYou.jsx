@@ -27,7 +27,9 @@ const Beam = styled.div`
   width: 1px;
   height: 56px;
   border-radius: 9999px;
-  background: linear-gradient(to bottom, ${colors.accent}, rgba(251,191,36,0.5), transparent);
+  background: ${p => p.$alt
+    ? 'linear-gradient(to bottom, var(--accent-2), rgba(var(--accent-2-rgb), 0.5), transparent)'
+    : 'linear-gradient(to bottom, var(--accent), rgba(var(--accent-rgb), 0.5), transparent)'};
   animation: ${beamFall} ${p => p.$dur}s linear infinite;
   animation-delay: ${p => p.$delay}s;
   opacity: 0;
@@ -52,7 +54,7 @@ const ThankTitle = styled.h2`
 const ThankYouGradient = styled.div`
   font-size: clamp(1.5rem, 4vw, 3.5rem);
   font-weight: 700;
-  background: linear-gradient(to right, ${colors.accent}, #fde68a, ${colors.accent});
+  background: linear-gradient(to right, var(--accent), var(--accent-soft), var(--accent));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -73,7 +75,7 @@ const BEAMS = [
 const ThankYou = () => (
   <ThankWrap>
     {BEAMS.map((b, i) => (
-      <Beam key={i} $x={b.x} $dur={b.dur} $delay={b.delay} />
+      <Beam key={i} $x={b.x} $dur={b.dur} $delay={b.delay} $alt={i % 2 === 1} />
     ))}
     <ThankContent>
       <ThankTitle>For visiting my profile</ThankTitle>

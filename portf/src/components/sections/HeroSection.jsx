@@ -88,7 +88,7 @@ const AccentName = styled.span`
     z-index: 1;
     transition: color 0.5s ease;
     display: inline-block;
-    color: ${colors.accent};
+    color: var(--accent);
   }
 
   .bg-slide {

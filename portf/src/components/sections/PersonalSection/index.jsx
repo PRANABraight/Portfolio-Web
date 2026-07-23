@@ -1,13 +1,18 @@
-// Personal page — exact match to radnaabazar.com/en/personal
+// Personal page — polaroid/journal aesthetic, clay accent (see theme.js sectionAccents.personal)
 import { useEffect } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { ScrollTrigger } from '../../../lib/motion';
+import { accentVars } from '../../../styles/theme';
 import Intro from './Intro';
 import BentoGrid from './BentoGrid';
 import Carousel from './Carousel';
 import MusicPlayer from './MusicPlayer';
 import ThankYou from './ThankYou';
+
+const PersonalRoot = styled.div`
+  ${accentVars('personal')}
+`;
 
 const WidgetsWrap = styled(motion.div)`
   position: relative;
@@ -48,7 +53,7 @@ const PersonalSection = ({ cmsPersonal }) => {
   }, []);
 
   return (
-    <>
+    <PersonalRoot>
       <Intro />
       <BentoGrid cmsPersonal={cmsPersonal} />
       <Carousel />
@@ -61,7 +66,7 @@ const PersonalSection = ({ cmsPersonal }) => {
       </WidgetsWrap>
 
       <ThankYou />
-    </>
+    </PersonalRoot>
   );
 };
 
