@@ -5,7 +5,7 @@ import { motion, useAnimationFrame, useMotionValue, useTransform } from 'framer-
 import { FaPython, FaDatabase, FaBrain, FaGithub } from 'react-icons/fa';
 import { SiScikitlearn, SiPandas } from 'react-icons/si';
 import { gsap, useGSAP, OK, batchReveal } from '../../lib/motion';
-import { accentVars } from '../../styles/theme';
+import { accentVars, colors } from '../../styles/theme';
 import { premiumCard } from '../../styles/mixins';
 import SectionTitle from '../common/SectionTitle';
 
@@ -24,7 +24,7 @@ const Card = styled.div`
 const CardTitle = styled.h4`
   font-size: 1rem;
   font-weight: 700;
-  color: #e7e5e4;
+  color: #fff;
   letter-spacing: 0.025em;
   margin-top: 1rem;
   padding: 0 1rem;
@@ -32,7 +32,7 @@ const CardTitle = styled.h4`
 
 const CardDesc = styled.p`
   font-size: 0.875rem;
-  color: #a8a29e;
+  color: ${colors.text2};
   letter-spacing: 0.025em;
   line-height: 1.625;
   margin-top: 2rem;
@@ -129,7 +129,7 @@ const HoverCard = ({ children }) => {
         <motion.span
           style={{
             position: 'absolute', inset: 0, height: '100%', width: '100%',
-            background: 'rgba(124, 45, 18, 0.8)', display: 'block', borderRadius: 24,
+            background: colors.background.active, display: 'block', borderRadius: 24,
           }}
           layoutId="hoverBg"
           initial={{ opacity: 0 }}
@@ -223,7 +223,7 @@ const ApproachSection = () => {
           <div style={{ padding: '1.5rem', width: '100%' }}>
             <div style={{ fontSize: '0.75rem', color: 'var(--accent)', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '0.75rem' }}>My primary tech stack</div>
             <h3 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#fff', letterSpacing: '-0.025em', marginBottom: '0.5rem' }}>Python · SQL</h3>
-            <p style={{ fontSize: '0.875rem', color: 'rgb(120,113,108)', lineHeight: 1.625 }}>Building end-to-end data pipelines, ML models, and analytical systems with the Python data science ecosystem.</p>
+            <p style={{ fontSize: '0.875rem', color: colors.text2, lineHeight: 1.625 }}>Building end-to-end data pipelines, ML models, and analytical systems with the Python data science ecosystem.</p>
             <TechGrid>
               {TECHS.map(t => (
                 <TechChip key={t.label}>
@@ -273,7 +273,7 @@ const ApproachSection = () => {
       <CardWrap className="approach-card" {...cardHover}>
         <MovingBorderCard duration={3600} dotColor={DOT_COLORS[1]}>
           <div style={{ padding: '1.5rem', width: '100%' }}>
-            <div style={{ fontSize: '0.75rem', color: 'rgb(120,113,108)', letterSpacing: '0.08em', marginBottom: '1rem' }}>Do you want to work together?</div>
+            <div style={{ fontSize: '0.75rem', color: colors.text2, letterSpacing: '0.08em', marginBottom: '1rem' }}>Do you want to work together?</div>
             <h3 style={{ fontSize: '1.2rem', fontWeight: 700, color: '#fff', letterSpacing: '-0.025em' }}>Let's build something impactful.</h3>
             <a
               href="mailto:pranabrai137@gmail.com"

@@ -1,6 +1,7 @@
 import { useRef, isValidElement, cloneElement } from 'react';
 import styled from 'styled-components';
 import { gsap, useGSAP, OK } from '../../lib/motion';
+import { colors } from '../../styles/theme';
 
 const Wrap = styled.div`
   text-align: center;
@@ -42,7 +43,7 @@ const Title = styled.h2`
 
 const Sub = styled.p`
   font-size: 0.875rem;
-  color: rgb(168, 162, 158);
+  color: ${colors.text2};
   max-width: 600px;
   margin: 1rem auto 0;
   line-height: 1.625;

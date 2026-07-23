@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { skillsData } from '../../data/portfolioData';
 import { getIcon } from '../../lib/iconMap';
 import { gsap, useGSAP, OK, batchReveal } from '../../lib/motion';
-import { accentVars } from '../../styles/theme';
+import { accentVars, colors } from '../../styles/theme';
 import SectionTitle from '../common/SectionTitle';
 
 const Wrap = styled.section`
@@ -39,7 +39,7 @@ const Left = styled(motion.div)`
 const Quote = styled.blockquote`
   font-size: 0.875rem;
   font-style: italic;
-  color: rgb(168,162,158);
+  color: ${colors.text2};
   line-height: 1.625;
   border-left: 2px solid var(--accent);
   padding-left: 1.25rem;
@@ -50,7 +50,7 @@ const SLabel = styled.div`
   font-size: 0.75rem;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: rgb(120,113,108);
+  color: ${colors.text3};
   margin-bottom: 1rem;
 `;
 
@@ -68,7 +68,7 @@ const StrItem = styled.li`
   padding: 0.75rem 0;
   border-bottom: 1px solid rgba(255,255,255,0.05);
   font-size: 0.75rem;
-  color: rgb(168,162,158);
+  color: ${colors.text2};
   transition: color 0.2s ease;
 
   &:last-child { border-bottom: none; }
@@ -87,7 +87,7 @@ const Grid = styled.div`
 
 const SkillCard = styled.div`
   padding: 1.25rem 0.75rem;
-  background: rgba(33,25,19,0.55);
+  background: rgba(255,255,255,0.04);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -107,7 +107,7 @@ const SkillCard = styled.div`
   }
 
   &:hover {
-    background: rgba(28,26,50,0.9);
+    background: ${colors.background.active};
     transform: translateY(-4px) scale(1.03);
     z-index: 1;
     &::after { opacity: 1; }
@@ -137,7 +137,7 @@ const SIcon = styled.div`
 
 const SName = styled.span`
   font-size: 0.75rem;
-  color: rgb(120,113,108);
+  color: ${colors.text3};
   text-align: center;
   letter-spacing: 0.03em;
   position: relative;

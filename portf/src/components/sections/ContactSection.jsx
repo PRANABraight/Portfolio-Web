@@ -1,11 +1,13 @@
 // Contact/Footer CTA — exact match to radnaabazar.com component 30836
-import { useState, useRef } from 'react';
+import { createElement, useState, useRef } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { gsap, useGSAP, OK, revealUp } from '../../lib/motion';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaGithub, FaLinkedin, FaInstagram, FaEnvelope, FaArrowRight } from 'react-icons/fa';
+import { FaArrowRight } from 'react-icons/fa';
 import { colors, typography, borderRadius, transitions, accentVars } from '../../styles/theme';
 import FloatingOrbs from '../common/FloatingOrbs';
+import { getIcon } from '../../lib/iconMap';
+import { SOCIALS as SOCIALS_DATA } from '../common/socials';
 
 const spinConic = keyframes`from{transform:rotate(0deg)}to{transform:rotate(360deg)}`;
 
@@ -272,12 +274,7 @@ const SocialBtn = styled(motion.a)`
   &:hover { background: var(--accent); color: ${colors.bg}; }
 `;
 
-const SOCIALS = [
-  { icon: <FaGithub />,    href: 'https://github.com/PRANABraight',              label: 'GitHub' },
-  { icon: <FaLinkedin />,  href: 'https://linkedin.com/in/pranab-rai-924b6731b/', label: 'LinkedIn' },
-  { icon: <FaInstagram />, href: 'https://instagram.com/pranabrai1/',             label: 'Instagram' },
-  { icon: <FaEnvelope />,  href: 'mailto:pranabrai137@gmail.com',                 label: 'Email' },
-];
+const SOCIALS = SOCIALS_DATA.map(s => ({ icon: createElement(getIcon(s.iconName)), href: s.href, label: s.label }));
 
 const INITIAL_FORM = { name: '', email: '', message: '', company: '' };
 

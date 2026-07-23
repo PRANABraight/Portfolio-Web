@@ -2,13 +2,14 @@ import { createElement, useRef } from 'react';
 import styled from 'styled-components';
 import { motion, useReducedMotion } from 'framer-motion';
 import { gsap, useGSAP, OK } from '../../lib/motion';
-import { FaGithub, FaLinkedin, FaInstagram, FaEnvelope, FaArrowRight } from 'react-icons/fa';
+import { FaArrowRight } from 'react-icons/fa';
 import resumePDF from '../../assets/Pranab_Rai_da (1).pdf';
 import profImg from '../../assets/prof.webp';
 import Spotlight from '../Spotlight';
 import FloatingOrbs from '../common/FloatingOrbs';
-import { accentVars } from '../../styles/theme';
+import { colors, accentVars } from '../../styles/theme';
 import { getIcon } from '../../lib/iconMap';
+import { SOCIALS } from '../common/socials';
 import { urlFor } from '../../lib/sanity';
 
 /* ── layout ── */
@@ -87,7 +88,7 @@ const AccentName = styled.span`
     z-index: 1;
     transition: color 0.5s ease;
     display: inline-block;
-    color: #fbbf24;
+    color: ${colors.accent};
   }
 
   .bg-slide {
@@ -101,7 +102,7 @@ const AccentName = styled.span`
   }
 
   &:hover .bg-slide { transform: scaleX(1); }
-  &:hover .text { color: #0e0e10; }
+  &:hover .text { color: ${colors.bg}; }
 `;
 
 const Description = styled.p`
@@ -166,7 +167,7 @@ const OutlineBtn = styled(motion.a)`
   svg { transition: transform 0.25s ease; }
 
   &:hover {
-    color: #0e0e10;
+    color: ${colors.bg};
     box-shadow: 0 8px 32px rgba(var(--accent-rgb), 0.3);
 
     &::before { transform: scaleX(1); }
@@ -194,7 +195,7 @@ const SIcon = styled(motion.a)`
 
   &:hover {
     background: var(--accent);
-    color: #0e0e10;
+    color: ${colors.bg};
     box-shadow: 0 4px 16px rgba(var(--accent-rgb), 0.35);
   }
 `;
@@ -242,13 +243,7 @@ const Photo = styled(motion.img)`
   border-radius: 50%;
 `;
 
-/* ── SOCIALS fallback ── */
-const SOCIALS_FALLBACK = [
-  { icon: <FaGithub />, href: 'https://github.com/PRANABraight', label: 'GitHub' },
-  { icon: <FaLinkedin />, href: 'https://linkedin.com/in/pranab-rai-924b6731b/', label: 'LinkedIn' },
-  { icon: <FaInstagram />, href: 'https://instagram.com/pranabrai1/', label: 'Instagram' },
-  { icon: <FaEnvelope />, href: 'mailto:pranabrai137@gmail.com', label: 'Email' },
-];
+const SOCIALS_FALLBACK = SOCIALS.map(s => ({ icon: createElement(getIcon(s.iconName)), href: s.href, label: s.label }));
 
 const HeroSection = ({ cmsHero }) => {
   const resumeHref = cmsHero?.resumeUrl || resumePDF;

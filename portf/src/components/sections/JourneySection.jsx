@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import styled from 'styled-components';
 import { gsap, useGSAP, OK, REDUCED, revealUp } from '../../lib/motion';
-import { accentVars } from '../../styles/theme';
+import { accentVars, colors } from '../../styles/theme';
 import SectionTitle from '../common/SectionTitle';
 
 const Wrap = styled.section`
@@ -116,7 +116,7 @@ const TYPE_COLORS = {
   publication:   { bg: 'rgba(255,255,255,0.07)', text: 'rgba(255,255,255,0.75)' },
   certification: { bg: 'rgba(255,255,255,0.07)', text: 'rgba(255,255,255,0.75)' },
   leadership:    { bg: 'rgba(255,255,255,0.07)', text: 'rgba(255,255,255,0.75)' },
-  milestone:     { bg: 'rgba(168,162,158,0.1)',  text: '#a8a29e' },
+  milestone:     { bg: 'rgba(255,255,255,0.07)', text: 'rgba(255,255,255,0.75)' },
 };
 
 const TypeBadge = styled.span`
@@ -126,8 +126,8 @@ const TypeBadge = styled.span`
   text-transform: uppercase;
   padding: 0.15rem 0.55rem;
   border-radius: 999px;
-  background: ${({ $type }) => TYPE_COLORS[$type]?.bg || 'rgba(168,162,158,0.1)'};
-  color: ${({ $type }) => TYPE_COLORS[$type]?.text || '#a8a29e'};
+  background: ${({ $type }) => TYPE_COLORS[$type]?.bg || 'rgba(255,255,255,0.07)'};
+  color: ${({ $type }) => TYPE_COLORS[$type]?.text || 'rgba(255,255,255,0.75)'};
 `;
 
 const EntryTitle = styled.h3`
@@ -140,7 +140,7 @@ const EntryTitle = styled.h3`
 
 const EntryDesc = styled.p`
   font-size: 0.875rem;
-  color: rgb(168,162,158);
+  color: ${colors.text2};
   line-height: 1.625;
   max-width: 680px;
 `;

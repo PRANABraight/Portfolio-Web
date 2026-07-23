@@ -6,7 +6,7 @@ import { useTypingEffect } from '../../hooks/useTypingEffect';
 import AnimatedTitle from '../common/AnimatedTitle';
 import { getIcon } from '../../lib/iconMap';
 import { gsap, useGSAP, OK, batchReveal } from '../../lib/motion';
-import { accentVars } from '../../styles/theme';
+import { accentVars, colors } from '../../styles/theme';
 import { premiumCard } from '../../styles/mixins';
 
 const blink = keyframes`0%,100%{opacity:1}50%{opacity:0}`;
@@ -112,7 +112,7 @@ const CodeBlock = styled.div`
 
 const CLine = styled.div`
   font-size: 0.75rem;
-  color: rgb(168,162,158);
+  color: ${colors.text2};
   white-space: pre-wrap;
   line-height: 1.8;
 
@@ -171,7 +171,7 @@ const CBody = styled.div`
   }
   p {
     font-size: 0.75rem;
-    color: rgb(168,162,158);
+    color: ${colors.text2};
     line-height: 1.625;
     margin: 0;
   }

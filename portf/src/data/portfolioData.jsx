@@ -18,7 +18,7 @@ export const aboutData = {
     "        self.name = 'Pranab Rai'",
     "        self.location = 'Bengaluru, India'",
     "        self.education = 'MCA, Christ University'",
-    "        self.tools = ['Python', 'SQL', 'JavaScript', 'AWS']",
+    "        self.tools = ['Python', 'SQL', 'JavaScript', 'AWS', 'TensorFlow', 'PostgreSQL']",
     "    ",
     "    def build_solutions(self):",
     "        # Architecting secure, scalable data systems",

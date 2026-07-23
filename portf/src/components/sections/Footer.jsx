@@ -1,5 +1,6 @@
 import styled, { keyframes } from 'styled-components';
 import { scrollToTop } from '../../hooks/useLenis';
+import { SOCIALS } from '../common/socials';
 
 const rainbowSlide = keyframes`
   from { background-position: 0% 50%; }
@@ -86,8 +87,11 @@ const Footer = () => (
     <Row>
       <p>© {new Date().getFullYear()} <span>Pranab Rai</span>. All rights reserved.</p>
       <Links aria-label="Footer">
-        <a href="https://github.com/PRANABraight" target="_blank" rel="noopener noreferrer">github</a>
-        <a href="https://www.linkedin.com/in/pranabrai" target="_blank" rel="noopener noreferrer">linkedin</a>
+        {SOCIALS.map(s => (
+          <a key={s.label} href={s.href} target={s.href.startsWith('http') ? '_blank' : undefined} rel="noopener noreferrer">
+            {s.label.toLowerCase()}
+          </a>
+        ))}
         <button type="button" onClick={() => scrollToTop()}>back to top ↑</button>
       </Links>
     </Row>

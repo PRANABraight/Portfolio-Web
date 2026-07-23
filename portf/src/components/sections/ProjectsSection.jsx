@@ -10,7 +10,7 @@ import FloatingOrbs from '../common/FloatingOrbs';
 import { gsap, useGSAP, OK, batchReveal } from '../../lib/motion';
 import { premiumCard } from '../../styles/mixins';
 import { getStackIcon } from '../../lib/iconMap';
-import { accentVars } from '../../styles/theme';
+import { accentVars, colors } from '../../styles/theme';
 
 const Wrap = styled.section`
   ${accentVars('projects')}
@@ -122,7 +122,7 @@ const PTitle = styled.h3`
 const PDesc = styled.p`
   font-size: 0.875rem;
   line-height: 1.625;
-  color: #d6cfc7;
+  color: ${colors.text2};
   margin-bottom: 1.25rem;
   display: -webkit-box;
   -webkit-line-clamp: 2;

@@ -38,7 +38,7 @@ const GhLink = styled.a`
   align-items: center;
   gap: 0.375rem;
   font-size: 0.75rem;
-  color: rgb(168,162,158);
+  color: ${colors.text2};
   margin-top: 0.75rem;
   text-decoration: none;
   transition: color 0.2s ease;

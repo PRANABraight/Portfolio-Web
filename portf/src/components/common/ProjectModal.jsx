@@ -174,7 +174,7 @@ const FeatureItem = styled(motion.li)`
   background: rgba(var(--accent-rgb), 0.03);
   border-radius: ${borderRadius.md};
   border-left: 2px solid var(--accent);
-  color: rgb(168,162,158);
+  color: ${colors.text2};
   font-size: ${typography.fontSize.sm};
   line-height: ${typography.lineHeight.relaxed};
   transition: all 200ms;
@@ -243,7 +243,7 @@ const ActionButton = styled(motion.a)`
 
   ${props => props.$primary ? `
     background: var(--accent);
-    color: #0e0e10;
+    color: ${colors.bg};
     border: 2px solid var(--accent);
     box-shadow: 0 4px 16px rgba(var(--accent-rgb), 0.25);
     font-weight: 700;
@@ -251,11 +251,11 @@ const ActionButton = styled(motion.a)`
     &:hover {
       opacity: 0.88;
       transform: translateY(-2px);
-      color: #0e0e10;
+      color: ${colors.bg};
     }
   ` : `
     background: transparent;
-    color: rgb(168,162,158);
+    color: ${colors.text2};
     border: 1px solid rgba(255, 255, 255, 0.12);
 
     &:hover {

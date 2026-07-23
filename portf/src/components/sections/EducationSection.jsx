@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FaGraduationCap } from 'react-icons/fa';
 import { gsap, useGSAP, OK, batchReveal } from '../../lib/motion';
 import SectionTitle from '../common/SectionTitle';
-import { accentVars } from '../../styles/theme';
+import { accentVars, colors } from '../../styles/theme';
 import { premiumCard } from '../../styles/mixins';
 
 const Wrap = styled.section`
@@ -42,7 +42,7 @@ const HoverBg = styled(motion.span)`
   inset: 0;
   height: 100%;
   width: 100%;
-  background: rgba(95, 50, 25, 0.8);
+  background: ${colors.background.active};
   display: block;
   border-radius: 24px;
 `;
@@ -94,7 +94,7 @@ const CardInner = styled.div`
 const CardTitle = styled.h4`
   font-size: 0.875rem;
   font-weight: 700;
-  color: #e7e5e4;
+  color: #fff;
   letter-spacing: 0.025em;
   margin-top: 1rem;
 `;
@@ -121,7 +121,7 @@ const Gpa = styled.div`
 const CardDesc = styled.p`
   margin-top: 2rem;
   font-size: 0.75rem;
-  color: #a8a29e;
+  color: ${colors.text2};
   letter-spacing: 0.025em;
   line-height: 1.625;
 `;
